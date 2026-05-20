@@ -1510,6 +1510,24 @@ h3 { font-size: 1.05rem; }
 }
 .add-entity-checkbox-label:hover { color: var(--text); }
 
+/* Timing notice — visible only on the public Vercel-hosted version (the
+ * form JS toggles its hidden state based on hostname). Explains the
+ * chart-then-readings cadence so visitors don't refresh frantically. */
+.add-entity-timing-note {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1.1rem;
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent-mayan, #ffb347);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.add-entity-timing-note strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .add-entity-status {
   font-size: 0.85rem;
   line-height: 1.5;

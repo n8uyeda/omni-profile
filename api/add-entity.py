@@ -97,9 +97,11 @@ def _build_canon_md(name: str, payload: dict, precision: int, essentials: dict) 
 
 class handler(BaseHTTPRequestHandler):  # noqa: N801
     def do_POST(self):  # noqa: N802
-        # Rate limit per IP (3/day, soft)
+        # Rate limit per IP — bucket "add_entity": 3/day (soft, in-memory)
         ip = _client_ip(self)
-        allowed, remaining, reset_in = check_and_increment(ip, max_requests=3)
+        allowed, remaining, reset_in = check_and_increment(
+            ip, bucket="add_entity", max_requests=3,
+        )
         if not allowed:
             hours = max(reset_in // 3600, 1)
             return _send_json(self, 429, {
@@ -228,7 +230,7 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
         except Exception as e:
             return _send_json(self, 500, {"ok": False, "error": f"Building file contents failed: {e}"})
 
-        # Commit to GitHub
+        # Commit chart files to GitHub
         try:
             canon_repo_path = f"vault/04_CANON/People/{name}.md"
             yaml_repo_path = f"vault/04_CANON/People/{name}.profile.yaml"
@@ -237,6 +239,38 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
             put_file(yaml_repo_path, profile_yaml, commit_msg, update_existing=False)
         except RuntimeError as e:
             return _send_json(self, 502, {"ok": False, "error": f"GitHub commit failed: {e}"})
+
+        # Auto-readings (optional, opt-in via auto_readings=true). Separately
+        # rate-limited (1/IP/day) because the GitHub Action that processes the
+        # marker calls Anthropic API (~$0.10 per submission). The marker is
+        # how the workflow knows this entity opted in. No marker → no readings.
+        auto_readings = bool(body.get("auto_readings"))
+        readings_status: dict = {"requested": auto_readings, "queued": False}
+        if auto_readings:
+            r_allowed, _r_remaining, r_reset_in = check_and_increment(
+                ip, bucket="readings", max_requests=1,
+            )
+            if r_allowed:
+                marker_path = f"pending-readings/{name}.flag"
+                marker_content = (
+                    f"# Pending readings authorization for {name}\n"
+                    f"submitted_at: {_date.today().isoformat()}\n"
+                    f"trigger: public-form-submission\n"
+                )
+                try:
+                    put_file(marker_path, marker_content,
+                             f"Queue readings for {name}", update_existing=False)
+                    readings_status["queued"] = True
+                    readings_status["eta_minutes"] = "2-3"
+                except RuntimeError as e:
+                    readings_status["error"] = f"Marker commit failed: {e}"
+            else:
+                hours = max(r_reset_in // 3600, 1)
+                readings_status["rate_limited"] = True
+                readings_status["error"] = (
+                    f"Auto-readings is limited to 1 per IP per 24h. Try again "
+                    f"in ~{hours}h. Your chart still committed — just not the readings."
+                )
 
         slug = re.sub(r"[^A-Za-z0-9._-]+", "_", name).strip("_")
         return _send_json(self, 200, {
@@ -248,6 +282,10 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
             "canon_md": canon_md,
             "profile_yaml": profile_yaml,
             "remaining_submissions_today": remaining,
-            "note": "Your entity is committed to the repo. Vercel will rebuild "
-                    "the site in ~30-60s and your page will be live.",
+            "readings": readings_status,
+            "note": (
+                "Your chart will appear in the network in ~1 minute (Vercel rebuild)."
+                + (" Full readings author in the background and appear ~2-3 minutes after submission."
+                   if readings_status.get("queued") else "")
+            ),
         })

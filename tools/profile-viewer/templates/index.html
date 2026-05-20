@@ -134,10 +134,13 @@
       </button>
       <label class="add-entity-checkbox-label">
         <input type="checkbox" id="add-entity-auto-readings" name="auto_readings" checked />
-        <span>Auto-author all 5 readings inline (~$0.10 · adds ~90s)</span>
+        <span id="add-entity-auto-readings-label">Auto-author all 5 readings inline (~$0.10 · adds ~90s)</span>
       </label>
       <div id="add-entity-status" class="add-entity-status" aria-live="polite"></div>
     </div>
+    <p id="add-entity-timing-note" class="add-entity-timing-note" hidden>
+      <strong>Heads up on timing:</strong> after you submit, your chart appears in the network within ~1 minute (site rebuild). If auto-readings is checked, full readings author in the background and appear ~2-3 minutes after submission. Stay on the page or come back later — your entry is permanent once submitted.
+    </p>
   </form>
 
   <div id="add-entity-preview" class="add-entity-preview" hidden aria-live="polite">
@@ -824,6 +827,29 @@
   const isFileProtocol = window.location.protocol === 'file:';
   if (isFileProtocol) banner.hidden = false;
 
+  // Detect whether we're on the live Vercel-hosted version vs the local dev
+  // server. The two paths behave differently for auto-readings:
+  //   - Local serve.py: authors readings INLINE in the add-entity handler (~90s)
+  //   - Vercel: writes a marker file, GitHub Action picks up the marker and
+  //     authors readings asynchronously (~2-3 min after submit)
+  // The form text + button visibility adapts.
+  const host = window.location.hostname;
+  const isLocal = host === '127.0.0.1' || host === 'localhost' || host === '';
+  const autoReadingsLabel = document.getElementById('add-entity-auto-readings-label');
+  const timingNote = document.getElementById('add-entity-timing-note');
+  const generateBtn = document.getElementById('add-entity-generate-readings');
+  if (!isLocal) {
+    if (autoReadingsLabel) {
+      autoReadingsLabel.textContent =
+        'Author all 5 readings (limit 1 per IP per day; readings appear ~2-3 min after submit)';
+    }
+    if (timingNote) timingNote.hidden = false;
+    // The /api/author-readings endpoint doesn't exist on Vercel — readings
+    // are handled async by the GitHub Action. Hide the inline-trigger button
+    // from the preview pane on public deployments.
+    if (generateBtn) generateBtn.style.display = 'none';
+  }
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -929,20 +955,46 @@
     blobDownloadLink(previewDownloadMd, body.canon_md, `${body.name}.md`, 'text/markdown');
     blobDownloadLink(previewDownloadYaml, body.profile_yaml, `${body.name}.profile.yaml`, 'application/x-yaml');
     if (readingsStatus) readingsStatus.textContent = '';
+    // Normalize the readings status across local + Vercel response shapes:
+    //   - Local server: body.readings_status is a string ('authored' | 'failed: …')
+    //   - Vercel server: body.readings is an object {queued, error, rate_limited, eta_minutes}
+    const localReadingsStatus = body.readings_status;          // string from local server
+    const remoteReadings      = body.readings || {};           // object from Vercel
+    const readingsAuthored    = localReadingsStatus === 'authored';
+    const readingsQueued      = remoteReadings.queued === true;
+    const readingsRateLimited = remoteReadings.rate_limited === true;
+    const readingsErrorMsg    = remoteReadings.error
+      || (typeof localReadingsStatus === 'string' && localReadingsStatus.startsWith('failed')
+          ? localReadingsStatus : null);
     if (generateReadingsBtn) {
-      // If readings were already auto-authored inline at submit, mark the
-      // button as done; otherwise leave it active so the user can click it.
-      if (body.readings_status === 'authored') {
+      if (readingsAuthored) {
         generateReadingsBtn.disabled = true;
         generateReadingsBtn.textContent = 'Readings authored ✓';
         if (readingsStatus) {
           setReadingsStatus(`All 5 readings authored inline. Session spend: <strong>$${(body.session_spend_usd || 0).toFixed(4)}</strong> of $${(body.session_spend_cap_usd || 1).toFixed(2)} cap.`, 'status-ok');
         }
-      } else if (body.readings_status && body.readings_status.startsWith('failed')) {
+      } else if (readingsQueued) {
+        // Public/Vercel: marker committed; GitHub Action will author in ~2-3 min
+        generateReadingsBtn.disabled = true;
+        generateReadingsBtn.textContent = 'Readings queued — appear in ~2-3 min';
+        if (readingsStatus) {
+          setReadingsStatus(
+            `Readings queued for auto-authoring. The chart appears within ~1 minute. ` +
+            `Full readings appear ~2-3 minutes after submission (Vercel rebuilds twice — once for the chart, once for the readings).`,
+            'status-ok'
+          );
+        }
+      } else if (readingsRateLimited) {
+        generateReadingsBtn.disabled = true;
+        generateReadingsBtn.textContent = 'Readings rate-limited';
+        if (readingsStatus) {
+          setReadingsStatus(escapeHtml(readingsErrorMsg || 'Rate limited.'), 'status-err');
+        }
+      } else if (readingsErrorMsg) {
         generateReadingsBtn.disabled = false;
         generateReadingsBtn.textContent = 'Retry readings (~$0.10 · ~90s)';
         if (readingsStatus) {
-          setReadingsStatus(`Auto-readings failed: <strong>${escapeHtml(body.readings_status)}</strong>. Click the button to retry.`, 'status-err');
+          setReadingsStatus(`Auto-readings failed: <strong>${escapeHtml(readingsErrorMsg)}</strong>. Click the button to retry.`, 'status-err');
         }
       } else {
         generateReadingsBtn.disabled = false;

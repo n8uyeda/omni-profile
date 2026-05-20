@@ -15,28 +15,43 @@ from __future__ import annotations
 import time
 
 # Per-instance state. Wiped on cold start.
-_BUCKETS: dict[str, list[float]] = {}
+# Keyed by bucket_name → ip → list[timestamps]. Separate buckets let us
+# enforce different per-IP caps on different actions (e.g. 3/day for
+# add-entity submissions, 1/day for readings-authoring).
+_BUCKETS: dict[str, dict[str, list[float]]] = {}
 
 # Window: seconds. 86400 = 1 day.
 DEFAULT_WINDOW_SECONDS = 86400
 DEFAULT_MAX_REQUESTS = 3
 
 
-def check_and_increment(ip: str, max_requests: int = DEFAULT_MAX_REQUESTS,
+def check_and_increment(ip: str, bucket: str = "default",
+                          max_requests: int = DEFAULT_MAX_REQUESTS,
                           window_seconds: int = DEFAULT_WINDOW_SECONDS) -> tuple[bool, int, int]:
     """Returns (allowed, remaining, reset_in_seconds).
 
-    If allowed=False, the caller should respond 429."""
+    If allowed=False, the caller should respond 429 (or skip the action)."""
     now = time.time()
     cutoff = now - window_seconds
-    # Trim expired entries
-    history = [t for t in _BUCKETS.get(ip, []) if t > cutoff]
+    bucket_map = _BUCKETS.setdefault(bucket, {})
+    history = [t for t in bucket_map.get(ip, []) if t > cutoff]
     if len(history) >= max_requests:
         oldest = history[0]
         reset_in = int(window_seconds - (now - oldest))
-        _BUCKETS[ip] = history
+        bucket_map[ip] = history
         return False, 0, max(reset_in, 0)
     history.append(now)
-    _BUCKETS[ip] = history
+    bucket_map[ip] = history
     remaining = max(max_requests - len(history), 0)
     return True, remaining, window_seconds
+
+
+def check_without_increment(ip: str, bucket: str = "default",
+                              max_requests: int = DEFAULT_MAX_REQUESTS,
+                              window_seconds: int = DEFAULT_WINDOW_SECONDS) -> bool:
+    """Like check_and_increment but read-only — doesn't consume a slot.
+    Returns True if a fresh call would be allowed."""
+    now = time.time()
+    cutoff = now - window_seconds
+    history = [t for t in _BUCKETS.get(bucket, {}).get(ip, []) if t > cutoff]
+    return len(history) < max_requests
