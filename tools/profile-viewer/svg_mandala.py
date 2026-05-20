@@ -119,21 +119,27 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
     def gate_activators(gate: int) -> list[int]:
         return [i for i, act in enumerate(per_entity_active) if gate in act]
 
+    # Per-render unique suffix (see svg_hd._uid docstring).
+    import secrets as _secrets
+    uid = _secrets.token_hex(3)
+    f_act = f'mc-active-glow-{uid}'
+    f_pla = f'mc-planet-glow-{uid}'
+    p_both = f'mc-both-pattern-{uid}'
     out: list[str] = [
         f'<svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" class="mandala">',
         '<defs>',
-        '  <filter id="mc-active-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_act}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="2.4" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
-        '  <filter id="mc-planet-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_pla}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="1.6" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
     ]
     if len(entity_colors) >= 2:
         out.append(
-            f'  <pattern id="mc-both-pattern" patternUnits="userSpaceOnUse" '
+            f'  <pattern id="{p_both}" patternUnits="userSpaceOnUse" '
             f'width="6" height="6" patternTransform="rotate(45)">'
             f'<rect x="0" y="0" width="3" height="6" fill="{entity_colors[0]}"/>'
             f'<rect x="3" y="0" width="3" height="6" fill="{entity_colors[1]}"/>'
@@ -142,9 +148,9 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
     out.extend([
         '  <style>',
         '    .mc-hexagram { font-family: serif; font-size: 16px; fill: var(--text-faint); opacity: 0.85; }',
-        '    .mc-hexagram-active { fill: var(--text); opacity: 1; filter: url(#mc-active-glow); }',
+        f'    .mc-hexagram-active {{ fill: var(--text); opacity: 1; filter: url(#{f_act}); }}',
         '    .mc-gate-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text); font-weight: 600; }',
-        '    .mc-gate-text-active { fill: #ffffff; filter: url(#mc-active-glow); }',
+        f'    .mc-gate-text-active {{ fill: #ffffff; filter: url(#{f_act}); }}',
         '    .mc-zodiac-wedge-fire  { fill: var(--chart-fire); opacity: 0.75; }',
         '    .mc-zodiac-wedge-earth { fill: var(--chart-earth); opacity: 0.75; }',
         '    .mc-zodiac-wedge-air   { fill: var(--chart-air); opacity: 0.75; }',
@@ -154,7 +160,7 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
         '    .mc-sign-glyph-air    { fill: var(--chart-air-glyph); }',
         '    .mc-sign-glyph-water  { fill: var(--chart-water-glyph); }',
         '    .mc-sign-glyph { font-family: "JetBrains Mono", "Segoe UI Symbol", monospace; font-size: 24px; }',
-        '    .mc-planet-glyph { font-family: "Segoe UI Symbol", "Apple Symbols", serif; font-size: 22px; filter: url(#mc-planet-glow); }',
+        f'    .mc-planet-glyph {{ font-family: "Segoe UI Symbol", "Apple Symbols", serif; font-size: 22px; filter: url(#{f_pla}); }}',
         '    .mc-ring { fill: none; stroke: var(--chart-ring-strong); stroke-width: 1.2; }',
         '    .mc-ring-thin { fill: none; stroke: var(--chart-ring); stroke-width: 0.7; }',
         '    .mc-gate-wedge-fire  { fill: var(--chart-fire); }',
@@ -184,10 +190,10 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
         wedge_d = _wedge_path(cx, cy, R_GATE_OUT, R_GATE_IN, a1, a2)
         if len(activators) == 1:
             stroke = entity_colors[activators[0]]
-            stroke_attr = f' stroke="{stroke}" stroke-width="2" filter="url(#mc-active-glow)"'
+            stroke_attr = f' stroke="{stroke}" stroke-width="2" filter="url(#{f_act})"'
         elif len(activators) >= 2:
-            stroke = "url(#mc-both-pattern)"
-            stroke_attr = f' stroke="url(#mc-both-pattern)" stroke-width="2.5" filter="url(#mc-active-glow)"'
+            stroke = f"url(#{p_both})"
+            stroke_attr = f' stroke="url(#{p_both})" stroke-width="2.5" filter="url(#{f_act})"'
         else:
             stroke_attr = ""
         active_cls = " mc-gate-wedge-active" if activators else ""
@@ -288,7 +294,7 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
     for i, name in enumerate(entity_names):
         x = 20 + i * 240
         out.append(
-            f'<circle cx="{x}" cy="20" r="7" fill="{entity_colors[i]}" filter="url(#mc-active-glow)"/>'
+            f'<circle cx="{x}" cy="20" r="7" fill="{entity_colors[i]}" filter="url(#{f_act})"/>'
         )
         out.append(
             f'<text x="{x + 14}" y="20" class="mc-overlay-legend" fill="{entity_colors[i]}" dominant-baseline="central">{name}</text>'
@@ -323,22 +329,29 @@ def render_mandala(chart_western: dict, chart_hd: dict | None, size: int = 1000)
         d_gates = {a["gate"] for a in chart_hd.get("design_activations", []) or []}
     active_gates = p_gates | d_gates
 
+    # Per-render unique suffix for filter IDs so the same mandala can appear
+    # multiple times on a page without Firefox cross-resolving url(#…) refs
+    # (see svg_hd._uid docstring for full context).
+    import secrets as _secrets
+    uid = _secrets.token_hex(3)
+    f_act = f'mandala-active-glow-{uid}'
+    f_pla = f'mandala-planet-glow-{uid}'
     out: list[str] = [
         f'<svg viewBox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg" class="mandala">',
         '<defs>',
-        '  <filter id="mandala-active-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_act}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="2.4" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
-        '  <filter id="mandala-planet-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_pla}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="1.6" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
         '  <style>',
         '    .mandala-hexagram { font-family: serif; font-size: 16px; fill: var(--text-faint); opacity: 0.85; }',
-        '    .mandala-hexagram-active { fill: var(--text); opacity: 1; filter: url(#mandala-active-glow); }',
+        f'    .mandala-hexagram-active {{ fill: var(--text); opacity: 1; filter: url(#{f_act}); }}',
         '    .mandala-gate-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text); font-weight: 600; letter-spacing: 0.02em; }',
-        '    .mandala-gate-text-active { fill: #ffffff; filter: url(#mandala-active-glow); }',
+        f'    .mandala-gate-text-active {{ fill: #ffffff; filter: url(#{f_act}); }}',
         '    .mandala-gate-divider { stroke: var(--chart-ring); stroke-width: 0.5; }',
         '    .mandala-gate-wedge-fire   { fill: var(--chart-fire); }',
         '    .mandala-gate-wedge-earth  { fill: var(--chart-earth); }',
@@ -351,7 +364,7 @@ def render_mandala(chart_western: dict, chart_hd: dict | None, size: int = 1000)
         '    .mandala-gate-wedge-earth.mandala-gate-wedge-active  { fill: color-mix(in srgb, var(--chart-earth), white 22%); }',
         '    .mandala-gate-wedge-air.mandala-gate-wedge-active    { fill: color-mix(in srgb, var(--chart-air), white 22%); }',
         '    .mandala-gate-wedge-water.mandala-gate-wedge-active  { fill: color-mix(in srgb, var(--chart-water), white 22%); }',
-        '    .mandala-gate-wedge-active { stroke: var(--accent); stroke-width: 1.5; filter: url(#mandala-active-glow); }',
+        f'    .mandala-gate-wedge-active {{ stroke: var(--accent); stroke-width: 1.5; filter: url(#{f_act}); }}',
         '    .mandala-zodiac-wedge-fire  { fill: var(--chart-fire); opacity: 0.75; }',
         '    .mandala-zodiac-wedge-earth { fill: var(--chart-earth); opacity: 0.75; }',
         '    .mandala-zodiac-wedge-air   { fill: var(--chart-air); opacity: 0.75; }',
@@ -361,7 +374,7 @@ def render_mandala(chart_western: dict, chart_hd: dict | None, size: int = 1000)
         '    .mandala-sign-glyph-air    { fill: var(--chart-air-glyph); }',
         '    .mandala-sign-glyph-water  { fill: var(--chart-water-glyph); }',
         '    .mandala-sign-glyph        { font-family: "JetBrains Mono", "Segoe UI Symbol", monospace; font-size: 24px; }',
-        '    .mandala-planet-glyph      { font-family: "Segoe UI Symbol", "Apple Symbols", serif; font-size: 22px; fill: var(--chart-planet-text); filter: url(#mandala-planet-glow); }',
+        f'    .mandala-planet-glyph      {{ font-family: "Segoe UI Symbol", "Apple Symbols", serif; font-size: 22px; fill: var(--chart-planet-text); filter: url(#{f_pla}); }}',
         '    .mandala-planet-tick { stroke: var(--chart-planet-tick); stroke-width: 1.4; }',
         '    .mandala-ring { fill: none; stroke: var(--chart-ring-strong); stroke-width: 1.2; }',
         '    .mandala-ring-thin { fill: none; stroke: var(--chart-ring); stroke-width: 0.7; }',

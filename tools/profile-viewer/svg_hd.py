@@ -15,6 +15,23 @@ viewBox: 460x680.
 """
 from __future__ import annotations
 
+import secrets
+
+
+def _uid() -> str:
+    """Short unique suffix to keep SVG <filter>/<pattern> IDs unique per render.
+
+    Why: when two bodygraphs share a page (e.g. the standalone bodygraph plus
+    the one nested inside the mandala), duplicate IDs make Firefox resolve
+    `filter: url(#hd-defined-glow)` to the first matching element in document
+    order — which, on desktop, is inside the standalone bodygraph (hidden
+    via display:none). Firefox then refuses to apply the filter and the
+    nested-bodygraph centers render without their lineage colors / glow.
+    Chrome/Brave are forgiving and pick a same-SVG match. Per-render uids
+    eliminate the collision."""
+    return secrets.token_hex(3)
+
+
 # --------------------------------------------------------------------
 # Center geometry (vertices for shape rendering, anchor for fallback)
 # --------------------------------------------------------------------
@@ -192,14 +209,19 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
       - Active in 1 entity     → line in that entity's color
       - Active in 2+           → gradient between entity colors
     """
+    # Per-render unique suffix for filter / pattern IDs (see _uid()).
+    uid = _uid()
+    f_def = f'hdc-defined-glow-{uid}'
+    f_chn = f'hdc-channel-glow-{uid}'
+    p_both = f'hdc-both-pattern-{uid}'
     out: list[str] = [
         f'<svg viewBox="0 0 460 680" xmlns="http://www.w3.org/2000/svg" class="bodygraph">',
         '<defs>',
-        '  <filter id="hdc-defined-glow" x="-30%" y="-30%" width="160%" height="160%">',
+        f'  <filter id="{f_def}" x="-30%" y="-30%" width="160%" height="160%">',
         '    <feGaussianBlur stdDeviation="3" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
-        '  <filter id="hdc-channel-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_chn}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="1.5" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
@@ -208,7 +230,7 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
     # we need one "both" pattern). For more entities, more patterns.
     if len(entity_colors) >= 2:
         out.append(
-            f'  <pattern id="hdc-both-pattern" patternUnits="userSpaceOnUse" '
+            f'  <pattern id="{p_both}" patternUnits="userSpaceOnUse" '
             f'width="6" height="6" patternTransform="rotate(45)">'
             f'<rect x="0" y="0" width="3" height="6" fill="{entity_colors[0]}"/>'
             f'<rect x="3" y="0" width="3" height="6" fill="{entity_colors[1]}"/>'
@@ -220,7 +242,7 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
         '    .center-stroke { stroke: var(--hd-stroke); stroke-width: 1.2; }',
         '    .center-undef-fill { fill: var(--hd-undef-bg); }',
         '    .channel-structure { stroke: var(--hd-stroke-weak); stroke-width: 1.4; stroke-linecap: round; opacity: 0.45; }',
-        '    .channel-overlay-line { stroke-width: 4; stroke-linecap: round; filter: url(#hdc-channel-glow); }',
+        f'    .channel-overlay-line {{ stroke-width: 4; stroke-linecap: round; filter: url(#{f_chn}); }}',
         '    .gate-num { font-family: "JetBrains Mono", monospace; font-size: 8.5px; font-weight: 600; }',
         '    .gate-num-undefined { fill: var(--text-dim); }',
         '    .gate-num-activated { fill: #ffffff; }',
@@ -312,9 +334,9 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
             fill_attr = ' class="center-undef-fill center-stroke"'
         elif len(definers) == 1:
             color = entity_colors[definers[0]]
-            fill_attr = f' fill="{color}" filter="url(#hdc-defined-glow)" class="center-stroke"'
+            fill_attr = f' fill="{color}" filter="url(#{f_def})" class="center-stroke"'
         else:
-            fill_attr = ' fill="url(#hdc-both-pattern)" filter="url(#hdc-defined-glow)" class="center-stroke"'
+            fill_attr = f' fill="url(#{p_both})" filter="url(#{f_def})" class="center-stroke"'
         out.append(
             f'{_shape_open(ldata)}{fill_attr} '
             f'data-tip-type="center" data-tip-id="{cname}"/>'
@@ -357,7 +379,7 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
                 color = entity_colors[activators[0]]
                 out.append(f'<circle cx="{gx}" cy="{gy}" r="{r}" fill="{color}" stroke="{color}" stroke-width="1.2"/>')
             else:
-                out.append(f'<circle cx="{gx}" cy="{gy}" r="{r}" fill="url(#hdc-both-pattern)" stroke="{entity_colors[activators[0]]}" stroke-width="1.2"/>')
+                out.append(f'<circle cx="{gx}" cy="{gy}" r="{r}" fill="url(#{p_both})" stroke="{entity_colors[activators[0]]}" stroke-width="1.2"/>')
             text_cls = "gate-num gate-num-activated"
         else:
             text_cls = "gate-num gate-num-undefined"
@@ -370,7 +392,7 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
     # 6. Legend (top-left corner)
     for i, name in enumerate(entity_names):
         y = 16 + i * 14
-        out.append(f'<circle cx="14" cy="{y}" r="5" fill="{entity_colors[i]}" filter="url(#hdc-defined-glow)"/>')
+        out.append(f'<circle cx="14" cy="{y}" r="5" fill="{entity_colors[i]}" filter="url(#{f_def})"/>')
         out.append(f'<text x="24" y="{y}" class="overlay-legend-text" fill="{entity_colors[i]}" dominant-baseline="central">{name}</text>')
 
     out.append('</svg>')
@@ -378,19 +400,25 @@ def render_bodygraph_combined(charts_hd: list[dict | None], entity_colors: list[
 
 
 def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
+    # Per-render unique suffix for filter / pattern IDs. See _uid() docstring.
+    uid = _uid()
+    f_def = f'hd-defined-glow-{uid}'
+    f_chn = f'hd-channel-glow-{uid}'
+    f_act = f'hd-activation-glow-{uid}'
+    p_str = f'stripe-pattern-{uid}'
     out: list[str] = [
         f'<svg viewBox="0 0 460 680" xmlns="http://www.w3.org/2000/svg" class="bodygraph">',
         '<defs>',
         # Filters
-        '  <filter id="hd-defined-glow" x="-30%" y="-30%" width="160%" height="160%">',
+        f'  <filter id="{f_def}" x="-30%" y="-30%" width="160%" height="160%">',
         '    <feGaussianBlur stdDeviation="3" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
-        '  <filter id="hd-channel-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_chn}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="1.5" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
-        '  <filter id="hd-activation-glow" x="-50%" y="-50%" width="200%" height="200%">',
+        f'  <filter id="{f_act}" x="-50%" y="-50%" width="200%" height="200%">',
         '    <feGaussianBlur stdDeviation="1.5" result="blur"/>',
         '    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
         '  </filter>',
@@ -398,19 +426,19 @@ def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
         '    .body-silhouette { fill: var(--text); opacity: 0.05; }',
         '    .center-stroke { stroke: var(--hd-stroke); stroke-width: 1.2; }',
         '    .center-undef-fill { fill: var(--hd-undef-bg); }',
-        '    .center-head-fill         { fill: var(--hd-head); filter: url(#hd-defined-glow); }',
-        '    .center-ajna-fill         { fill: var(--hd-ajna); filter: url(#hd-defined-glow); }',
-        '    .center-throat-fill       { fill: var(--hd-throat); filter: url(#hd-defined-glow); }',
-        '    .center-g-fill            { fill: var(--hd-g); filter: url(#hd-defined-glow); }',
-        '    .center-heart-fill        { fill: var(--hd-heart); filter: url(#hd-defined-glow); }',
-        '    .center-solar_plexus-fill { fill: var(--hd-solar_plexus); filter: url(#hd-defined-glow); }',
-        '    .center-sacral-fill       { fill: var(--hd-sacral); filter: url(#hd-defined-glow); }',
-        '    .center-spleen-fill       { fill: var(--hd-spleen); filter: url(#hd-defined-glow); }',
-        '    .center-root-fill         { fill: var(--hd-root); filter: url(#hd-defined-glow); }',
+        f'    .center-head-fill         {{ fill: var(--hd-head); filter: url(#{f_def}); }}',
+        f'    .center-ajna-fill         {{ fill: var(--hd-ajna); filter: url(#{f_def}); }}',
+        f'    .center-throat-fill       {{ fill: var(--hd-throat); filter: url(#{f_def}); }}',
+        f'    .center-g-fill            {{ fill: var(--hd-g); filter: url(#{f_def}); }}',
+        f'    .center-heart-fill        {{ fill: var(--hd-heart); filter: url(#{f_def}); }}',
+        f'    .center-solar_plexus-fill {{ fill: var(--hd-solar_plexus); filter: url(#{f_def}); }}',
+        f'    .center-sacral-fill       {{ fill: var(--hd-sacral); filter: url(#{f_def}); }}',
+        f'    .center-spleen-fill       {{ fill: var(--hd-spleen); filter: url(#{f_def}); }}',
+        f'    .center-root-fill         {{ fill: var(--hd-root); filter: url(#{f_def}); }}',
         # Channel layers
         '    .channel-structure { stroke: var(--hd-stroke-weak); stroke-width: 1.4; stroke-linecap: round; opacity: 0.45; }',
-        '    .channel-personality { stroke: var(--hd-personality); stroke-width: 4; stroke-linecap: round; filter: url(#hd-channel-glow); }',
-        '    .channel-design      { stroke: var(--hd-design);      stroke-width: 4; stroke-linecap: round; filter: url(#hd-channel-glow); }',
+        f'    .channel-personality {{ stroke: var(--hd-personality); stroke-width: 4; stroke-linecap: round; filter: url(#{f_chn}); }}',
+        f'    .channel-design      {{ stroke: var(--hd-design);      stroke-width: 4; stroke-linecap: round; filter: url(#{f_chn}); }}',
         '    .channel-both-base   { stroke: var(--hd-personality); stroke-width: 4; stroke-linecap: butt; }',
         '    .channel-both-over   { stroke: var(--hd-design); stroke-width: 4; stroke-linecap: butt; stroke-dasharray: 7 7; }',
         # Gate numbers + activation badges
@@ -418,9 +446,9 @@ def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
         '    .gate-num-defined { fill: rgba(0, 0, 0, 0.82); }',
         '    .gate-num-undefined { fill: var(--text-dim); }',
         '    .gate-num-activated { fill: #ffffff; }',
-        '    .activation-circle-personality { fill: var(--hd-personality); stroke: var(--hd-personality); stroke-width: 1.2; filter: url(#hd-activation-glow); }',
-        '    .activation-circle-design      { fill: var(--hd-design); stroke: var(--hd-design); stroke-width: 1.2; filter: url(#hd-activation-glow); }',
-        '    .activation-circle-both        { fill: url(#stripe-pattern); stroke: var(--hd-personality); stroke-width: 1.2; filter: url(#hd-activation-glow); }',
+        f'    .activation-circle-personality {{ fill: var(--hd-personality); stroke: var(--hd-personality); stroke-width: 1.2; filter: url(#{f_act}); }}',
+        f'    .activation-circle-design      {{ fill: var(--hd-design); stroke: var(--hd-design); stroke-width: 1.2; filter: url(#{f_act}); }}',
+        f'    .activation-circle-both        {{ fill: url(#{p_str}); stroke: var(--hd-personality); stroke-width: 1.2; filter: url(#{f_act}); }}',
         # Center labels
         '    .center-label-text { font-family: "JetBrains Mono", monospace; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; }',
         '    .center-label-defined { fill: rgba(0, 0, 0, 0.55); }',
@@ -428,7 +456,7 @@ def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
         '    .skipped-note { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-faint); letter-spacing: 0.04em; }',
         '  </style>',
         # Stripe pattern for "both" activations (P + D on same gate)
-        '  <pattern id="stripe-pattern" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">',
+        f'  <pattern id="{p_str}" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">',
         '    <rect x="0" y="0" width="3" height="6" fill="var(--hd-personality)"/>',
         '    <rect x="3" y="0" width="3" height="6" fill="var(--hd-design)"/>',
         '  </pattern>',
