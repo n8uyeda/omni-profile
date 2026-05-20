@@ -3,8 +3,8 @@
    since the mandala nests the bodygraph at its center.
    Caller passes: mandala_svg, chart_hd, planet_glyphs. #}
 <div class="mandala-frame">
-  <div class="activation-column design">
-    <h3 class="activation-heading">Design</h3>
+  <details class="activation-column design" open>
+    <summary class="activation-heading">Design</summary>
     {% if chart_hd and chart_hd.design_activations %}
       {% for a in chart_hd.design_activations %}
         <div class="activation-row design-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
@@ -15,14 +15,14 @@
     {% else %}
       <p class="activation-empty">—</p>
     {% endif %}
-  </div>
+  </details>
 
   <div class="mandala-svg-wrap">
     {{ mandala_svg|safe }}
   </div>
 
-  <div class="activation-column personality">
-    <h3 class="activation-heading">Personality</h3>
+  <details class="activation-column personality" open>
+    <summary class="activation-heading">Personality</summary>
     {% if chart_hd and chart_hd.personality_activations %}
       {% for a in chart_hd.personality_activations %}
         <div class="activation-row personality-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
@@ -33,7 +33,7 @@
     {% else %}
       <p class="activation-empty">—</p>
     {% endif %}
-  </div>
+  </details>
 </div>
 
 <div class="mandala-legend" aria-label="Mandala chart legend">

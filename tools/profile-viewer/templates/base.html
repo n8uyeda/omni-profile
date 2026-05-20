@@ -194,6 +194,21 @@
 
   <script>
     // ============================================================
+    // Activation columns (Design / Personality) — open on desktop,
+    // closed on mobile so the chart can be full-width.
+    // Runs once at page load. Resizes don't override user choices
+    // (kept simple — if the user opens an accordion on mobile then rotates,
+    // it stays open).
+    // ============================================================
+    (function() {
+      const isDesktop = window.innerWidth > 720;
+      document.querySelectorAll('.activation-column').forEach(col => {
+        if (isDesktop) col.setAttribute('open', '');
+        else col.removeAttribute('open');
+      });
+    })();
+
+    // ============================================================
     // Chart chat — floating launcher + side panel on every page
     // ============================================================
     (function() {

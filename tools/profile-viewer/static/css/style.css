@@ -2368,6 +2368,20 @@ details[open] > summary .collapse-toggle {
   font-weight: 600;
 }
 
+/* Desktop (>=721px): the column uses native <details> but we hide the marker
+ * so it looks identical to the previous static column. JS at page load sets
+ * `open` on all activation-columns so the rows display.
+ * The cursor stays as text-pointer (not pointer) since clicking it does
+ * nothing on desktop. */
+@media (min-width: 721px) {
+  .activation-column > summary.activation-heading {
+    cursor: default;
+    list-style: none;
+  }
+  .activation-column > summary.activation-heading::-webkit-details-marker { display: none; }
+  .activation-column > summary.activation-heading::marker { content: ''; }
+}
+
 .activation-column.design .activation-heading { color: var(--hd-personality); }
 .activation-column.personality .activation-heading { color: var(--text); }
 
@@ -2425,6 +2439,68 @@ details[open] > summary .collapse-toggle {
   }
   .activation-row { font-size: 0.72rem; gap: 0.25rem; }
   .activation-glyph { font-size: 0.95rem; }
+}
+
+/* Mobile (<=720px): the 70px / 1fr / 70px grid squeezes the chart down to
+ * an unusable size. Stack everything into a single column with the chart
+ * FIRST (visually), and turn each activation column into a tap-to-expand
+ * accordion (default closed via JS) so the page doesn't become a long scroll. */
+@media (max-width: 720px) {
+  .bodygraph-frame,
+  .mandala-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  /* Chart first, then activation columns under it (CSS order). */
+  .bodygraph-svg-wrap,
+  .mandala-svg-wrap { order: 1; }
+  .activation-column.design { order: 2; }
+  .activation-column.personality { order: 3; }
+
+  /* Each activation column becomes a tappable accordion */
+  .activation-column {
+    padding-top: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .activation-column > summary.activation-heading {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0.9rem;
+    margin: 0;
+    background: var(--bg-soft);
+    user-select: none;
+    text-align: left;
+  }
+  .activation-column > summary.activation-heading::-webkit-details-marker { display: none; }
+  .activation-column > summary.activation-heading::marker { content: ''; }
+  .activation-column > summary.activation-heading::after {
+    content: '▾';
+    color: var(--text-faint);
+    transition: transform 0.18s;
+    margin-left: 0.5rem;
+  }
+  .activation-column[open] > summary.activation-heading::after {
+    transform: rotate(180deg);
+  }
+
+  /* Rows breathe inside the accordion, take full width */
+  .activation-column .activation-row {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+  }
+  .activation-column .activation-row.personality-row {
+    justify-content: flex-start;  /* match design-row, easier to read on mobile */
+  }
+  .activation-column .activation-empty {
+    padding: 0.7rem 0.9rem;
+  }
 }
 
 /* ----- Detail panels ----- */
