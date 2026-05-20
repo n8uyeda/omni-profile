@@ -925,6 +925,79 @@
   const readingsStatus = document.getElementById('add-entity-readings-status');
   let currentEntityName = null;
   let currentPersonUrl = null;
+  let readingsPollTimer = null;
+  let readingsPollAttempts = 0;
+
+  // Polls the person URL until the readings section appears, then reloads
+  // the preview iframe so the new content shows up without a manual refresh.
+  // Used on Vercel (auto-readings via GitHub Action, ~2-3 min latency).
+  function startReadingsPolling(personUrl, displayName) {
+    stopReadingsPolling();
+    readingsPollAttempts = 0;
+    const elapsedStart = Date.now();
+    const maxAttempts = 24;       // 24 × 20s = 8 min
+    const intervalMs   = 20000;
+
+    const check = async () => {
+      readingsPollAttempts += 1;
+      const elapsedSec = Math.round((Date.now() - elapsedStart) / 1000);
+      try {
+        const resp = await fetch(personUrl + '?_=' + Date.now(), { cache: 'no-store' });
+        if (resp.ok) {
+          const html = await resp.text();
+          // The thematic-synthesis section only renders when readings exist.
+          if (html.includes('class="reading-section') || html.includes('chart-reading')) {
+            stopReadingsPolling();
+            // Force-reload the iframe to display the now-populated readings.
+            try { previewFrame.src = personUrl + '?_=' + Date.now(); } catch (_) {}
+            if (readingsStatus) {
+              setReadingsStatus(
+                `<strong>Readings ready ✓</strong> The chart preview above has been refreshed automatically.`,
+                'status-ok'
+              );
+            }
+            if (generateReadingsBtn) {
+              generateReadingsBtn.disabled = true;
+              generateReadingsBtn.textContent = 'Readings authored ✓';
+            }
+            return;
+          }
+        }
+      } catch (_) { /* network blip — keep polling */ }
+
+      if (readingsPollAttempts >= maxAttempts) {
+        stopReadingsPolling();
+        if (readingsStatus) {
+          setReadingsStatus(
+            `Readings are taking longer than expected. They should appear soon — ` +
+            `<a href="${personUrl}" target="_blank" rel="noopener">open the chart page</a> ` +
+            `in a minute and refresh.`,
+            'status-warn'
+          );
+        }
+        return;
+      }
+      if (readingsStatus) {
+        const minRemaining = Math.max(0, 180 - elapsedSec);
+        setReadingsStatus(
+          `Authoring readings for <strong>${escapeHtml(displayName)}</strong>… ` +
+          `(${elapsedSec}s elapsed · ~${minRemaining}s remaining) — the preview will refresh automatically when they're ready.`,
+          'status-working'
+        );
+      }
+    };
+
+    // Run an immediate first check, then schedule.
+    check();
+    readingsPollTimer = setInterval(check, intervalMs);
+  }
+
+  function stopReadingsPolling() {
+    if (readingsPollTimer) {
+      clearInterval(readingsPollTimer);
+      readingsPollTimer = null;
+    }
+  }
 
   // Track currently-active object URLs so we can revoke them when the user
   // resets the form (avoid leaking memory if they add many people in a row).
@@ -974,16 +1047,19 @@
           setReadingsStatus(`All 5 readings authored inline. Session spend: <strong>$${(body.session_spend_usd || 0).toFixed(4)}</strong> of $${(body.session_spend_cap_usd || 1).toFixed(2)} cap.`, 'status-ok');
         }
       } else if (readingsQueued) {
-        // Public/Vercel: marker committed; GitHub Action will author in ~2-3 min
+        // Public/Vercel: marker committed; GitHub Action will author in ~2-3 min.
+        // Start polling the person URL so the preview iframe auto-refreshes
+        // as soon as the readings land — no manual reload needed.
         generateReadingsBtn.disabled = true;
         generateReadingsBtn.textContent = 'Readings queued — appear in ~2-3 min';
         if (readingsStatus) {
           setReadingsStatus(
-            `Readings queued for auto-authoring. The chart appears within ~1 minute. ` +
-            `Full readings appear ~2-3 minutes after submission (Vercel rebuilds twice — once for the chart, once for the readings).`,
+            `Readings queued. Chart appears within ~1 minute; full readings ~2-3 minutes after submit. ` +
+            `<strong>The preview above will refresh automatically when readings are ready</strong> — no need to reload.`,
             'status-ok'
           );
         }
+        startReadingsPolling(body.person_url, body.name);
       } else if (readingsRateLimited) {
         generateReadingsBtn.disabled = true;
         generateReadingsBtn.textContent = 'Readings rate-limited';
@@ -1006,6 +1082,7 @@
     preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   function hidePreview() {
+    stopReadingsPolling();
     preview.hidden = true;
     form.hidden = false;
     previewFrame.src = 'about:blank';

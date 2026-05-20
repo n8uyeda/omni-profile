@@ -1,160 +1,240 @@
-generated_at: '2026-05-18T15:01:58Z'
+generated_at: '2026-05-20T20:47:51Z'
 engine_version: '0.5'
 entity: Cami
-canon_path: 04_CANON/People/Cami.md
+canon_path: 04_CANON/Shared/People/Cami.md
 birth:
   date: 1996-03-14
+  time: '11:20'
   tz: America/Mexico_City
   place: Mexico City, Mexico
   lat: 19.4326
   lon: -99.1332
-  precision: 2
+  precision: 1
+  source: Date + place provided by N8 on 2026-05-17 (via Gabriel Vicente); birth time (11:20 local) added 2026-05-20.
 western:
   zodiac: tropical
-  house_system: null
-  precision_note: Computed at 12:00 UT of birth date (no birth time on file). Sun
-    reliable to ±1°; Moon ±6° (date-only). Houses, Ascendant, and Midheaven omitted
-    — require precision 1.
-  ascendant: null
-  midheaven: null
-  houses: null
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 73.2368
+    sign: Gemini
+    degree_in_sign: 13.2368
+  midheaven:
+    longitude: 331.4476
+    sign: Pisces
+    degree_in_sign: 1.4476
+  houses:
+    - number: 1
+      cusp_longitude: 73.2368
+      sign: Gemini
+      degree_in_sign: 13.2368
+    - number: 2
+      cusp_longitude: 98.5053
+      sign: Cancer
+      degree_in_sign: 8.5053
+    - number: 3
+      cusp_longitude: 123.5354
+      sign: Leo
+      degree_in_sign: 3.5354
+    - number: 4
+      cusp_longitude: 151.4476
+      sign: Virgo
+      degree_in_sign: 1.4476
+    - number: 5
+      cusp_longitude: 183.9835
+      sign: Libra
+      degree_in_sign: 3.9835
+    - number: 6
+      cusp_longitude: 219.386
+      sign: Scorpio
+      degree_in_sign: 9.386
+    - number: 7
+      cusp_longitude: 253.2368
+      sign: Sagittarius
+      degree_in_sign: 13.2368
+    - number: 8
+      cusp_longitude: 278.5053
+      sign: Capricorn
+      degree_in_sign: 8.5053
+    - number: 9
+      cusp_longitude: 303.5354
+      sign: Aquarius
+      degree_in_sign: 3.5354
+    - number: 10
+      cusp_longitude: 331.4476
+      sign: Pisces
+      degree_in_sign: 1.4476
+    - number: 11
+      cusp_longitude: 3.9835
+      sign: Aries
+      degree_in_sign: 3.9835
+    - number: 12
+      cusp_longitude: 39.386
+      sign: Taurus
+      degree_in_sign: 9.386
   planets:
-  - body: sun
-    longitude: 354.1918
-    sign: Pisces
-    degree_in_sign: 24.1918
-    retrograde: false
-  - body: moon
-    longitude: 287.8011
-    sign: Capricorn
-    degree_in_sign: 17.8011
-    retrograde: false
-  - body: mercury
-    longitude: 341.7918
-    sign: Pisces
-    degree_in_sign: 11.7918
-    retrograde: false
-  - body: venus
-    longitude: 39.2645
-    sign: Taurus
-    degree_in_sign: 9.2645
-    retrograde: false
-  - body: mars
-    longitude: 352.0769
-    sign: Pisces
-    degree_in_sign: 22.0769
-    retrograde: false
-  - body: jupiter
-    longitude: 283.8249
-    sign: Capricorn
-    degree_in_sign: 13.8249
-    retrograde: false
-  - body: saturn
-    longitude: 357.0641
-    sign: Pisces
-    degree_in_sign: 27.0641
-    retrograde: false
-  - body: uranus
-    longitude: 303.3591
-    sign: Aquarius
-    degree_in_sign: 3.3591
-    retrograde: false
-  - body: neptune
-    longitude: 297.1842
-    sign: Capricorn
-    degree_in_sign: 27.1842
-    retrograde: false
-  - body: pluto
-    longitude: 243.0943
-    sign: Sagittarius
-    degree_in_sign: 3.0943
-    retrograde: true
-  - body: north_node
-    longitude: 197.3331
-    sign: Libra
-    degree_in_sign: 17.3331
-    retrograde: true
+    - body: sun
+      longitude: 354.4133
+      sign: Pisces
+      degree_in_sign: 24.4133
+      retrograde: false
+      house: 10
+    - body: moon
+      longitude: 291.0055
+      sign: Capricorn
+      degree_in_sign: 21.0055
+      retrograde: false
+      house: 8
+    - body: mercury
+      longitude: 342.1815
+      sign: Pisces
+      degree_in_sign: 12.1815
+      retrograde: false
+      house: 10
+    - body: venus
+      longitude: 39.5052
+      sign: Taurus
+      degree_in_sign: 9.5052
+      retrograde: false
+      house: 12
+    - body: mars
+      longitude: 352.2512
+      sign: Pisces
+      degree_in_sign: 22.2512
+      retrograde: false
+      house: 10
+    - body: jupiter
+      longitude: 283.8561
+      sign: Capricorn
+      degree_in_sign: 13.8561
+      retrograde: false
+      house: 8
+    - body: saturn
+      longitude: 357.0916
+      sign: Pisces
+      degree_in_sign: 27.0916
+      retrograde: false
+      house: 10
+    - body: uranus
+      longitude: 303.3685
+      sign: Aquarius
+      degree_in_sign: 3.3685
+      retrograde: false
+      house: 8
+    - body: neptune
+      longitude: 297.1896
+      sign: Capricorn
+      degree_in_sign: 27.1896
+      retrograde: false
+      house: 8
+    - body: pluto
+      longitude: 243.0931
+      sign: Sagittarius
+      degree_in_sign: 3.0931
+      retrograde: true
+      house: 6
+    - body: north_node
+      longitude: 197.3259
+      sign: Libra
+      degree_in_sign: 17.3259
+      retrograde: true
+      house: 5
   aspects:
-  - from: sun
-    to: mars
-    type: conjunction
-    separation: 2.1149
-    orb: 2.1149
-  - from: sun
-    to: saturn
-    type: conjunction
-    separation: 2.8723
-    orb: 2.8723
-  - from: sun
-    to: neptune
-    type: sextile
-    separation: 57.0075
-    orb: 2.9925
-  - from: moon
-    to: mars
-    type: sextile
-    separation: 64.2758
-    orb: 4.2758
-  - from: moon
-    to: jupiter
-    type: conjunction
-    separation: 3.9763
-    orb: 3.9763
-  - from: moon
-    to: north_node
-    type: square
-    separation: 90.4681
-    orb: 0.4681
-  - from: mercury
-    to: venus
-    type: sextile
-    separation: 57.4727
-    orb: 2.5273
-  - from: mercury
-    to: jupiter
-    type: sextile
-    separation: 57.967
-    orb: 2.033
-  - from: venus
-    to: jupiter
-    type: trine
-    separation: 115.4396
-    orb: 4.5604
-  - from: venus
-    to: uranus
-    type: square
-    separation: 95.9054
-    orb: 5.9054
-  - from: mars
-    to: saturn
-    type: conjunction
-    separation: 4.9872
-    orb: 4.9872
-  - from: jupiter
-    to: north_node
-    type: square
-    separation: 86.4918
-    orb: 3.5082
-  - from: saturn
-    to: neptune
-    type: sextile
-    separation: 59.8798
-    orb: 0.1202
-  - from: saturn
-    to: pluto
-    type: trine
-    separation: 113.9698
-    orb: 6.0302
-  - from: uranus
-    to: neptune
-    type: conjunction
-    separation: 6.1749
-    orb: 6.1749
-  - from: uranus
-    to: pluto
-    type: sextile
-    separation: 60.2649
-    orb: 0.2649
+    - from: sun
+      to: moon
+      type: sextile
+      separation: 63.4078
+      orb: 3.4078
+    - from: sun
+      to: mars
+      type: conjunction
+      separation: 2.1621
+      orb: 2.1621
+    - from: sun
+      to: saturn
+      type: conjunction
+      separation: 2.6784
+      orb: 2.6784
+    - from: sun
+      to: neptune
+      type: sextile
+      separation: 57.2237
+      orb: 2.7763
+    - from: moon
+      to: mars
+      type: sextile
+      separation: 61.2457
+      orb: 1.2457
+    - from: moon
+      to: jupiter
+      type: conjunction
+      separation: 7.1494
+      orb: 7.1494
+    - from: moon
+      to: neptune
+      type: conjunction
+      separation: 6.1841
+      orb: 6.1841
+    - from: moon
+      to: north_node
+      type: square
+      separation: 93.6796
+      orb: 3.6796
+    - from: mercury
+      to: venus
+      type: sextile
+      separation: 57.3237
+      orb: 2.6763
+    - from: mercury
+      to: jupiter
+      type: sextile
+      separation: 58.3254
+      orb: 1.6746
+    - from: venus
+      to: jupiter
+      type: trine
+      separation: 115.6491
+      orb: 4.3509
+    - from: venus
+      to: uranus
+      type: square
+      separation: 96.1367
+      orb: 6.1367
+    - from: mars
+      to: saturn
+      type: conjunction
+      separation: 4.8405
+      orb: 4.8405
+    - from: mars
+      to: neptune
+      type: sextile
+      separation: 55.0616
+      orb: 4.9384
+    - from: jupiter
+      to: north_node
+      type: square
+      separation: 86.5303
+      orb: 3.4697
+    - from: saturn
+      to: neptune
+      type: sextile
+      separation: 59.9021
+      orb: 0.0979
+    - from: saturn
+      to: pluto
+      type: trine
+      separation: 113.9985
+      orb: 6.0015
+    - from: uranus
+      to: neptune
+      type: conjunction
+      separation: 6.1789
+      orb: 6.1789
+    - from: uranus
+      to: pluto
+      type: sextile
+      separation: 60.2753
+      orb: 0.2753
   element_balance:
     fire: 0
     earth: 2
@@ -173,7 +253,174 @@ mayan:
   tone: 1
   trecena_start: *id001
 human_design:
-  skipped: requires precision 1 (date + time + place)
+  type: Manifesting Generator
+  strategy: To Respond and Inform
+  authority: Emotional
+  not_self_theme: Frustration and Anger
+  profile: 2/5
+  definition: Triple Split
+  incarnation_cross:
+    angle: Right Angle
+    code: 36/6 | 11/12
+    gates:
+      personality_sun: 36
+      personality_earth: 6
+      design_sun: 11
+      design_earth: 12
+    name: Right Angle Cross of Eden
+  defined_centers:
+    - ajna
+    - head
+    - sacral
+    - solar_plexus
+    - spleen
+    - throat
+  undefined_centers:
+    - g
+    - heart
+    - root
+  channels:
+    - channel: 12-22
+      gates:
+        - 12
+        - 22
+      centers:
+        - throat
+        - solar_plexus
+    - channel: 24-61
+      gates:
+        - 24
+        - 61
+      centers:
+        - ajna
+        - head
+    - channel: 34-57
+      gates:
+        - 34
+        - 57
+      centers:
+        - sacral
+        - spleen
+  hanging_gates:
+    - 6
+    - 11
+    - 32
+    - 36
+    - 38
+    - 41
+    - 42
+    - 44
+    - 51
+    - 60
+    - 63
+  personality_jd_ut: 2450157.22222
+  design_jd_ut: 2450070.32405
+  personality_activations:
+    - body: sun
+      longitude: 354.4133
+      gate: 36
+      line: 2
+    - body: earth
+      longitude: 174.4133
+      gate: 6
+      line: 2
+    - body: north_node
+      longitude: 197.3259
+      gate: 57
+      line: 3
+    - body: south_node
+      longitude: 17.3259
+      gate: 51
+      line: 3
+    - body: moon
+      longitude: 291.0055
+      gate: 61
+      line: 1
+    - body: mercury
+      longitude: 342.1815
+      gate: 63
+      line: 1
+    - body: venus
+      longitude: 39.5052
+      gate: 24
+      line: 3
+    - body: mars
+      longitude: 352.2512
+      gate: 22
+      line: 6
+    - body: jupiter
+      longitude: 283.8561
+      gate: 38
+      line: 5
+    - body: saturn
+      longitude: 357.0916
+      gate: 36
+      line: 5
+    - body: uranus
+      longitude: 303.3685
+      gate: 41
+      line: 2
+    - body: neptune
+      longitude: 297.1896
+      gate: 60
+      line: 1
+    - body: pluto
+      longitude: 243.0931
+      gate: 34
+      line: 4
+  design_activations:
+    - body: sun
+      longitude: 266.4133
+      gate: 11
+      line: 5
+    - body: earth
+      longitude: 86.4133
+      gate: 12
+      line: 5
+    - body: north_node
+      longitude: 204.5807
+      gate: 32
+      line: 5
+    - body: south_node
+      longitude: 24.5807
+      gate: 42
+      line: 5
+    - body: moon
+      longitude: 220.9318
+      gate: 44
+      line: 4
+    - body: mercury
+      longitude: 280.4014
+      gate: 38
+      line: 1
+    - body: venus
+      longitude: 296.3631
+      gate: 61
+      line: 6
+    - body: mars
+      longitude: 283.9466
+      gate: 38
+      line: 5
+    - body: jupiter
+      longitude: 266.4772
+      gate: 11
+      line: 5
+    - body: saturn
+      longitude: 348.6389
+      gate: 22
+      line: 2
+    - body: uranus
+      longitude: 298.6343
+      gate: 60
+      line: 3
+    - body: neptune
+      longitude: 294.2067
+      gate: 61
+      line: 4
+    - body: pluto
+      longitude: 241.4862
+      gate: 34
+      line: 2
 chinese:
   year:
     animal: Rat
@@ -191,5 +438,7 @@ chinese:
     solar_term_pinyin: Jingzhe
     solar_term_english: Awakening of Insects
     solar_term_start_longitude: 345
-  hour: null
-  triple_animals: Rat / Rabbit
+  hour:
+    animal: Horse
+    time_range: 11:00–13:00
+  triple_animals: Rat / Rabbit / Horse
