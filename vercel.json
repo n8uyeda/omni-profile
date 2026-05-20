@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pip install --user -r requirements.txt && python3 tools/profile-viewer/build.py",
+  "buildCommand": "python3 tools/profile-viewer/build.py",
   "outputDirectory": "site",
   "functions": {
     "api/chat.py": {
