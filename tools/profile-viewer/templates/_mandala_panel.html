@@ -17,9 +17,20 @@
     {% endif %}
   </details>
 
-  <div class="mandala-svg-wrap">
-    {{ mandala_svg|safe }}
+  {# Standalone bodygraph — visible on mobile only (hidden on desktop because
+     the mandala below already has the bodygraph nested at its center). #}
+  <div class="bodygraph-only-mobile">
+    {{ hd_svg|safe }}
   </div>
+
+  {# Mandala (zodiac wheel + 64 gates + bodygraph at center). On desktop this
+     IS the chart — flanked by activation columns. On mobile it becomes a
+     collapsible drop-down so the standalone bodygraph above can be the
+     default-visible chart. #}
+  <details class="mandala-svg-wrap mandala-drop-down" open>
+    <summary class="mandala-mobile-summary">View full mandala chart</summary>
+    {{ mandala_svg|safe }}
+  </details>
 
   <details class="activation-column personality" open>
     <summary class="activation-heading">Personality</summary>

@@ -2380,6 +2380,18 @@ details[open] > summary .collapse-toggle {
   }
   .activation-column > summary.activation-heading::-webkit-details-marker { display: none; }
   .activation-column > summary.activation-heading::marker { content: ''; }
+
+  /* The standalone bodygraph is mobile-only — hide on desktop where the
+   * mandala (below) already has the bodygraph nested at its center. */
+  .bodygraph-only-mobile { display: none; }
+
+  /* The mandala stays the primary chart on desktop. The <details> wrapper
+   * just behaves like the previous .mandala-svg-wrap; hide its summary. */
+  .mandala-drop-down > summary.mandala-mobile-summary { display: none; }
+  .mandala-drop-down {
+    /* Remove the native <details> spacing so the SVG lays out as before */
+    display: block;
+  }
 }
 
 .activation-column.design .activation-heading { color: var(--hd-personality); }
@@ -2442,9 +2454,13 @@ details[open] > summary .collapse-toggle {
 }
 
 /* Mobile (<=720px): the 70px / 1fr / 70px grid squeezes the chart down to
- * an unusable size. Stack everything into a single column with the chart
- * FIRST (visually), and turn each activation column into a tap-to-expand
- * accordion (default closed via JS) so the page doesn't become a long scroll. */
+ * an unusable size. Stack everything into a single column.
+ *
+ * The mandala SVG carries the bodygraph nested at its center but at phone-
+ * width the whole thing becomes too small to read. So on mobile we show
+ * the standalone bodygraph as the default-visible chart, AND tuck the full
+ * mandala (zodiac wheel + 64 gates + bodygraph nested) behind a "View full
+ * mandala chart" drop-down. */
 @media (max-width: 720px) {
   .bodygraph-frame,
   .mandala-frame {
@@ -2452,11 +2468,59 @@ details[open] > summary .collapse-toggle {
     flex-direction: column;
     gap: 0.6rem;
   }
-  /* Chart first, then activation columns under it (CSS order). */
-  .bodygraph-svg-wrap,
-  .mandala-svg-wrap { order: 1; }
-  .activation-column.design { order: 2; }
-  .activation-column.personality { order: 3; }
+  /* Stacking order:
+   *   1. standalone bodygraph (always visible, default chart)
+   *   2. mandala drop-down (collapsed by default)
+   *   3. Design accordion
+   *   4. Personality accordion
+   * The .bodygraph-svg-wrap is from _bodygraph_panel.html (different chart
+   * panel — kept at order: 1 too for consistency when shown alone). */
+  .bodygraph-svg-wrap { order: 1; }
+  .bodygraph-only-mobile {
+    display: block;
+    order: 1;
+    width: 100%;
+  }
+  .mandala-drop-down { order: 2; width: 100%; }
+  .activation-column.design { order: 3; }
+  .activation-column.personality { order: 4; }
+
+  /* Mandala drop-down summary becomes a tappable bar. JS removes `open`
+   * from the <details> on initial load so it starts collapsed. */
+  .mandala-drop-down > summary.mandala-mobile-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+    padding: 0.7rem 0.9rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    user-select: none;
+  }
+  .mandala-drop-down > summary.mandala-mobile-summary::-webkit-details-marker { display: none; }
+  .mandala-drop-down > summary.mandala-mobile-summary::marker { content: ''; }
+  .mandala-drop-down > summary.mandala-mobile-summary::after {
+    content: '▾';
+    color: var(--text-faint);
+    transition: transform 0.18s;
+  }
+  .mandala-drop-down[open] > summary.mandala-mobile-summary::after {
+    transform: rotate(180deg);
+  }
+  /* When opened, the mandala SVG renders below the summary */
+  .mandala-drop-down[open] {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem;
+    overflow: auto;  /* in case SVG overflows on very narrow viewports */
+  }
 
   /* Each activation column becomes a tappable accordion */
   .activation-column {

@@ -161,32 +161,53 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
         if lat is not None: birth["lat"] = lat
         if lon is not None: birth["lon"] = lon
 
-        # Compute the chart by calling the engine modules directly
+        # Compute the chart by calling the engine modules directly. Each system
+        # is wrapped separately so one system's failure (e.g. Chinese calendar
+        # out-of-range for very old / future birth dates) doesn't abort the
+        # entire submission — the chart computes for whatever systems work.
+        skipped = []
         try:
             from western import chart as western_chart, essentials_from_full as western_ess
             from mayan import full_mayan, essentials_from_full as mayan_ess
             from chinese import full_chinese, essentials_from_full as chinese_ess
             from writer import build_essentials, build_full_chart
             try:
-                from human_design import full_hd_chart, essentials_from_full as hd_ess, HDPrecisionError
+                from human_design import full_hd_chart, essentials_from_full as hd_ess
             except ImportError:
                 full_hd_chart = None
+                hd_ess = None
 
-            w_full = western_chart(birth, precision)
-            m_full = full_mayan(birth)
-            c_full = full_chinese(birth)
+            try:
+                w_full = western_chart(birth, precision)
+            except Exception as e:
+                # Western is foundational — failure here is fatal.
+                return _send_json(self, 500, {"ok": False, "error":
+                    f"Western chart compute failed: {e}"})
+
+            try:
+                m_full = full_mayan(birth)
+            except Exception as e:
+                m_full = None
+                skipped.append(f"mayan ({e})")
+
+            try:
+                c_full = full_chinese(birth)
+            except Exception as e:
+                c_full = None
+                skipped.append(f"chinese ({e})")
+
             hd_full = None
             if precision == 1 and full_hd_chart is not None:
                 try:
                     hd_full = full_hd_chart(birth)
-                except Exception:
-                    hd_full = None
+                except Exception as e:
+                    skipped.append(f"human_design ({e})")
 
             essentials = build_essentials(
                 western_ess(w_full),
-                mayan_ess(m_full),
-                hd_ess(hd_full) if hd_full else None,
-                chinese_ess(c_full),
+                mayan_ess(m_full) if m_full else None,
+                hd_ess(hd_full) if (hd_full and hd_ess) else None,
+                chinese_ess(c_full) if c_full else None,
                 precision=precision,
             )
             full_chart = build_full_chart(birth, w_full, m_full, hd_full, c_full)
