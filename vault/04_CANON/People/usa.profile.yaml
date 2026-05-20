@@ -1,0 +1,413 @@
+birth:
+  date: '1776-07-04'
+  precision: 1
+  time: '17:10'
+  tz: America/New_York
+  place: Philadelphia, Philadelphia County, Pennsylvania, United States
+  lat: 39.9527
+  lon: -75.1635
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 251.3957
+    sign: Sagittarius
+    degree_in_sign: 11.3957
+  midheaven:
+    longitude: 179.7932
+    sign: Virgo
+    degree_in_sign: 29.7932
+  houses:
+  - number: 1
+    cusp_longitude: 251.3957
+    sign: Sagittarius
+    degree_in_sign: 11.3957
+  - number: 2
+    cusp_longitude: 284.9062
+    sign: Capricorn
+    degree_in_sign: 14.9062
+  - number: 3
+    cusp_longitude: 323.5564
+    sign: Aquarius
+    degree_in_sign: 23.5564
+  - number: 4
+    cusp_longitude: 359.7932
+    sign: Pisces
+    degree_in_sign: 29.7932
+  - number: 5
+    cusp_longitude: 28.7126
+    sign: Aries
+    degree_in_sign: 28.7126
+  - number: 6
+    cusp_longitude: 51.5924
+    sign: Taurus
+    degree_in_sign: 21.5924
+  - number: 7
+    cusp_longitude: 71.3957
+    sign: Gemini
+    degree_in_sign: 11.3957
+  - number: 8
+    cusp_longitude: 104.9062
+    sign: Cancer
+    degree_in_sign: 14.9062
+  - number: 9
+    cusp_longitude: 143.5564
+    sign: Leo
+    degree_in_sign: 23.5564
+  - number: 10
+    cusp_longitude: 179.7932
+    sign: Virgo
+    degree_in_sign: 29.7932
+  - number: 11
+    cusp_longitude: 208.7126
+    sign: Libra
+    degree_in_sign: 28.7126
+  - number: 12
+    cusp_longitude: 231.5924
+    sign: Scorpio
+    degree_in_sign: 21.5924
+  planets:
+  - body: sun
+    longitude: 103.3197
+    sign: Cancer
+    degree_in_sign: 13.3197
+    retrograde: false
+    house: 7
+  - body: moon
+    longitude: 327.1256
+    sign: Aquarius
+    degree_in_sign: 27.1256
+    retrograde: false
+    house: 3
+  - body: mercury
+    longitude: 114.1987
+    sign: Cancer
+    degree_in_sign: 24.1987
+    retrograde: true
+    house: 8
+  - body: venus
+    longitude: 93.101
+    sign: Cancer
+    degree_in_sign: 3.101
+    retrograde: false
+    house: 7
+  - body: mars
+    longitude: 81.3735
+    sign: Gemini
+    degree_in_sign: 21.3735
+    retrograde: false
+    house: 7
+  - body: jupiter
+    longitude: 95.9327
+    sign: Cancer
+    degree_in_sign: 5.9327
+    retrograde: false
+    house: 7
+  - body: saturn
+    longitude: 194.8054
+    sign: Libra
+    degree_in_sign: 14.8054
+    retrograde: false
+    house: 10
+  - body: uranus
+    longitude: 68.9214
+    sign: Gemini
+    degree_in_sign: 8.9214
+    retrograde: false
+    house: 6
+  - body: neptune
+    longitude: 172.4195
+    sign: Virgo
+    degree_in_sign: 22.4195
+    retrograde: false
+    house: 9
+  - body: pluto
+    longitude: 297.5505
+    sign: Capricorn
+    degree_in_sign: 27.5505
+    retrograde: true
+    house: 2
+  - body: north_node
+    longitude: 126.5937
+    sign: Leo
+    degree_in_sign: 6.5937
+    retrograde: false
+    house: 8
+  aspects:
+  - from: sun
+    to: jupiter
+    type: conjunction
+    separation: 7.387
+    orb: 7.387
+  - from: sun
+    to: saturn
+    type: square
+    separation: 91.4857
+    orb: 1.4857
+  - from: moon
+    to: mercury
+    type: quincunx
+    separation: 147.0731
+    orb: 2.9269
+  - from: moon
+    to: venus
+    type: trine
+    separation: 125.9754
+    orb: 5.9754
+  - from: moon
+    to: mars
+    type: trine
+    separation: 114.2479
+    orb: 5.7521
+  - from: moon
+    to: pluto
+    type: semi_sextile
+    separation: 29.5752
+    orb: 0.4248
+  - from: mercury
+    to: neptune
+    type: sextile
+    separation: 58.2208
+    orb: 1.7792
+  - from: mercury
+    to: pluto
+    type: opposition
+    separation: 176.6483
+    orb: 3.3517
+  - from: venus
+    to: jupiter
+    type: conjunction
+    separation: 2.8317
+    orb: 2.8317
+  - from: mars
+    to: saturn
+    type: trine
+    separation: 113.4319
+    orb: 6.5681
+  - from: mars
+    to: neptune
+    type: square
+    separation: 91.046
+    orb: 1.046
+  - from: jupiter
+    to: north_node
+    type: semi_sextile
+    separation: 30.661
+    orb: 0.661
+  - from: saturn
+    to: uranus
+    type: trine
+    separation: 125.8841
+    orb: 5.8841
+  - from: uranus
+    to: north_node
+    type: sextile
+    separation: 57.6723
+    orb: 2.3277
+  - from: neptune
+    to: pluto
+    type: trine
+    separation: 125.1309
+    orb: 5.1309
+  element_balance:
+    fire: 0
+    earth: 0
+    air: 2
+    water: 3
+  modality_balance:
+    cardinal: 3
+    fixed: 1
+    mutable: 1
+mayan:
+  correlation: GMT-584283
+  long_count: 12.8.0.1.13
+  day_sign:
+    kiche: Aj
+    yucatec: Ben
+  tone: 9
+  trecena_start:
+    kiche: Kan
+    yucatec: Chicchan
+human_design:
+  type: Projector
+  strategy: Wait for the Invitation
+  authority: Emotional
+  not_self_theme: Bitterness
+  profile: 5/1
+  definition: Split Definition
+  incarnation_cross:
+    angle: Left Angle
+    code: 39/38 | 51/57
+    gates:
+      personality_sun: 39
+      personality_earth: 38
+      design_sun: 51
+      design_earth: 57
+    name: Left Angle Cross of Individualism
+  defined_centers:
+  - g
+  - root
+  - solar_plexus
+  - spleen
+  - throat
+  undefined_centers:
+  - ajna
+  - head
+  - heart
+  - sacral
+  channels:
+  - channel: 7-31
+    gates:
+    - 7
+    - 31
+    centers:
+    - g
+    - throat
+  - channel: 16-48
+    gates:
+    - 16
+    - 48
+    centers:
+    - throat
+    - spleen
+  - channel: 20-57
+    gates:
+    - 20
+    - 57
+    centers:
+    - throat
+    - spleen
+  - channel: 30-41
+    gates:
+    - 30
+    - 41
+    centers:
+    - solar_plexus
+    - root
+  hanging_gates:
+  - 6
+  - 13
+  - 15
+  - 22
+  - 35
+  - 38
+  - 39
+  - 45
+  - 47
+  - 51
+  - 52
+  - 60
+  - 62
+  - 63
+  personality_jd_ut: 2369916.42086
+  design_jd_ut: 2369825.04931
+  personality_activations:
+  - body: sun
+    longitude: 103.3197
+    gate: 39
+    line: 5
+  - body: earth
+    longitude: 283.3197
+    gate: 38
+    line: 5
+  - body: north_node
+    longitude: 126.5937
+    gate: 31
+    line: 5
+  - body: south_node
+    longitude: 306.5937
+    gate: 41
+    line: 5
+  - body: moon
+    longitude: 327.1256
+    gate: 30
+    line: 3
+  - body: mercury
+    longitude: 114.1987
+    gate: 62
+    line: 4
+  - body: venus
+    longitude: 93.101
+    gate: 15
+    line: 6
+  - body: mars
+    longitude: 81.3735
+    gate: 45
+    line: 5
+  - body: jupiter
+    longitude: 95.9327
+    gate: 52
+    line: 3
+  - body: saturn
+    longitude: 194.8054
+    gate: 48
+    line: 6
+  - body: uranus
+    longitude: 68.9214
+    gate: 16
+    line: 4
+  - body: neptune
+    longitude: 172.4195
+    gate: 47
+    line: 6
+  - body: pluto
+    longitude: 297.5505
+    gate: 60
+    line: 2
+  design_activations:
+  - body: sun
+    longitude: 15.3197
+    gate: 51
+    line: 1
+  - body: earth
+    longitude: 195.3197
+    gate: 57
+    line: 1
+  - body: north_node
+    longitude: 133.6631
+    gate: 7
+    line: 1
+  - body: south_node
+    longitude: 313.6631
+    gate: 13
+    line: 1
+  - body: moon
+    longitude: 200.0932
+    gate: 57
+    line: 6
+  - body: mercury
+    longitude: 347.6933
+    gate: 22
+    line: 1
+  - body: venus
+    longitude: 342.0339
+    gate: 63
+    line: 1
+  - body: mars
+    longitude: 15.3425
+    gate: 51
+    line: 1
+  - body: jupiter
+    longitude: 76.8595
+    gate: 35
+    line: 6
+  - body: saturn
+    longitude: 198.1563
+    gate: 57
+    line: 4
+  - body: uranus
+    longitude: 63.9259
+    gate: 20
+    line: 5
+  - body: neptune
+    longitude: 172.9603
+    gate: 6
+    line: 1
+  - body: pluto
+    longitude: 298.3047
+    gate: 60
+    line: 3
+chinese: null
+entity: usa
+canon_path: 04_CANON/People/usa.md
