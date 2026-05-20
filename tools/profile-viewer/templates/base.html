@@ -479,7 +479,13 @@
           addMessage('assistant', body.reply);
           history.push({ role: 'assistant', content: body.reply });
           saveHistory(scope);
-          setStatus(`session spend: $${body.session_spend_usd.toFixed(4)} / $${body.session_spend_cap_usd.toFixed(2)} cap`, 'ok');
+          const used = body.session_spend_usd;
+          const cap = body.session_spend_cap_usd;
+          if (typeof used === 'number' && typeof cap === 'number') {
+            setStatus(`session spend: $${used.toFixed(4)} / $${cap.toFixed(2)} cap`, 'ok');
+          } else {
+            setStatus('reply received', 'ok');
+          }
         } catch (err) {
           thinkingEl.remove();
           setStatus('Network error: ' + err.message, 'err');
@@ -626,9 +632,15 @@
           addMessage('assistant', body.reply);
           history.push({ role: 'assistant', content: body.reply });
           saveHistory(scope);  // persist the round-trip so reloads / window close keep it
-          const cap = body.session_spend_cap_usd;
+          // Spend tracking is only returned by the local server. On Vercel
+          // the serverless function omits it (functions are stateless).
           const used = body.session_spend_usd;
-          setStatus(`session spend: $${used.toFixed(4)} / $${cap.toFixed(2)} cap`, 'ok');
+          const cap = body.session_spend_cap_usd;
+          if (typeof used === 'number' && typeof cap === 'number') {
+            setStatus(`session spend: $${used.toFixed(4)} / $${cap.toFixed(2)} cap`, 'ok');
+          } else {
+            setStatus('reply received', 'ok');
+          }
         } catch (err) {
           thinkingEl.remove();
           setStatus('Network error: ' + err.message + '. Is the local server running?', 'err');
