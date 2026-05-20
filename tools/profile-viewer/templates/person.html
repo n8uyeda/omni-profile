@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+{% block head_extra %}
+  {# Expose the entity name so base.html's chat panel can scope to this person. #}
+  <meta name="omni-entity-name" content="{{ entity.name }}">
+{% endblock %}
+{% block content %}
+{% set ess = entity.essentials or {} %}
+{% set chart = entity.chart or {} %}
+{% set birth = entity.birth or {} %}
+{% set w_full = chart.get('western') or {} %}
+{% set w_ess = ess.get('western') or {} %}
+{% set hd_full = chart.get('human_design') or {} %}
+{% set hd_ess = ess.get('human_design') or {} %}
+{% set m_full = chart.get('mayan') or {} %}
+{% set m_ess = ess.get('mayan') or {} %}
+{% set c_full = chart.get('chinese') or {} %}
+{% set c_ess = ess.get('chinese') or {} %}
+
+<section class="person-header">
+  <a href="{{ asset_prefix }}index.html" class="back-link">← Network</a>
+  <h1>{{ entity.name }}</h1>
+  <p class="person-meta">
+    {{ entity.type }}{% if entity.domain %} · {{ entity.domain }}{% endif %} · precision {{ ess.get('precision', '—') }}
+  </p>
+  <p class="birth-line">
+    Born {{ birth.get('date') }}{% if birth.get('time') %} at {{ birth.get('time') }} {{ birth.get('tz') }}{% endif %}{% if birth.get('place') %} in {{ birth.get('place') }}{% endif %}
+  </p>
+  {% if w_ess.get('note') %}
+    <p class="precision-note">⚠️ {{ w_ess.note }}</p>
+  {% endif %}
+</section>
+
+<section class="kpi-grid">
+  <article class="kpi-card western">
+    <h2>Western</h2>
+    <div class="kpi-trio">
+      {% if w_ess.sun %}<div><span class="kpi-label">Sun</span><span class="kpi-value">{{ w_ess.sun.sign }} {{ '%.1f'|format(w_ess.sun.degree) }}°</span></div>{% endif %}
+      {% if w_ess.moon %}<div><span class="kpi-label">Moon</span><span class="kpi-value">{{ w_ess.moon.sign }} {{ '%.1f'|format(w_ess.moon.degree) }}°</span></div>{% endif %}
+      {% if w_ess.get('rising') %}<div><span class="kpi-label">Rising</span><span class="kpi-value">{{ w_ess.rising.sign }} {{ '%.1f'|format(w_ess.rising.degree) }}°</span></div>{% endif %}
+    </div>
+    {% if w_ess.elements %}
+      <div class="balance-row">
+        <span>fire {{ w_ess.elements.fire }}</span>
+        <span>earth {{ w_ess.elements.earth }}</span>
+        <span>air {{ w_ess.elements.air }}</span>
+        <span>water {{ w_ess.elements.water }}</span>
+      </div>
+    {% endif %}
+  </article>
+
+  <article class="kpi-card hd">
+    <h2>Human Design</h2>
+    {% if hd_ess.type %}
+      <div class="kpi-trio">
+        <div><span class="kpi-label">Type</span><span class="kpi-value">{{ hd_ess.type }}</span></div>
+        <div><span class="kpi-label">Profile</span><span class="kpi-value">{{ hd_ess.profile }}</span></div>
+        <div><span class="kpi-label">Authority</span><span class="kpi-value">{{ hd_ess.authority }}</span></div>
+      </div>
+      <p class="kpi-secondary">{{ hd_ess.definition }} · {% if hd_ess.cross_name %}{{ hd_ess.cross_name }}{% else %}{{ hd_ess.cross_angle }} Cross{% endif %} <span class="cross-code-inline">{{ hd_ess.incarnation_cross }}</span></p>
+    {% else %}
+      <p class="kpi-skipped">{{ hd_ess.skipped or 'not computed' }}</p>
+    {% endif %}
+  </article>
+
+  <article class="kpi-card mayan">
+    <h2>Mayan</h2>
+    {% if m_ess.day_sign %}
+      <div class="kpi-trio">
+        <div><span class="kpi-label">Tone</span><span class="kpi-value">{{ m_ess.tone }}</span></div>
+        <div><span class="kpi-label">K'iche'</span><span class="kpi-value">{{ m_ess.day_sign.kiche }}</span></div>
+        <div><span class="kpi-label">Yucatec</span><span class="kpi-value">{{ m_ess.day_sign.yucatec }}</span></div>
+      </div>
+      {% if m_full.long_count %}<p class="kpi-secondary">Long Count {{ m_full.long_count }}</p>{% endif %}
+    {% endif %}
+  </article>
+
+  <article class="kpi-card chinese">
+    <h2>Chinese</h2>
+    {% if c_ess.year_pillar %}
+      <div class="kpi-trio">
+        <div><span class="kpi-label">Year</span><span class="kpi-value">{{ c_ess.year_pillar }}</span></div>
+        <div><span class="kpi-label">Inner</span><span class="kpi-value">{{ c_ess.inner_animal }}</span></div>
+        {% if c_ess.get('secret_animal') %}<div><span class="kpi-label">Secret</span><span class="kpi-value">{{ c_ess.secret_animal }}</span></div>{% endif %}
+      </div>
+      <p class="kpi-secondary">{{ c_ess.triple_animals }}</p>
+    {% endif %}
+  </article>
+
+  {% if entity.psychometrics %}
+  <article class="kpi-card psychometric">
+    <h2>Psychometric</h2>
+    {% set ps = entity.psychometrics %}
+    <div class="kpi-trio">
+      {% if ps.mbti %}<div><span class="kpi-label">MBTI</span><span class="kpi-value">{{ ps.mbti }}</span></div>{% endif %}
+      {% if ps.enneagram and ps.enneagram.get('type') %}
+        <div>
+          <span class="kpi-label">Enneagram</span>
+          <span class="kpi-value">{{ ps.enneagram.type }}{% if ps.enneagram.get('wing') %}w{{ ps.enneagram.wing }}{% endif %}</span>
+        </div>
+      {% endif %}
+      {% if ps.enneagram and ps.enneagram.get('variant') %}
+        <div><span class="kpi-label">Variant</span><span class="kpi-value">{{ ps.enneagram.variant }}</span></div>
+      {% endif %}
+    </div>
+    {% if ps.ocean %}
+      <div class="ocean-bars">
+        {% for letter, key in [('O','openness'),('C','conscientiousness'),('E','extraversion'),('A','agreeableness'),('N','neuroticism')] %}
+          {% if ps.ocean.get(key) is not none %}
+            <div class="ocean-row" title="{{ key|capitalize }} {{ ps.ocean[key] }}/100">
+              <span class="ocean-letter">{{ letter }}</span>
+              <div class="ocean-bar-wrap"><div class="ocean-bar" style="width: {{ ps.ocean[key] }}%"></div></div>
+              <span class="ocean-num">{{ ps.ocean[key] }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </article>
+  {% endif %}
+</section>
+
+{% if entity.operational_tags %}
+<details class="tags-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Tags</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="tag-chip-row">
+    {% for tag in entity.operational_tags %}
+      <span class="tag-chip">{{ tag }}</span>
+    {% endfor %}
+  </div>
+</details>
+{% endif %}
+
+{% macro render_system_reading(entity, system_key, label) %}
+  {% if entity.system_readings and entity.system_readings.systems.get(system_key) %}
+    {% set sr = entity.system_readings.systems[system_key] %}
+    <details class="chart-reading" open>
+      <summary class="chart-reading-header">
+        <span class="chart-reading-label">{{ label }}</span>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-reading-body">
+        {% for para in sr.body.split('\n\n') %}
+          {% if para.strip() %}<p>{{ para.strip()|replace('\n', ' ') }}</p>{% endif %}
+        {% endfor %}
+      </div>
+    </details>
+  {% endif %}
+{% endmacro %}
+
+<section class="charts-stack">
+
+  {# ----- Western ----- #}
+  <article class="chart-section">
+    <details class="chart-panel chart-panel-wide" open>
+      <summary class="chart-panel-summary">
+        <h2>Natal chart wheel</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if w_full.planets %}
+        <div class="chart-wide-wrap">{{ western_svg|safe }}</div>
+      {% else %}
+        <p class="kpi-skipped">No chart data — requires precision 1.</p>
+      {% endif %}
+      </div>
+    </details>
+    {{ render_system_reading(entity, 'western', 'Western reading') }}
+    {% if w_full.planets %}
+    <details class="chart-detail-panel">
+      <summary class="chart-detail-summary">Planets — full table</summary>
+      <div class="chart-detail-content">
+        <table class="detail-table">
+          <thead><tr><th>Body</th><th>Sign</th><th>Degree</th><th>House</th><th>Retro</th></tr></thead>
+          <tbody>
+          {% for p in w_full.planets %}
+            <tr>
+              <td>{{ p.body|capitalize }}</td>
+              <td>{{ p.sign }}</td>
+              <td>{{ '%.2f'|format(p.degree_in_sign) }}°</td>
+              <td>{{ p.get('house', '—') }}</td>
+              <td>{% if p.retrograde %}R{% endif %}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {% endif %}
+    {% if w_full.aspects %}
+    <details class="chart-detail-panel">
+      <summary class="chart-detail-summary">Aspects ({{ w_full.aspects|length }})</summary>
+      <div class="chart-detail-content">
+        <table class="detail-table compact">
+          <thead><tr><th>From</th><th>Aspect</th><th>To</th><th>Orb</th></tr></thead>
+          <tbody>
+          {% for a in w_full.aspects %}
+            <tr class="aspect-{{ a.type }}">
+              <td>{{ a['from']|capitalize }}</td>
+              <td><span class="aspect-tag {{ a.type }}">{{ a.type }}</span></td>
+              <td>{{ a.to|capitalize }}</td>
+              <td>{{ '%.2f'|format(a.orb) }}°</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {% endif %}
+  </article>
+
+  {# ----- Human Design / Mandala ----- #}
+  <article class="chart-section">
+    <details class="chart-panel chart-panel-wide" open>
+      <summary class="chart-panel-summary">
+        <h2>The Mandala — zodiac wheel · 64 gates · bodygraph</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% set chart_hd = (entity.chart or {}).get('human_design') %}
+      {% if mandala_svg %}
+        {% include "_mandala_panel.html" %}
+      {% else %}
+        <p class="kpi-skipped">No chart data — requires precision 1.</p>
+      {% endif %}
+      </div>
+    </details>
+    {{ render_system_reading(entity, 'human_design', 'Human Design reading') }}
+    {% if hd_full.channels %}
+    <details class="chart-detail-panel">
+      <summary class="chart-detail-summary">HD channels &amp; hanging gates</summary>
+      <div class="chart-detail-content">
+        <ul class="channel-list">
+        {% for ch in hd_full.channels %}
+          <li><strong>{{ ch.channel }}</strong> — {{ ch.centers[0]|capitalize }} ↔ {{ ch.centers[1]|capitalize }}</li>
+        {% endfor %}
+        </ul>
+        {% if hd_full.hanging_gates %}
+          <p class="hanging-gates-list"><strong>Hanging gates:</strong> {{ hd_full.hanging_gates|join(', ') }}</p>
+        {% endif %}
+      </div>
+    </details>
+    {% endif %}
+  </article>
+
+  {# ----- Mayan ----- #}
+  <article class="chart-section">
+    <details class="chart-panel chart-panel-wide" open>
+      <summary class="chart-panel-summary">
+        <h2>Tzolk'in — 260-day Sacred Calendar</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if tzolkin_svg %}
+        <div class="chart-wide-wrap">{{ tzolkin_svg|safe }}</div>
+      {% else %}
+        <p class="kpi-skipped">No Mayan data.</p>
+      {% endif %}
+      </div>
+    </details>
+    {{ render_system_reading(entity, 'mayan', 'Mayan reading') }}
+  </article>
+
+  {# ----- Chinese ----- #}
+  <article class="chart-section">
+    <details class="chart-panel chart-panel-wide" open>
+      <summary class="chart-panel-summary">
+        <h2>Chinese Zodiac Wheel</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if chinese_svg %}
+        <div class="chart-wide-wrap">{{ chinese_svg|safe }}</div>
+      {% else %}
+        <p class="kpi-skipped">No Chinese data.</p>
+      {% endif %}
+      </div>
+    </details>
+    {{ render_system_reading(entity, 'chinese', 'Chinese reading') }}
+  </article>
+
+</section>
+
+{% if entity.reading and entity.reading.sections %}
+<details class="reading-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="reading-title section-title">Reading — cross-system synthesis</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <header class="reading-header">
+    <span class="reading-meta">
+      {% if entity.reading.frontmatter.get('voice') %}{{ entity.reading.frontmatter.voice }} · {% endif %}
+      {% if entity.reading.frontmatter.get('generated_at') %}written {{ entity.reading.frontmatter.generated_at|string|truncate(10, end='') }}{% endif %}
+    </span>
+  </header>
+  <div class="reading-body">
+    {% for sec in entity.reading.sections %}
+      <article class="reading-block">
+        {% if sec.heading %}<h3 class="reading-block-heading">{{ sec.heading }}</h3>{% endif %}
+        <div class="reading-block-body">
+          {% for para in sec.body.split('\n\n') %}
+            <p>{{ para.strip()|replace('\n', ' ') }}</p>
+          {% endfor %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</details>
+{% endif %}
+
+{% if related %}
+<details class="detail-panel section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Network connections</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <ul class="related-list">
+  {% for r in related %}
+    <li>
+      <a href="{{ r.slug }}.html">{{ r.name }}</a> —
+      <span class="related-tooltip">{{ r.tooltip }}</span>
+      {% if r.pair_slug %}<a class="synastry-link" href="../pair/{{ r.pair_slug }}.html">view pair →</a>{% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+</details>
+{% endif %}
+
+<details class="detail-panel section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Birth data</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <table class="detail-table compact">
+    <tbody>
+      <tr><th>date</th><td>{{ birth.get('date') }}</td></tr>
+      <tr><th>time</th><td>{{ birth.get('time', '—') }}</td></tr>
+      <tr><th>tz</th><td>{{ birth.get('tz', '—') }}</td></tr>
+      <tr><th>place</th><td>{{ birth.get('place', '—') }}</td></tr>
+      <tr><th>coords</th><td>{% if birth.get('lat') is not none %}{{ birth.lat }}, {{ birth.lon }}{% else %}—{% endif %}</td></tr>
+      <tr><th>precision</th><td>{{ birth.get('precision', '—') }}</td></tr>
+      <tr><th>source</th><td>{{ birth.get('source', '—') }}</td></tr>
+    </tbody>
+  </table>
+</details>
+{% endblock %}

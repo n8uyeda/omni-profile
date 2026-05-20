@@ -1,0 +1,35 @@
+{# Bodygraph + Design / Personality activation columns.
+   Caller must pass: hd_svg, chart_hd (the full human_design block or None), planet_glyphs. #}
+<div class="bodygraph-frame">
+  <div class="activation-column design">
+    <h3 class="activation-heading">Design</h3>
+    {% if chart_hd and chart_hd.design_activations %}
+      {% for a in chart_hd.design_activations %}
+        <div class="activation-row design-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
+          <span class="activation-glyph">{{ planet_glyphs.get(a.body, '?') }}</span>
+          <span class="activation-coord">{{ a.gate }}.{{ a.line }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="activation-empty">—</p>
+    {% endif %}
+  </div>
+
+  <div class="bodygraph-svg-wrap">
+    {{ hd_svg|safe }}
+  </div>
+
+  <div class="activation-column personality">
+    <h3 class="activation-heading">Personality</h3>
+    {% if chart_hd and chart_hd.personality_activations %}
+      {% for a in chart_hd.personality_activations %}
+        <div class="activation-row personality-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
+          <span class="activation-coord">{{ a.gate }}.{{ a.line }}</span>
+          <span class="activation-glyph">{{ planet_glyphs.get(a.body, '?') }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="activation-empty">—</p>
+    {% endif %}
+  </div>
+</div>

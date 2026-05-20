@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block content %}
+{% set a_ess = a.essentials or {} %}
+{% set b_ess = b.essentials or {} %}
+{% set a_w = a_ess.get('western') or {} %}
+{% set b_w = b_ess.get('western') or {} %}
+{% set a_hd = a_ess.get('human_design') or {} %}
+{% set b_hd = b_ess.get('human_design') or {} %}
+{% set a_m = a_ess.get('mayan') or {} %}
+{% set b_m = b_ess.get('mayan') or {} %}
+{% set a_c = a_ess.get('chinese') or {} %}
+{% set b_c = b_ess.get('chinese') or {} %}
+
+<section class="pair-header">
+  <a href="{{ asset_prefix }}index.html" class="back-link">← Network</a>
+  <h1>{{ a.name }} ↔ {{ b.name }}</h1>
+  <p class="pair-meta">{{ edge.count }} pattern-match connections · {{ synastry.total_events }} synastry events surfaced</p>
+</section>
+
+{# ---------------- RESONANCE SUMMARY ---------------- #}
+<details class="resonance-summary section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Net resonance</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  {% set h = synastry.total_harmony %}
+  {% set f = synastry.total_friction %}
+  {% set total = h + f if (h + f) > 0 else 1 %}
+  {% set h_pct = (h / total * 100)|round(0) %}
+  {% set f_pct = (f / total * 100)|round(0) %}
+  <div class="resonance-bar-wrap">
+    <div class="resonance-bar">
+      <div class="resonance-bar-harmony" style="width: {{ h_pct }}%" title="harmony {{ h }}"></div>
+      <div class="resonance-bar-friction" style="width: {{ f_pct }}%" title="friction {{ f }}"></div>
+    </div>
+    <div class="resonance-bar-labels">
+      <span class="resonance-harmony-label">harmony +{{ h }}</span>
+      <span class="resonance-net-label">net {{ '+' if synastry.net > 0 else '' }}{{ synastry.net }}</span>
+      <span class="resonance-friction-label">friction −{{ f }}</span>
+    </div>
+  </div>
+</details>
+
+{# ---------------- PER-SYSTEM SYNASTRY BOXES ---------------- #}
+<details class="synastry-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Per-system synastry breakdown</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="synastry-grid">
+  {% for system_key, system_label, system_class in [
+       ('western', 'Western cross-aspects', 'western'),
+       ('hd', 'Human Design', 'hd'),
+       ('chinese', 'Chinese', 'chinese'),
+       ('mayan', 'Mayan', 'mayan'),
+       ('psychometric', 'Psychometric / Tags', 'psychometric'),
+  ] %}
+    {% set sys = synastry.systems[system_key] %}
+    <article class="synastry-box {{ system_class }}{% if sys.count == 0 %} synastry-box-empty{% endif %}">
+      <header class="synastry-box-header">
+        <h3>{{ system_label }}</h3>
+        <div class="synastry-box-scores">
+          <span class="score-harmony">+{{ sys.harmony }}</span>
+          <span class="score-friction">−{{ sys.friction }}</span>
+        </div>
+      </header>
+      {% if sys.count > 0 %}
+        <ul class="synastry-event-list">
+          {% for ev in sys.events_sorted[:5] %}
+            <li class="synastry-event {% if ev.weight > 0 %}harmony{% elif ev.weight < 0 %}friction{% else %}neutral{% endif %}">
+              <span class="event-weight">{{ '+' if ev.weight > 0 else '' }}{{ '%.2f'|format(ev.weight) }}</span>
+              <div class="event-content">
+                <div class="event-label">{{ ev.label }}</div>
+                {% if ev.detail %}<div class="event-detail">{{ ev.detail }}</div>{% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if sys.events_sorted|length > 5 %}
+          <button class="synastry-expand-btn" type="button" aria-expanded="false">
+            Show all {{ sys.events_sorted|length }}
+          </button>
+          <ul class="synastry-event-list synastry-event-list-extra">
+            {% for ev in sys.events_sorted[5:] %}
+              <li class="synastry-event {% if ev.weight > 0 %}harmony{% elif ev.weight < 0 %}friction{% else %}neutral{% endif %}">
+                <span class="event-weight">{{ '+' if ev.weight > 0 else '' }}{{ '%.2f'|format(ev.weight) }}</span>
+                <div class="event-content">
+                  <div class="event-label">{{ ev.label }}</div>
+                  {% if ev.detail %}<div class="event-detail">{{ ev.detail }}</div>{% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% else %}
+        <p class="synastry-empty">No surfaced events in this system.</p>
+      {% endif %}
+    </article>
+  {% endfor %}
+  </div>
+</details>
+
+{# ---------------- PATTERN-MATCH CONNECTIONS (existing v0.6 layer) ---------------- #}
+<details class="connection-list-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Pattern-match connections</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <p class="section-subtitle">Surface-level shared traits (drives the network graph)</p>
+  <ul class="connection-list">
+  {% for conn in edge.connections %}
+    <li class="connection-row kind-{{ conn.kind }}">
+      <span class="connection-kind">{{ conn.kind.replace('_', ' ') }}</span>
+      <span class="connection-label">{{ conn.label }}</span>
+      <span class="connection-weight">weight {{ conn.weight }}</span>
+    </li>
+  {% endfor %}
+  </ul>
+</details>
+
+{# ---------------- SIDE-BY-SIDE ENTITY SUMMARY (existing) ---------------- #}
+<details class="side-by-side-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Side-by-side entity summary</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="side-by-side">
+  <article class="side-card">
+    <h2><a href="../people/{{ a.slug }}.html">{{ a.name }}</a></h2>
+    <ul class="side-stats">
+      {% if a_w.sun %}<li><strong>Sun</strong> {{ a_w.sun.sign }}</li>{% endif %}
+      {% if a_w.get('rising') %}<li><strong>Rising</strong> {{ a_w.rising.sign }}</li>{% endif %}
+      {% if a_hd.type %}<li><strong>HD</strong> {{ a_hd.type }} · {{ a_hd.profile }} · {{ a_hd.authority }}</li>{% endif %}
+      {% if a_hd.incarnation_cross %}<li><strong>Cross</strong> {% if a_hd.cross_name %}{{ a_hd.cross_name }}{% else %}{{ a_hd.cross_angle }} Cross{% endif %} <span class="cross-code-inline">{{ a_hd.incarnation_cross }}</span></li>{% endif %}
+      {% if a_m.day_sign %}<li><strong>Mayan</strong> tone {{ a_m.tone }} {{ a_m.day_sign.kiche }} / {{ a_m.day_sign.yucatec }}</li>{% endif %}
+      {% if a_c.year_pillar %}<li><strong>Chinese</strong> {{ a_c.year_pillar }} · Inner {{ a_c.inner_animal }}{% if a_c.get('secret_animal') %} · Secret {{ a_c.secret_animal }}{% endif %}</li>{% endif %}
+    </ul>
+  </article>
+  <article class="side-card">
+    <h2><a href="../people/{{ b.slug }}.html">{{ b.name }}</a></h2>
+    <ul class="side-stats">
+      {% if b_w.sun %}<li><strong>Sun</strong> {{ b_w.sun.sign }}</li>{% endif %}
+      {% if b_w.get('rising') %}<li><strong>Rising</strong> {{ b_w.rising.sign }}</li>{% endif %}
+      {% if b_hd.type %}<li><strong>HD</strong> {{ b_hd.type }} · {{ b_hd.profile }} · {{ b_hd.authority }}</li>{% endif %}
+      {% if b_hd.incarnation_cross %}<li><strong>Cross</strong> {% if b_hd.cross_name %}{{ b_hd.cross_name }}{% else %}{{ b_hd.cross_angle }} Cross{% endif %} <span class="cross-code-inline">{{ b_hd.incarnation_cross }}</span></li>{% endif %}
+      {% if b_m.day_sign %}<li><strong>Mayan</strong> tone {{ b_m.tone }} {{ b_m.day_sign.kiche }} / {{ b_m.day_sign.yucatec }}</li>{% endif %}
+      {% if b_c.year_pillar %}<li><strong>Chinese</strong> {{ b_c.year_pillar }} · Inner {{ b_c.inner_animal }}{% if b_c.get('secret_animal') %} · Secret {{ b_c.secret_animal }}{% endif %}</li>{% endif %}
+    </ul>
+  </article>
+  </div>
+</details>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Expand/collapse synastry event lists
+(function() {
+  document.querySelectorAll('.synastry-expand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.closest('.synastry-box');
+      const expanded = box.classList.toggle('expanded');
+      btn.setAttribute('aria-expanded', expanded);
+      btn.textContent = expanded ? 'Show fewer' : btn.textContent.replace('Show fewer', 'Show all');
+    });
+  });
+})();
+</script>
+{% endblock %}

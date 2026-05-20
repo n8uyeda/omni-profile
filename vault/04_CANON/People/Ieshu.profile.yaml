@@ -1,0 +1,452 @@
+generated_at: '2026-05-18T15:01:58Z'
+engine_version: '0.5'
+entity: Ieshu
+canon_path: 04_CANON/People/Ieshu.md
+birth:
+  date: 1985-12-25
+  time: 07:20
+  tz: America/Argentina/Buenos_Aires
+  place: Buenos Aires, Argentina
+  lat: -34.6037
+  lon: -58.3816
+  precision: 1
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 294.1843
+    sign: Capricorn
+    degree_in_sign: 24.1843
+  midheaven:
+    longitude: 191.4138
+    sign: Libra
+    degree_in_sign: 11.4138
+  houses:
+  - number: 1
+    cusp_longitude: 294.1843
+    sign: Capricorn
+    degree_in_sign: 24.1843
+  - number: 2
+    cusp_longitude: 315.7054
+    sign: Aquarius
+    degree_in_sign: 15.7054
+  - number: 3
+    cusp_longitude: 340.7542
+    sign: Pisces
+    degree_in_sign: 10.7542
+  - number: 4
+    cusp_longitude: 11.4138
+    sign: Aries
+    degree_in_sign: 11.4138
+  - number: 5
+    cusp_longitude: 46.9971
+    sign: Taurus
+    degree_in_sign: 16.9971
+  - number: 6
+    cusp_longitude: 82.6364
+    sign: Gemini
+    degree_in_sign: 22.6364
+  - number: 7
+    cusp_longitude: 114.1843
+    sign: Cancer
+    degree_in_sign: 24.1843
+  - number: 8
+    cusp_longitude: 135.7054
+    sign: Leo
+    degree_in_sign: 15.7054
+  - number: 9
+    cusp_longitude: 160.7542
+    sign: Virgo
+    degree_in_sign: 10.7542
+  - number: 10
+    cusp_longitude: 191.4138
+    sign: Libra
+    degree_in_sign: 11.4138
+  - number: 11
+    cusp_longitude: 226.9971
+    sign: Scorpio
+    degree_in_sign: 16.9971
+  - number: 12
+    cusp_longitude: 262.6364
+    sign: Sagittarius
+    degree_in_sign: 22.6364
+  planets:
+  - body: sun
+    longitude: 273.5732
+    sign: Capricorn
+    degree_in_sign: 3.5732
+    retrograde: false
+    house: 12
+  - body: moon
+    longitude: 72.6883
+    sign: Gemini
+    degree_in_sign: 12.6883
+    retrograde: false
+    house: 5
+  - body: mercury
+    longitude: 253.7319
+    sign: Sagittarius
+    degree_in_sign: 13.7319
+    retrograde: false
+    house: 11
+  - body: venus
+    longitude: 267.5381
+    sign: Sagittarius
+    degree_in_sign: 27.5381
+    retrograde: false
+    house: 12
+  - body: mars
+    longitude: 216.548
+    sign: Scorpio
+    degree_in_sign: 6.548
+    retrograde: false
+    house: 10
+  - body: jupiter
+    longitude: 316.8801
+    sign: Aquarius
+    degree_in_sign: 16.8801
+    retrograde: false
+    house: 2
+  - body: saturn
+    longitude: 244.4578
+    sign: Sagittarius
+    degree_in_sign: 4.4578
+    retrograde: false
+    house: 11
+  - body: uranus
+    longitude: 259.1132
+    sign: Sagittarius
+    degree_in_sign: 19.1132
+    retrograde: false
+    house: 11
+  - body: neptune
+    longitude: 273.338
+    sign: Capricorn
+    degree_in_sign: 3.338
+    retrograde: false
+    house: 12
+  - body: pluto
+    longitude: 216.7529
+    sign: Scorpio
+    degree_in_sign: 6.7529
+    retrograde: false
+    house: 10
+  - body: north_node
+    longitude: 37.887
+    sign: Taurus
+    degree_in_sign: 7.887
+    retrograde: true
+    house: 4
+  aspects:
+  - from: sun
+    to: venus
+    type: conjunction
+    separation: 6.035
+    orb: 6.035
+  - from: sun
+    to: mars
+    type: sextile
+    separation: 57.0251
+    orb: 2.9749
+  - from: sun
+    to: saturn
+    type: semi_sextile
+    separation: 29.1154
+    orb: 0.8846
+  - from: sun
+    to: neptune
+    type: conjunction
+    separation: 0.2351
+    orb: 0.2351
+  - from: sun
+    to: pluto
+    type: sextile
+    separation: 56.8203
+    orb: 3.1797
+  - from: sun
+    to: north_node
+    type: trine
+    separation: 124.3138
+    orb: 4.3138
+  - from: moon
+    to: mercury
+    type: opposition
+    separation: 178.9565
+    orb: 1.0435
+  - from: moon
+    to: jupiter
+    type: trine
+    separation: 115.8082
+    orb: 4.1918
+  - from: moon
+    to: uranus
+    type: opposition
+    separation: 173.5752
+    orb: 6.4248
+  - from: mercury
+    to: jupiter
+    type: sextile
+    separation: 63.1482
+    orb: 3.1482
+  - from: mercury
+    to: uranus
+    type: conjunction
+    separation: 5.3813
+    orb: 5.3813
+  - from: venus
+    to: neptune
+    type: conjunction
+    separation: 5.7999
+    orb: 5.7999
+  - from: mars
+    to: neptune
+    type: sextile
+    separation: 56.79
+    orb: 3.21
+  - from: mars
+    to: pluto
+    type: conjunction
+    separation: 0.2048
+    orb: 0.2048
+  - from: mars
+    to: north_node
+    type: opposition
+    separation: 178.661
+    orb: 1.339
+  - from: jupiter
+    to: uranus
+    type: sextile
+    separation: 57.7669
+    orb: 2.2331
+  - from: saturn
+    to: neptune
+    type: semi_sextile
+    separation: 28.8803
+    orb: 1.1197
+  - from: neptune
+    to: pluto
+    type: sextile
+    separation: 56.5852
+    orb: 3.4148
+  - from: neptune
+    to: north_node
+    type: trine
+    separation: 124.549
+    orb: 4.549
+  - from: pluto
+    to: north_node
+    type: opposition
+    separation: 178.8659
+    orb: 1.1341
+  element_balance:
+    fire: 2
+    earth: 1
+    air: 1
+    water: 1
+  modality_balance:
+    cardinal: 1
+    fixed: 1
+    mutable: 3
+mayan:
+  correlation: GMT-584283
+  long_count: 12.18.12.11.2
+  day_sign:
+    kiche: Iq'
+    yucatec: Ik
+  tone: 13
+  trecena_start:
+    kiche: Tz'i'
+    yucatec: Oc
+human_design:
+  type: Generator
+  strategy: To Respond
+  authority: Sacral
+  not_self_theme: Frustration
+  profile: 6/2
+  definition: Split Definition
+  incarnation_cross:
+    angle: Left Angle
+    code: 10/15 | 18/17
+    gates:
+      personality_sun: 10
+      personality_earth: 15
+      design_sun: 18
+      design_earth: 17
+    name: Left Angle Cross of Prevention
+  defined_centers:
+  - g
+  - heart
+  - sacral
+  - spleen
+  undefined_centers:
+  - ajna
+  - head
+  - root
+  - solar_plexus
+  - throat
+  channels:
+  - channel: 5-15
+    gates:
+    - 5
+    - 15
+    centers:
+    - sacral
+    - g
+  - channel: 10-34
+    gates:
+    - 10
+    - 34
+    centers:
+    - g
+    - sacral
+  - channel: 26-44
+    gates:
+    - 26
+    - 44
+    centers:
+    - heart
+    - spleen
+  hanging_gates:
+  - 11
+  - 13
+  - 14
+  - 17
+  - 18
+  - 24
+  - 25
+  - 28
+  - 35
+  - 40
+  - 41
+  - 48
+  - 64
+  personality_jd_ut: 2446424.93056
+  design_jd_ut: 2446337.27482
+  personality_activations:
+  - body: sun
+    longitude: 273.5732
+    gate: 10
+    line: 6
+  - body: earth
+    longitude: 93.5732
+    gate: 15
+    line: 6
+  - body: north_node
+    longitude: 37.887
+    gate: 24
+    line: 1
+  - body: south_node
+    longitude: 217.887
+    gate: 44
+    line: 1
+  - body: moon
+    longitude: 72.6883
+    gate: 35
+    line: 2
+  - body: mercury
+    longitude: 253.7319
+    gate: 5
+    line: 3
+  - body: venus
+    longitude: 267.5381
+    gate: 11
+    line: 6
+  - body: mars
+    longitude: 216.548
+    gate: 28
+    line: 5
+  - body: jupiter
+    longitude: 316.8801
+    gate: 13
+    line: 4
+  - body: saturn
+    longitude: 244.4578
+    gate: 34
+    line: 5
+  - body: uranus
+    longitude: 259.1132
+    gate: 26
+    line: 3
+  - body: neptune
+    longitude: 273.338
+    gate: 10
+    line: 6
+  - body: pluto
+    longitude: 216.7529
+    gate: 28
+    line: 6
+  design_activations:
+  - body: sun
+    longitude: 185.5732
+    gate: 18
+    line: 2
+  - body: earth
+    longitude: 5.5732
+    gate: 17
+    line: 2
+  - body: north_node
+    longitude: 39.4767
+    gate: 24
+    line: 2
+  - body: south_node
+    longitude: 219.4767
+    gate: 44
+    line: 2
+  - body: moon
+    longitude: 2.9915
+    gate: 25
+    line: 6
+  - body: mercury
+    longitude: 190.2839
+    gate: 48
+    line: 1
+  - body: venus
+    longitude: 158.1179
+    gate: 40
+    line: 3
+  - body: mars
+    longitude: 161.8397
+    gate: 64
+    line: 1
+  - body: jupiter
+    longitude: 307.1557
+    gate: 41
+    line: 6
+  - body: saturn
+    longitude: 234.653
+    gate: 14
+    line: 1
+  - body: uranus
+    longitude: 254.5339
+    gate: 5
+    line: 4
+  - body: neptune
+    longitude: 270.921
+    gate: 10
+    line: 3
+  - body: pluto
+    longitude: 213.5293
+    gate: 28
+    line: 2
+chinese:
+  year:
+    animal: Ox
+    element: Wood
+    polarity: Yin
+    name: Wood Ox
+    name_with_polarity: Yin Wood Ox
+    stem_index: 1
+    branch_index: 1
+    sexagenary_index: 11
+    chinese_year_gregorian: 1985
+    chinese_new_year: '1985-02-20'
+  month:
+    animal: Rat
+    solar_term_pinyin: Daxue
+    solar_term_english: Greater Snow
+    solar_term_start_longitude: 255
+  hour:
+    animal: Dragon
+    time_range: 07:00–09:00
+  triple_animals: Ox / Rat / Dragon

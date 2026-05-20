@@ -1,0 +1,15 @@
+# Runtime dependencies for Vercel build + serverless functions
+# (build step: build.py needs jinja2 + pyyaml + pyswisseph for engine compute)
+
+# Templating for the static-site builder
+Jinja2>=3.0
+
+# YAML for canon page frontmatter + .profile.yaml siblings
+PyYAML>=6.0
+
+# Ephemerides for the engine — chart computation runs at build time AND
+# inside the add-entity serverless function
+pyswisseph>=2.10
+
+# IANA timezone derivation from coordinates (used by geocode + add-entity)
+timezonefinder>=6.0

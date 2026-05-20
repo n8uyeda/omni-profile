@@ -1,0 +1,94 @@
+{# Mini-dashboard for one entity. Used both in the index-page selector
+   and (potentially) other contexts. Caller passes: entity, western_svg,
+   hd_svg, chart_hd, planet_glyphs. #}
+{% set ess = entity.essentials or {} %}
+{% set birth = entity.birth or {} %}
+{% set w_ess = ess.get('western') or {} %}
+{% set hd_ess = ess.get('human_design') or {} %}
+{% set m_ess = ess.get('mayan') or {} %}
+{% set c_ess = ess.get('chinese') or {} %}
+{% set chart = entity.chart or {} %}
+{% set w_full = chart.get('western') or {} %}
+
+<article class="mini-dashboard" data-dashboard-for="{{ entity.slug }}">
+  <header class="mini-dash-header">
+    <h2 class="mini-dash-name">
+      <a href="people/{{ entity.slug }}.html">{{ entity.name }} →</a>
+    </h2>
+    <p class="mini-dash-birth">
+      {{ birth.get('date') }}{% if birth.get('time') %} · {{ birth.get('time') }} {{ birth.get('tz') }}{% endif %}{% if birth.get('place') %} · {{ birth.get('place') }}{% endif %}
+    </p>
+  </header>
+
+  <section class="mini-kpi-grid">
+    <article class="kpi-card western">
+      <h2>Western</h2>
+      <div class="kpi-trio">
+        {% if w_ess.sun %}<div><span class="kpi-label">Sun</span><span class="kpi-value">{{ w_ess.sun.sign }}</span></div>{% endif %}
+        {% if w_ess.moon %}<div><span class="kpi-label">Moon</span><span class="kpi-value">{{ w_ess.moon.sign }}</span></div>{% endif %}
+        {% if w_ess.get('rising') %}<div><span class="kpi-label">Rising</span><span class="kpi-value">{{ w_ess.rising.sign }}</span></div>{% endif %}
+      </div>
+    </article>
+    <article class="kpi-card hd">
+      <h2>Human Design</h2>
+      {% if hd_ess.type %}
+        <div class="kpi-trio">
+          <div><span class="kpi-label">Type</span><span class="kpi-value">{{ hd_ess.type }}</span></div>
+          <div><span class="kpi-label">Profile</span><span class="kpi-value">{{ hd_ess.profile }}</span></div>
+          <div><span class="kpi-label">Authority</span><span class="kpi-value">{{ hd_ess.authority }}</span></div>
+        </div>
+      {% else %}
+        <p class="kpi-skipped">precision 1 required</p>
+      {% endif %}
+    </article>
+    <article class="kpi-card mayan">
+      <h2>Mayan</h2>
+      {% if m_ess.day_sign %}
+        <div class="kpi-trio">
+          <div><span class="kpi-label">Tone</span><span class="kpi-value">{{ m_ess.tone }}</span></div>
+          <div><span class="kpi-label">K'iche'</span><span class="kpi-value">{{ m_ess.day_sign.kiche }}</span></div>
+          <div><span class="kpi-label">Yucatec</span><span class="kpi-value">{{ m_ess.day_sign.yucatec }}</span></div>
+        </div>
+      {% endif %}
+    </article>
+    <article class="kpi-card chinese">
+      <h2>Chinese</h2>
+      {% if c_ess.year_pillar %}
+        <div class="kpi-trio">
+          <div><span class="kpi-label">Year</span><span class="kpi-value">{{ c_ess.year_pillar }}</span></div>
+          <div><span class="kpi-label">Inner</span><span class="kpi-value">{{ c_ess.inner_animal }}</span></div>
+          {% if c_ess.get('secret_animal') %}<div><span class="kpi-label">Secret</span><span class="kpi-value">{{ c_ess.secret_animal }}</span></div>{% endif %}
+        </div>
+      {% endif %}
+    </article>
+  </section>
+
+  <section class="mini-charts-stack">
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
+        <h2>Natal wheel</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if w_full.planets %}
+        {{ western_svg|safe }}
+      {% else %}
+        <p class="kpi-skipped">precision 1 required</p>
+      {% endif %}
+      </div>
+    </details>
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
+        <h2>Mandala</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if mandala_svg %}
+        {% include "_mandala_panel.html" %}
+      {% else %}
+        <p class="kpi-skipped">precision 1 required</p>
+      {% endif %}
+      </div>
+    </details>
+  </section>
+</article>

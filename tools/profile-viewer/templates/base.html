@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} — Omni-Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="{{ asset_prefix }}assets/css/style.css">
+  <script>
+    // Restore theme before paint to avoid flash of wrong theme.
+    (function() {
+      const saved = localStorage.getItem('omniprofile.theme');
+      const theme = saved || 'deep-space';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a href="{{ asset_prefix }}index.html" class="nav-brand">Omni-Profile</a>
+      <span class="nav-divider">·</span>
+      <a href="{{ asset_prefix }}index.html">Network</a>
+      <span class="nav-divider">·</span>
+      <span class="nav-meta">{{ generated_at }} · engine v{{ engine_version }} · viewer v{{ viewer_version }}</span>
+      <div class="theme-switcher" role="group" aria-label="Theme">
+        <button class="theme-btn" data-theme-value="deep-space" type="button">Deep Space</button>
+        <button class="theme-btn" data-theme-value="cosmic-glass" type="button">Cosmic Glass</button>
+        <button class="theme-btn" data-theme-value="planetarium" type="button">Planetarium</button>
+      </div>
+    </nav>
+  </header>
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+  <div id="chart-tooltip" class="chart-tooltip" role="tooltip" aria-hidden="true">
+    <div class="chart-tooltip-name"></div>
+    <div class="chart-tooltip-desc"></div>
+  </div>
+  <script id="meanings-data" type="application/json">{{ meanings_json|safe }}</script>
+
+  {# ===== Chat launcher + side panel =====
+     Floating button on every page. Side panel opens on click, scoped to the
+     current entity (resolved from URL on person/pair pages). Powered by
+     POST /api/chat on the local server. Fresh history each session. #}
+  <button id="chat-launcher" class="chat-launcher" type="button" aria-label="Open chart chat" aria-controls="chat-panel" aria-expanded="false">
+    <span class="chat-launcher-icon" aria-hidden="true">✦</span>
+    <span class="chat-launcher-label">Chat with chart</span>
+  </button>
+
+  <aside id="chat-panel" class="chat-panel" hidden aria-label="Chart chat">
+    <header class="chat-header">
+      <div class="chat-header-titles">
+        <span class="chat-header-eyebrow">Chat with</span>
+        <h3 class="chat-header-name"><span id="chat-entity-name">—</span></h3>
+      </div>
+      <div class="chat-header-actions">
+        <button id="chat-clear" class="chat-clear" type="button" aria-label="Clear this conversation" title="Clear this conversation">clear</button>
+        <button id="chat-close" class="chat-close" type="button" aria-label="Close chat">×</button>
+      </div>
+    </header>
+
+    <div class="chat-personas" role="radiogroup" aria-label="Conversation frame">
+      <button type="button" class="chat-persona" data-persona="general"           aria-pressed="true">General</button>
+      <button type="button" class="chat-persona" data-persona="hero_journey"      aria-pressed="false">Hero's Journey</button>
+      <button type="button" class="chat-persona" data-persona="relationship"      aria-pressed="false">Relationship</button>
+      <button type="button" class="chat-persona" data-persona="business"          aria-pressed="false">Business</button>
+      <button type="button" class="chat-persona" data-persona="creative_practice" aria-pressed="false">Creative Practice</button>
+    </div>
+
+    <div class="chat-length" role="radiogroup" aria-label="Reply length">
+      <span class="chat-length-label">Length</span>
+      <button type="button" class="chat-length-btn" data-length="terse"    aria-pressed="false">Terse</button>
+      <button type="button" class="chat-length-btn" data-length="standard" aria-pressed="true">Standard</button>
+      <button type="button" class="chat-length-btn" data-length="deep"     aria-pressed="false">Deep</button>
+    </div>
+
+    <div id="chat-context-warning" class="chat-context-warning" hidden>
+      <strong>Chat needs an entity.</strong> Open a person's profile page (click any name in the network) and the chat will scope to their chart.
+    </div>
+
+    <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+
+    <form id="chat-form" class="chat-form">
+      <textarea id="chat-input" class="chat-input"
+                placeholder="Ask anything about this chart…"
+                rows="2"
+                aria-label="Chat message"></textarea>
+      <button type="submit" id="chat-submit" class="chat-submit" aria-label="Send">
+        Send
+      </button>
+    </form>
+    <div id="chat-status" class="chat-status" aria-live="polite"></div>
+  </aside>
+
+  <footer class="site-footer">
+    <span class="footer-text">Built by the Profile Engine ({{ engine_version }}) · Viewer v{{ viewer_version }} · From the Personal Intelligence System vault.</span>
+  </footer>
+  <script>
+    // Chart-element hover tooltips. Hover any [data-tip-type][data-tip-id]
+    // and a name + 1-sentence description floats near the cursor.
+    (function() {
+      const dataEl = document.getElementById('meanings-data');
+      if (!dataEl) return;
+      let MEANINGS;
+      try { MEANINGS = JSON.parse(dataEl.textContent); }
+      catch (e) { console.warn('meanings json parse failed', e); return; }
+
+      const tip = document.getElementById('chart-tooltip');
+      const nameEl = tip.querySelector('.chart-tooltip-name');
+      const descEl = tip.querySelector('.chart-tooltip-desc');
+
+      function show(target) {
+        const type = target.getAttribute('data-tip-type');
+        const id = target.getAttribute('data-tip-id');
+        const bucket = MEANINGS[type];
+        if (!bucket) return false;
+        const entry = bucket[id];
+        if (!entry) return false;
+        nameEl.textContent = entry.name;
+        descEl.textContent = entry.description;
+        tip.style.display = 'block';
+        tip.setAttribute('aria-hidden', 'false');
+        return true;
+      }
+      function hide() {
+        tip.style.display = 'none';
+        tip.setAttribute('aria-hidden', 'true');
+      }
+      function positionAt(x, y) {
+        const margin = 14;
+        const rect = tip.getBoundingClientRect();
+        const winW = window.innerWidth, winH = window.innerHeight;
+        let left = x + margin;
+        let top = y + margin;
+        if (left + rect.width > winW - 8) left = x - rect.width - margin;
+        if (top + rect.height > winH - 8) top = y - rect.height - margin;
+        tip.style.left = Math.max(8, left) + 'px';
+        tip.style.top = Math.max(8, top) + 'px';
+      }
+
+      let currentTarget = null;
+      document.addEventListener('mousemove', e => {
+        // Use composedPath / target.closest with [data-tip-type] to find the
+        // hover element. closest() works inside SVG too.
+        let target = e.target;
+        if (target && target.closest) target = target.closest('[data-tip-type]');
+        if (target && target.getAttribute && target.getAttribute('data-tip-type')) {
+          if (target !== currentTarget) {
+            currentTarget = target;
+            const ok = show(target);
+            if (!ok) { hide(); currentTarget = null; }
+          }
+          positionAt(e.clientX, e.clientY);
+        } else if (currentTarget) {
+          hide();
+          currentTarget = null;
+        }
+      });
+      // Hide if mouse leaves the document
+      document.addEventListener('mouseleave', () => { hide(); currentTarget = null; });
+    })();
+  </script>
+  <script>
+    // Theme switcher — sets data-theme on <html>, persists to localStorage,
+    // updates active button state.
+    (function() {
+      const buttons = document.querySelectorAll('.theme-btn');
+      function syncActive() {
+        const current = document.documentElement.getAttribute('data-theme') || 'deep-space';
+        buttons.forEach(b => {
+          b.classList.toggle('active', b.dataset.themeValue === current);
+        });
+      }
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const next = btn.dataset.themeValue;
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('omniprofile.theme', next);
+          syncActive();
+          // Network graph (if present) restyles via CSS vars on next render
+          if (window.cyInstance) {
+            window.cyInstance.style().update();
+          }
+        });
+      });
+      syncActive();
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
+
+  <script>
+    // ============================================================
+    // Chart chat — floating launcher + side panel on every page
+    // ============================================================
+    (function() {
+      const launcher    = document.getElementById('chat-launcher');
+      const panel       = document.getElementById('chat-panel');
+      const closeBtn    = document.getElementById('chat-close');
+      const nameEl      = document.getElementById('chat-entity-name');
+      const warningEl   = document.getElementById('chat-context-warning');
+      const messagesEl  = document.getElementById('chat-messages');
+      const form        = document.getElementById('chat-form');
+      const input       = document.getElementById('chat-input');
+      const submitBtn   = document.getElementById('chat-submit');
+      const statusEl    = document.getElementById('chat-status');
+
+      if (!launcher || !panel) return;
+
+      // ---- Persona (framing lens) ----
+      // Global setting across all entities + sessions. Stored in localStorage.
+      const PERSONA_KEY = 'omni.chat.persona';
+      const VALID_PERSONAS = ['general', 'hero_journey', 'relationship', 'business', 'creative_practice'];
+      function getPersona() {
+        const saved = localStorage.getItem(PERSONA_KEY);
+        return VALID_PERSONAS.includes(saved) ? saved : 'general';
+      }
+      function setPersona(name) {
+        if (!VALID_PERSONAS.includes(name)) return;
+        localStorage.setItem(PERSONA_KEY, name);
+        document.querySelectorAll('.chat-persona').forEach(btn => {
+          btn.setAttribute('aria-pressed', btn.dataset.persona === name ? 'true' : 'false');
+        });
+      }
+      setPersona(getPersona());
+      document.querySelectorAll('.chat-persona').forEach(btn => {
+        btn.addEventListener('click', () => setPersona(btn.dataset.persona));
+      });
+
+      // ---- Length (reply depth) ----
+      const LENGTH_KEY = 'omni.chat.length';
+      const VALID_LENGTHS = ['terse', 'standard', 'deep'];
+      function getLength() {
+        const saved = localStorage.getItem(LENGTH_KEY);
+        return VALID_LENGTHS.includes(saved) ? saved : 'standard';
+      }
+      function setLength(name) {
+        if (!VALID_LENGTHS.includes(name)) return;
+        localStorage.setItem(LENGTH_KEY, name);
+        document.querySelectorAll('.chat-length-btn').forEach(btn => {
+          btn.setAttribute('aria-pressed', btn.dataset.length === name ? 'true' : 'false');
+        });
+      }
+      setLength(getLength());
+      document.querySelectorAll('.chat-length-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLength(btn.dataset.length));
+      });
+
+      // Per-person pages expose the entity via <meta name="omni-entity-name">.
+      // The home page exposes the network's entity selector instead — checked
+      // boxes become the chat scope (1 = single, 2 = pair, 0 or 3+ = unusable).
+      const metaEntity = document.querySelector('meta[name="omni-entity-name"]');
+
+      function getSelectedEntityNamesFromCheckboxes() {
+        return Array.from(document.querySelectorAll('.entity-checkbox:checked'))
+          .map(cb => {
+            const row = cb.closest('.entity-selector-row');
+            if (!row) return null;
+            const nameEl = row.querySelector('.entity-selector-name');
+            return nameEl ? nameEl.textContent.trim() : null;
+          })
+          .filter(Boolean);
+      }
+
+      function getChatScope() {
+        // Returns { mode, names, warning }
+        if (metaEntity) {
+          return { mode: 'single', names: [metaEntity.content.trim()] };
+        }
+        const names = getSelectedEntityNamesFromCheckboxes();
+        if (names.length === 0) {
+          return {
+            mode: 'none',
+            names: [],
+            warning: "Select 1 entity in the Entities list to chat about them, or check 2 to chat about their relationship.",
+          };
+        }
+        if (names.length === 1) return { mode: 'single', names };
+        if (names.length === 2) return { mode: 'pair', names };
+        return {
+          mode: 'too-many',
+          names,
+          warning: `Chat supports 1 or 2 entities. Currently ${names.length} selected — uncheck ${names.length - 2} to enable.`,
+        };
+      }
+
+      // History is keyed by the current chat scope (single entity name or
+       // alphabetically-sorted pair). Persisted in localStorage so it survives
+      // reloads, tab closes, even browser restarts. Per-browser only.
+      const HISTORY_KEY_PREFIX = 'omni.chat.';
+      const HISTORY_MAX_TURNS = 100;  // hard cap so a key can't grow indefinitely
+      let history = [];
+
+      function historyKey(scope) {
+        if (!scope || (scope.mode !== 'single' && scope.mode !== 'pair')) return null;
+        if (scope.mode === 'single') return HISTORY_KEY_PREFIX + 'single::' + scope.names[0];
+        const sorted = [...scope.names].sort();
+        return HISTORY_KEY_PREFIX + 'pair::' + sorted.join('---');
+      }
+      function loadHistory(scope) {
+        const key = historyKey(scope);
+        if (!key) { history = []; return; }
+        try {
+          const raw = localStorage.getItem(key);
+          history = raw ? JSON.parse(raw) : [];
+          if (!Array.isArray(history)) history = [];
+        } catch (e) { history = []; }
+      }
+      function saveHistory(scope) {
+        const key = historyKey(scope);
+        if (!key) return;
+        try {
+          // Cap before writing
+          const toSave = history.length > HISTORY_MAX_TURNS
+            ? history.slice(-HISTORY_MAX_TURNS)
+            : history;
+          localStorage.setItem(key, JSON.stringify(toSave));
+        } catch (e) { /* quota exceeded, etc. — silent */ }
+      }
+      function clearStoredHistory(scope) {
+        const key = historyKey(scope);
+        if (!key) return;
+        try { localStorage.removeItem(key); } catch (e) {}
+      }
+
+      function renderHeader() {
+        const scope = getChatScope();
+        if (scope.mode === 'single') {
+          nameEl.textContent = scope.names[0] + "'s chart";
+          warningEl.hidden = true;
+          form.hidden = false;
+        } else if (scope.mode === 'pair') {
+          nameEl.textContent = scope.names[0] + ' ↔ ' + scope.names[1];
+          warningEl.hidden = true;
+          form.hidden = false;
+        } else {
+          nameEl.textContent = scope.mode === 'too-many' ? '(too many selected)' : '(no chart selected)';
+          warningEl.textContent = '';
+          warningEl.innerHTML = '<strong>Chat needs an entity.</strong> ' +
+            escapeHtml(scope.warning || 'Open a person page or pick entities from the home page.');
+          warningEl.hidden = false;
+          form.hidden = true;
+        }
+      }
+
+      // Re-render header + reload history in real time when the home-page
+      // entity selection changes. (No-op on per-person pages where there are
+      // no checkboxes.)
+      document.querySelectorAll('.entity-checkbox').forEach(cb => {
+        cb.addEventListener('change', refreshOnScopeChange);
+      });
+
+      function setStatus(text, cls) {
+        statusEl.className = 'chat-status' + (cls ? ' ' + cls : '');
+        statusEl.textContent = text || '';
+      }
+
+      // Minimal markdown -> safe HTML. Supports **bold**, *italic*, `code`, and
+      // paragraph breaks on \n\n. Everything else stays plain.
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+      function mdToHtml(text) {
+        const paragraphs = String(text).split(/\n{2,}/);
+        return paragraphs.map(p => {
+          let s = escapeHtml(p);
+          s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+          s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+          s = s.replace(/\n/g, '<br>');
+          return `<p>${s}</p>`;
+        }).join('');
+      }
+
+      function addMessage(role, content, opts) {
+        opts = opts || {};
+        const el = document.createElement('div');
+        el.className = 'chat-message ' + role + (opts.thinking ? ' thinking' : '');
+        if (role === 'assistant') {
+          const body = document.createElement('div');
+          body.className = 'chat-message-body';
+          body.innerHTML = mdToHtml(content);
+          el.appendChild(body);
+          if (!opts.thinking) {
+            const actions = document.createElement('div');
+            actions.className = 'chat-message-actions';
+            const copyBtn = document.createElement('button');
+            copyBtn.type = 'button';
+            copyBtn.className = 'chat-msg-action';
+            copyBtn.textContent = 'copy';
+            copyBtn.title = 'Copy reply to clipboard';
+            copyBtn.addEventListener('click', () => copyMessage(copyBtn, content));
+            const retryBtn = document.createElement('button');
+            retryBtn.type = 'button';
+            retryBtn.className = 'chat-msg-action';
+            retryBtn.textContent = '↻ retry';
+            retryBtn.title = 'Regenerate this reply';
+            retryBtn.addEventListener('click', () => retryFromMessage(el));
+            actions.appendChild(copyBtn);
+            actions.appendChild(retryBtn);
+            el.appendChild(actions);
+          }
+        } else {
+          el.textContent = content;
+        }
+        // Remove the empty-state placeholder if present
+        const empty = messagesEl.querySelector('.chat-message-empty');
+        if (empty) empty.remove();
+        messagesEl.appendChild(el);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return el;
+      }
+
+      function copyMessage(btn, text) {
+        const original = btn.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = 'copied ✓';
+          setTimeout(() => { btn.textContent = original; }, 1400);
+        }, () => {
+          btn.textContent = 'copy failed';
+          setTimeout(() => { btn.textContent = original; }, 1400);
+        });
+      }
+
+      function retryFromMessage(assistantEl) {
+        // Find which assistant message index this DOM element is at,
+        // trim history to just before this assistant turn (i.e. keep the user
+        // message that prompted it), and re-submit.
+        const allMessages = Array.from(messagesEl.querySelectorAll('.chat-message'));
+        const domIdx = allMessages.indexOf(assistantEl);
+        if (domIdx < 0) return;
+        // history is parallel-aligned with the rendered messages (excluding
+        // the empty-state placeholder which addMessage removes).
+        if (domIdx >= history.length) return;
+        // Trim history to everything BEFORE this assistant turn — so the
+        // user message that preceded it is now the last turn.
+        history = history.slice(0, domIdx);
+        const scope = getChatScope();
+        saveHistory(scope);
+        rerenderMessages();
+        // Re-send to /api/chat by faking a submit with no new user input.
+        // We programmatically call the same flow as a normal submit, but skip
+        // adding a new user message. The previous user turn is already the
+        // last history entry.
+        if (history.length === 0 || history[history.length - 1].role !== 'user') return;
+        retryLastTurn();
+      }
+
+      async function retryLastTurn() {
+        const scope = getChatScope();
+        if (scope.mode !== 'single' && scope.mode !== 'pair') return;
+        submitBtn.disabled = true;
+        const thinkingEl = addMessage('assistant', 'thinking…', { thinking: true });
+        setStatus(`Re-generating reply (Claude · ${scope.mode} mode · ${getPersona()} · ${getLength()})…`);
+        try {
+          const resp = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              names: scope.names,
+              messages: history,
+              persona: getPersona(),
+              length: getLength(),
+            }),
+          });
+          const body = await resp.json();
+          if (!body.ok) {
+            thinkingEl.remove();
+            setStatus('Error: ' + (body.error || 'unknown'), 'err');
+            submitBtn.disabled = false;
+            return;
+          }
+          thinkingEl.remove();
+          addMessage('assistant', body.reply);
+          history.push({ role: 'assistant', content: body.reply });
+          saveHistory(scope);
+          setStatus(`session spend: $${body.session_spend_usd.toFixed(4)} / $${body.session_spend_cap_usd.toFixed(2)} cap`, 'ok');
+        } catch (err) {
+          thinkingEl.remove();
+          setStatus('Network error: ' + err.message, 'err');
+        } finally {
+          submitBtn.disabled = false;
+        }
+      }
+
+      function showEmptyState() {
+        if (messagesEl.children.length > 0) return;
+        const scope = getChatScope();
+        const el = document.createElement('div');
+        el.className = 'chat-message-empty';
+        if (scope.mode === 'single') {
+          const n = scope.names[0];
+          el.innerHTML =
+            'Ask anything about <strong>' + escapeHtml(n) + "</strong>'s chart.<br>" +
+            '<em>Examples:</em><br>' +
+            '— "What does the Moon-Saturn conjunction mean for them?"<br>' +
+            '— "Walk me through their incarnation cross."<br>' +
+            '— "How does their Mayan day-sign show up in everyday life?"';
+        } else if (scope.mode === 'pair') {
+          const a = scope.names[0], b = scope.names[1];
+          el.innerHTML =
+            'Ask anything about how <strong>' + escapeHtml(a) + '</strong> and ' +
+            '<strong>' + escapeHtml(b) + '</strong> relate.<br>' +
+            '<em>Examples:</em><br>' +
+            '— "Where does the friction between them come from?"<br>' +
+            '— "What flows easily between these two?"<br>' +
+            '— "How does ' + escapeHtml(a) + "'s Sun land on " + escapeHtml(b) + "'s chart?\"<br>" +
+            '— "Are there any electromagnetic channels formed between them?"';
+        } else {
+          el.textContent = scope.warning || "Open a person's profile page, then come back here.";
+        }
+        messagesEl.appendChild(el);
+      }
+
+      // Re-render the message list from scratch (used when scope or history changes).
+      function rerenderMessages() {
+        messagesEl.innerHTML = '';
+        for (const turn of history) addMessage(turn.role, turn.content);
+        if (history.length === 0) showEmptyState();
+      }
+
+      function openPanel() {
+        panel.hidden = false;
+        launcher.setAttribute('aria-expanded', 'true');
+        const scope = getChatScope();
+        loadHistory(scope);
+        renderHeader();
+        rerenderMessages();
+        if (scope.mode === 'single' || scope.mode === 'pair') {
+          setTimeout(() => input.focus(), 50);
+        }
+      }
+      function closePanel() {
+        panel.hidden = true;
+        launcher.setAttribute('aria-expanded', 'false');
+        setStatus('');
+      }
+
+      // If scope changes while the panel is open (user toggles a checkbox on
+      // the home page), swap to the new scope's history.
+      let lastScopeKey = null;
+      function refreshOnScopeChange() {
+        if (panel.hidden) return;
+        const scope = getChatScope();
+        const key = historyKey(scope);
+        if (key !== lastScopeKey) {
+          lastScopeKey = key;
+          loadHistory(scope);
+          renderHeader();
+          rerenderMessages();
+        } else {
+          renderHeader();  // header text may still need to update (warning copy)
+        }
+      }
+
+      launcher.addEventListener('click', openPanel);
+      closeBtn.addEventListener('click', closePanel);
+
+      // "Clear" button wipes the stored conversation for the current scope.
+      const clearBtn = document.getElementById('chat-clear');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          const scope = getChatScope();
+          if (history.length === 0) return;
+          if (!confirm('Clear this conversation? This can\'t be undone.')) return;
+          history = [];
+          clearStoredHistory(scope);
+          rerenderMessages();
+          setStatus('cleared', 'ok');
+        });
+      }
+
+      // Submit-on-Enter (Shift+Enter inserts newline).
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const scope = getChatScope();
+        if (scope.mode !== 'single' && scope.mode !== 'pair') {
+          setStatus(scope.warning || 'No entity selected.', 'err');
+          return;
+        }
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage('user', text);
+        history.push({ role: 'user', content: text });
+        saveHistory(scope);  // persist the user's turn immediately (assistant turn appended after the reply)
+        input.value = '';
+        submitBtn.disabled = true;
+        const thinkingEl = addMessage('assistant', 'thinking…', { thinking: true });
+        setStatus(`Calling Claude (Haiku 4.5)… ${scope.mode} mode · ${scope.names.length} entity${scope.names.length === 1 ? '' : 'ies'}`);
+
+        try {
+          const resp = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              names: scope.names,
+              messages: history,
+              persona: getPersona(),
+              length: getLength(),
+            }),
+          });
+          const body = await resp.json();
+          if (!body.ok) {
+            thinkingEl.remove();
+            setStatus('Error: ' + (body.error || 'unknown'), 'err');
+            // Don't keep the failed user turn in history? Actually keep it — the
+            // user might want to rephrase and resubmit; their original message
+            // stays visible as context.
+            submitBtn.disabled = false;
+            return;
+          }
+          thinkingEl.remove();
+          addMessage('assistant', body.reply);
+          history.push({ role: 'assistant', content: body.reply });
+          saveHistory(scope);  // persist the round-trip so reloads / window close keep it
+          const cap = body.session_spend_cap_usd;
+          const used = body.session_spend_usd;
+          setStatus(`session spend: $${used.toFixed(4)} / $${cap.toFixed(2)} cap`, 'ok');
+        } catch (err) {
+          thinkingEl.remove();
+          setStatus('Network error: ' + err.message + '. Is the local server running?', 'err');
+        } finally {
+          submitBtn.disabled = false;
+          input.focus();
+        }
+      });
+
+      // Cmd/Ctrl + K toggles the chat panel.
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          panel.hidden ? openPanel() : closePanel();
+        }
+        if (e.key === 'Escape' && !panel.hidden) closePanel();
+      });
+    })();
+  </script>
+</body>
+</html>

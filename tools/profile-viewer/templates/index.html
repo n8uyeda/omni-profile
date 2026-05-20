@@ -1,0 +1,1086 @@
+{% extends "base.html" %}
+{% block head_extra %}
+  <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+  {# Inline network data so file:// URLs work (fetch() of local files is blocked by CORS) #}
+  <script id="network-data" type="application/json">{{ network_data_json|safe }}</script>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>The Network</h1>
+  <p class="subtitle">{{ entities|length }} {{ "entity" if entities|length == 1 else "entities" }} computed · {{ edges|length }} relational {{ "connection" if edges|length == 1 else "connections" }} surfaced</p>
+</section>
+
+{# ---------------- ADD ENTITY ---------------- #}
+{# Submit creates a canon page + runs the engine + rebuilds the site.
+   Requires the local server: `python3 tools/profile-viewer/serve.py` #}
+<details class="add-entity-section section-collapsible" open id="add-entity-section">
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Add a new person</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+
+  <div id="add-entity-server-banner" class="add-entity-banner add-entity-banner-warn" hidden>
+    <strong>Local server required.</strong>
+    To add new entities, run <code>python3 tools/profile-viewer/serve.py</code> from the repo root and open the URL it prints. Opening the site via <code>file://</code> won't be able to submit.
+  </div>
+
+  <form id="add-entity-form" class="add-entity-form" autocomplete="off">
+    <div class="add-entity-grid">
+      <label class="add-entity-field add-entity-field-wide">
+        <span class="add-entity-label">Name <span class="req">*</span></span>
+        <input type="text" name="name" required maxlength="80"
+               placeholder="e.g. Jane Doe" />
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Birth date <span class="req">*</span></span>
+        <input type="date" name="date" required />
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Birth time</span>
+        <input type="time" name="time" />
+        <span class="add-entity-help">Optional — without time, HD is skipped (precision 2).</span>
+      </label>
+
+      <label class="add-entity-field add-entity-field-wide">
+        <span class="add-entity-label">Birth place</span>
+        <div class="add-entity-input-row">
+          <input type="text" name="place" id="add-entity-place"
+                 placeholder='e.g. "Santa Barbara, California, USA"' />
+          <button type="button" id="add-entity-geocode" class="add-entity-button-secondary">
+            Look up
+          </button>
+        </div>
+        <span class="add-entity-help" id="add-entity-geocode-status">
+          Click <em>Look up</em> to fetch latitude / longitude via OpenStreetMap (Nominatim).
+        </span>
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Latitude</span>
+        <input type="number" name="lat" step="0.0001" min="-90" max="90"
+               placeholder="34.4208" />
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Longitude</span>
+        <input type="number" name="lon" step="0.0001" min="-180" max="180"
+               placeholder="-119.6982" />
+      </label>
+
+      <label class="add-entity-field add-entity-field-wide">
+        <span class="add-entity-label">Timezone (IANA)</span>
+        <input type="text" name="tz" id="add-entity-tz" list="iana-tz-suggestions"
+               placeholder="America/Los_Angeles" />
+        <datalist id="iana-tz-suggestions">
+          <option value="America/Los_Angeles"></option>
+          <option value="America/Denver"></option>
+          <option value="America/Chicago"></option>
+          <option value="America/New_York"></option>
+          <option value="America/Phoenix"></option>
+          <option value="America/Anchorage"></option>
+          <option value="America/Mexico_City"></option>
+          <option value="America/Argentina/Buenos_Aires"></option>
+          <option value="America/Sao_Paulo"></option>
+          <option value="Europe/London"></option>
+          <option value="Europe/Paris"></option>
+          <option value="Europe/Berlin"></option>
+          <option value="Europe/Rome"></option>
+          <option value="Europe/Madrid"></option>
+          <option value="Europe/Amsterdam"></option>
+          <option value="Europe/Athens"></option>
+          <option value="Africa/Cairo"></option>
+          <option value="Asia/Dubai"></option>
+          <option value="Asia/Kolkata"></option>
+          <option value="Asia/Bangkok"></option>
+          <option value="Asia/Singapore"></option>
+          <option value="Asia/Hong_Kong"></option>
+          <option value="Asia/Shanghai"></option>
+          <option value="Asia/Tokyo"></option>
+          <option value="Australia/Sydney"></option>
+          <option value="Pacific/Auckland"></option>
+          <option value="UTC"></option>
+        </datalist>
+        <span class="add-entity-help">Auto-filled from the geocoder when you click <em>Look up</em>. Only edit if the lookup couldn't determine it.</span>
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Pronouns</span>
+        <input type="text" name="pronouns" id="add-entity-pronouns"
+               list="pronouns-suggestions" placeholder="he/him"
+               value="they/them" />
+        <datalist id="pronouns-suggestions">
+          <option value="he/him"></option>
+          <option value="she/her"></option>
+          <option value="they/them"></option>
+          <option value="he/they"></option>
+          <option value="she/they"></option>
+        </datalist>
+        <span class="add-entity-help">So the chat refers to this person correctly.</span>
+      </label>
+
+      <label class="add-entity-field">
+        <span class="add-entity-label">Relationship (optional)</span>
+        <input type="text" name="relationship" maxlength="120"
+               placeholder='Free-form, e.g. "TMFA Cohort 01"' />
+      </label>
+    </div>
+
+    <div class="add-entity-actions">
+      <button type="submit" id="add-entity-submit" class="add-entity-button-primary">
+        Add to vault
+      </button>
+      <label class="add-entity-checkbox-label">
+        <input type="checkbox" id="add-entity-auto-readings" name="auto_readings" checked />
+        <span>Auto-author all 5 readings inline (~$0.10 · adds ~90s)</span>
+      </label>
+      <div id="add-entity-status" class="add-entity-status" aria-live="polite"></div>
+    </div>
+  </form>
+
+  <div id="add-entity-preview" class="add-entity-preview" hidden aria-live="polite">
+    <header class="add-entity-preview-header">
+      <h3 class="add-entity-preview-title">
+        <span id="add-entity-preview-name">—</span>
+        <span class="add-entity-preview-badge">just added</span>
+      </h3>
+      <div class="add-entity-preview-actions">
+        <button type="button" id="add-entity-generate-readings" class="add-entity-button-primary">
+          Generate readings (~$0.10 · ~90s)
+        </button>
+        <a id="add-entity-preview-download-md" class="add-entity-button-secondary" href="#" download>Download .md ↓</a>
+        <a id="add-entity-preview-download-yaml" class="add-entity-button-secondary" href="#" download>Download .yaml ↓</a>
+        <a id="add-entity-preview-open" class="add-entity-button-secondary" href="#" target="_blank" rel="noopener">Open full profile ↗</a>
+        <button type="button" id="add-entity-preview-reload" class="add-entity-button-secondary">Reload network</button>
+        <button type="button" id="add-entity-preview-another" class="add-entity-button-secondary">Add another</button>
+      </div>
+      <div id="add-entity-readings-status" class="add-entity-readings-status" aria-live="polite"></div>
+    </header>
+    <iframe id="add-entity-preview-frame" class="add-entity-preview-frame"
+            title="Newly created profile preview" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+    <p class="add-entity-preview-help">
+      This is the new person's full profile page rendered inline. Scroll within the frame to see all four charts and their readings. The network graph below shows the existing entities — click <strong>Reload network</strong> to refresh it with the new person included.
+    </p>
+  </div>
+</details>
+
+{# ---------------- DASHBOARDS PANEL ---------------- #}
+<details id="dashboards-panel" class="dashboards-panel section-collapsible is-empty" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="dashboards-panel-title section-title">Selected dashboards</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="dashboards-panel-header">
+    <div class="view-mode-switcher" role="group" aria-label="View mode">
+      <button class="view-mode-btn active" data-view-mode="stacked" type="button">Stacked</button>
+      <button class="view-mode-btn" data-view-mode="overlaid" type="button">Overlaid</button>
+    </div>
+  </div>
+  <div id="dashboards-container" class="dashboards-container stacked">
+    <p class="dashboards-empty">Select one or more entities below to view their charts here.</p>
+  </div>
+</details>
+
+{# Hidden pool — every entity pre-rendered, cloned into the container on selection #}
+<div id="dashboards-pool" hidden>
+  {% for d in pool %}
+    {% set entity = d.entity %}
+    {% set western_svg = d.western_svg %}
+    {% set hd_svg = d.hd_svg %}
+    {% set mandala_svg = d.mandala_svg %}
+    {% set chart_hd = (entity.chart or {}).get('human_design') %}
+    {% include "_mini_dashboard.html" %}
+  {% endfor %}
+  {% for c in combined_pool %}
+    {% set pair_a = c.entity_a %}
+    {% set pair_b = c.entity_b %}
+    {% set combined_western_svg = c.western_svg %}
+    {% set combined_mandala_svg = c.mandala_svg %}
+    {% set pair_slug = c.pair_slug %}
+    {% set synastry = c.synastry %}
+    {% include "_combined_dashboard.html" %}
+  {% endfor %}
+</div>
+
+{# ---------------- SELECTOR ---------------- #}
+<details class="entity-selector-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Entities</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="entity-selector">
+    {% for e in entities %}
+      <label class="entity-selector-row" data-entity-row="{{ e.slug }}">
+        <input type="checkbox" class="entity-checkbox" data-entity="{{ e.slug }}" />
+        <span class="entity-selector-name">{{ e.name }}</span>
+        {% set ess = e.essentials or {} %}
+        {% set w = ess.get('western') or {} %}
+        {% set hd = ess.get('human_design') or {} %}
+        {% set m = ess.get('mayan') or {} %}
+        {% set c = ess.get('chinese') or {} %}
+        <span class="entity-selector-kpis">
+          {% if w.sun %}<span class="kpi"><strong>☉</strong> {{ w.sun.sign }}</span>{% endif %}
+          {% if hd.type %}<span class="kpi"><strong>HD</strong> {{ hd.type }}</span>{% endif %}
+          {% if m.day_sign %}<span class="kpi"><strong>M</strong> {{ m.day_sign.kiche }}</span>{% endif %}
+          {% if c.year_animal %}<span class="kpi"><strong>CN</strong> {{ c.year_animal }}</span>{% endif %}
+          {% if e.psychometrics and e.psychometrics.mbti %}<span class="kpi"><strong>MBTI</strong> {{ e.psychometrics.mbti }}</span>{% endif %}
+          {% if e.operational_tags %}
+            {% for tag in e.operational_tags[:3] %}<span class="tag-chip-sm">{{ tag }}</span>{% endfor %}
+          {% endif %}
+        </span>
+        <a class="entity-selector-link" href="people/{{ e.slug }}.html">open →</a>
+      </label>
+    {% endfor %}
+  </div>
+</details>
+
+{# ---------------- NETWORK GRAPH ---------------- #}
+<details class="network-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Network</h2>
+    <button type="button" class="legend-toggle-btn" id="legend-toggle" aria-pressed="true">Hide legend</button>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <div class="network-container" id="network-container">
+    <div id="network-graph" class="network-graph-frame"></div>
+    <aside class="network-legend" id="network-legend">
+      <h3>Connection types</h3>
+      <p class="legend-help">Click a row to show / hide that system's connections in the graph.</p>
+      <ul class="legend-list" id="legend-filter-list">
+        <li class="legend-item" data-system="western" role="button" tabindex="0" aria-pressed="true">
+          <span class="legend-swatch" style="background: var(--accent-western); color: var(--accent-western)"></span>
+          <span class="legend-item-text">Western — Sun sign · dominant element</span>
+        </li>
+        <li class="legend-item" data-system="hd" role="button" tabindex="0" aria-pressed="true">
+          <span class="legend-swatch" style="background: var(--accent-hd); color: var(--accent-hd)"></span>
+          <span class="legend-item-text">Human Design — channel · profile · cross</span>
+        </li>
+        <li class="legend-item" data-system="mayan" role="button" tabindex="0" aria-pressed="true">
+          <span class="legend-swatch" style="background: var(--accent-mayan); color: var(--accent-mayan)"></span>
+          <span class="legend-item-text">Mayan — day-sign · tone</span>
+        </li>
+        <li class="legend-item" data-system="chinese" role="button" tabindex="0" aria-pressed="true">
+          <span class="legend-swatch" style="background: var(--accent-chinese); color: var(--accent-chinese)"></span>
+          <span class="legend-item-text">Chinese — year animal · element · inner</span>
+        </li>
+      </ul>
+      <h3 class="legend-section-title">How to use</h3>
+      <p class="legend-note">Click a node to open its profile. Hover an edge to see why two people share it. Drag nodes to rearrange — the graph stays where you put it.</p>
+    </aside>
+  </div>
+</details>
+
+{# ---------------- NETWORK RESONANCE — recommendations ---------------- #}
+<details class="network-resonance-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Network resonance</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <p class="section-subtitle">
+    Pairs that flow · pairs in friction · outliers with unusual placements.
+    {% if n_entities < 3 %}
+      <strong>Group dynamics unlock at 3+ entities</strong> — currently you have {{ n_entities }}.
+    {% endif %}
+  </p>
+
+  <div class="resonance-grid">
+    <article class="resonance-rank-card">
+      <header class="resonance-rank-header">
+        <h3>🟢 Top resonance</h3>
+        <span class="resonance-rank-count">{{ rankings.by_harmony|length }} pair{{ 's' if rankings.by_harmony|length != 1 else '' }}</span>
+      </header>
+      {% if rankings.by_harmony %}
+        <ol class="resonance-rank-list">
+        {% for r in rankings.by_harmony[:5] %}
+          <li>
+            <a href="pair/{{ r.pair_slug }}.html">
+              <span class="resonance-pair-name">{{ r.entity_a.name }} ↔ {{ r.entity_b.name }}</span>
+              <span class="resonance-pair-score harmony">+{{ r.summary.total_harmony }}</span>
+            </a>
+          </li>
+        {% endfor %}
+        </ol>
+      {% else %}
+        <p class="resonance-rank-empty">No pairs yet.</p>
+      {% endif %}
+    </article>
+
+    <article class="resonance-rank-card">
+      <header class="resonance-rank-header">
+        <h3>🔴 Most friction</h3>
+        <span class="resonance-rank-count">{{ rankings.by_friction|length }} pair{{ 's' if rankings.by_friction|length != 1 else '' }}</span>
+      </header>
+      {% if rankings.by_friction and rankings.by_friction[0].summary.total_friction > 0 %}
+        <ol class="resonance-rank-list">
+        {% for r in rankings.by_friction[:5] if r.summary.total_friction > 0 %}
+          <li>
+            <a href="pair/{{ r.pair_slug }}.html">
+              <span class="resonance-pair-name">{{ r.entity_a.name }} ↔ {{ r.entity_b.name }}</span>
+              <span class="resonance-pair-score friction">−{{ r.summary.total_friction }}</span>
+            </a>
+          </li>
+        {% endfor %}
+        </ol>
+      {% else %}
+        <p class="resonance-rank-empty">No pairs with surfaced friction.</p>
+      {% endif %}
+    </article>
+
+    <article class="resonance-rank-card">
+      <header class="resonance-rank-header">
+        <h3>✨ Outliers</h3>
+        <span class="resonance-rank-count">{{ outliers|length }}</span>
+      </header>
+      {% if outliers %}
+        <ul class="resonance-outliers-list">
+        {% for o in outliers %}
+          <li>
+            <a href="people/{{ o.slug }}.html">
+              <span class="resonance-pair-name">{{ entities|selectattr('slug', 'equalto', o.slug)|first|attr('name') }}</span>
+              <span class="resonance-outlier-detail">{{ o.label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% elif n_entities < 3 %}
+        <p class="resonance-rank-empty">Add a third entity to surface outliers — placements that are unique within the group.</p>
+      {% else %}
+        <p class="resonance-rank-empty">No statistical outliers — placements distributed evenly across the group.</p>
+      {% endif %}
+    </article>
+  </div>
+
+  {% if pair_pages %}
+  <details class="resonance-all-pairs">
+    <summary>All pair pages ({{ pair_pages|length }})</summary>
+    <ul class="pair-list">
+      {% for p in pair_pages %}
+        <li><a href="pair/{{ p.slug }}.html">{{ p.a }} ↔ {{ p.b }}</a> — {{ p.count }} connections</li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+</details>
+
+{# ---------------- NETWORK COMPOSITION — totals per categorical field ---------------- #}
+<details class="composition-section section-collapsible" open>
+  <summary class="section-collapsible-summary">
+    <h2 class="section-title">Network composition</h2>
+    <span class="collapse-toggle" aria-hidden="true">▾</span>
+  </summary>
+  <p class="section-subtitle">How {{ n_entities }} entities distribute across each system's categories. Larger counts cluster; singletons are the outliers above.</p>
+
+  <div class="composition-grid">
+    {% for cat in demographics %}
+      <article class="composition-card composition-{{ cat.system }}">
+        <header class="composition-card-header">
+          <h3>{{ cat.label }}</h3>
+          <span class="composition-card-meta">{{ cat.unique }} unique · {{ cat.total }} total</span>
+        </header>
+        {% set max_count = cat.buckets[0].count %}
+        <ul class="composition-bucket-list">
+          {% for b in cat.buckets %}
+            <li class="composition-bucket">
+              <div class="composition-bucket-row">
+                <span class="composition-bucket-value">{{ b.value }}</span>
+                <span class="composition-bucket-count">{{ b.count }}</span>
+              </div>
+              <div class="composition-bar-wrap">
+                <div class="composition-bar" style="width: {{ (b.count / max_count * 100)|round(0) }}%"></div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </article>
+    {% endfor %}
+  </div>
+</details>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ---------------- Dashboard selector logic ----------------
+(function() {
+  const pool = document.getElementById('dashboards-pool');
+  const container = document.getElementById('dashboards-container');
+  const panel = document.getElementById('dashboards-panel');
+  const checkboxes = document.querySelectorAll('.entity-checkbox');
+  const modeButtons = document.querySelectorAll('.view-mode-btn');
+
+  function getMode() {
+    return container.classList.contains('overlaid') ? 'overlaid' : 'stacked';
+  }
+
+  function selectedSlugs() {
+    return Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.dataset.entity);
+  }
+
+  function pairSlug(a, b) {
+    // Match build.py's pair_slug() — alphabetical order by slug.
+    return [a, b].sort().join('--');
+  }
+
+  function clearContainer() {
+    while (container.firstChild) container.removeChild(container.firstChild);
+  }
+
+  function renderEmpty(msg) {
+    const p = document.createElement('p');
+    p.className = 'dashboards-empty';
+    p.textContent = msg || 'Select one or more entities below to view their charts here.';
+    container.appendChild(p);
+  }
+
+  function rebuild() {
+    const slugs = selectedSlugs();
+    const mode = getMode();
+    clearContainer();
+
+    if (slugs.length === 0) {
+      panel.classList.add('is-empty');
+      renderEmpty();
+      return;
+    }
+    panel.classList.remove('is-empty');
+
+    if (mode === 'overlaid' && slugs.length === 2) {
+      // Use the pre-rendered combined dashboard
+      const slug = pairSlug(slugs[0], slugs[1]);
+      const tmpl = pool.querySelector(`[data-combined-for="${slug}"]`);
+      if (tmpl) {
+        container.appendChild(tmpl.cloneNode(true));
+        return;
+      }
+      // If no pre-rendered pair (e.g., precision mismatch), fall back to stacked individuals
+      renderEmpty('No combined chart available for this pair (one or both lack precision-1 data). Showing individuals instead:');
+    }
+
+    if (mode === 'overlaid' && slugs.length !== 2) {
+      // Inform the user that overlay needs exactly 2
+      renderEmpty(slugs.length === 1
+        ? 'Overlay mode needs two entities — pick one more. Showing the single selected dashboard:'
+        : `Overlay mode supports exactly 2 entities at a time (you have ${slugs.length}). Showing all selected stacked:`
+      );
+    }
+
+    // Stacked mode (or fallback): render each individual dashboard
+    slugs.forEach(slug => {
+      const tmpl = pool.querySelector(`[data-dashboard-for="${slug}"]`);
+      if (tmpl) container.appendChild(tmpl.cloneNode(true));
+    });
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', rebuild));
+
+  // View-mode toggle
+  modeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.viewMode;
+      modeButtons.forEach(b => b.classList.toggle('active', b === btn));
+      container.classList.toggle('stacked', mode === 'stacked');
+      container.classList.toggle('overlaid', mode === 'overlaid');
+      localStorage.setItem('omniprofile.viewmode', mode);
+      rebuild();
+    });
+  });
+
+  // Restore preferred mode
+  const savedMode = localStorage.getItem('omniprofile.viewmode') || 'stacked';
+  if (savedMode === 'overlaid') {
+    container.classList.remove('stacked');
+    container.classList.add('overlaid');
+    modeButtons.forEach(b => b.classList.toggle('active', b.dataset.viewMode === 'overlaid'));
+  }
+  rebuild();
+})();
+
+// ---------------- Network graph (theme-aware) ----------------
+(function() {
+  function themeVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888';
+  }
+  function buildStyle() {
+    return [
+      // ----- Base node: large, halo border, generous label with backdrop -----
+      { selector: 'node', style: {
+          'background-color': themeVar('--node-person'),
+          'background-opacity': 1,
+          'label': 'data(label)',
+          'color': themeVar('--node-text'),
+          'text-valign': 'bottom',
+          'text-halign': 'center',
+          'text-margin-y': 14,
+          'text-wrap': 'wrap',
+          'text-max-width': '140px',
+          // Pill-shaped label background — separates the text from background
+          // chart artifacts and edges, making labels legible at any zoom.
+          'text-background-color': themeVar('--bg-page'),
+          'text-background-opacity': 0.85,
+          'text-background-padding': '6px',
+          'text-background-shape': 'round-rectangle',
+          'text-border-color': themeVar('--border'),
+          'text-border-opacity': 0.4,
+          'text-border-width': 1,
+          'font-size': 16,
+          'font-weight': 600,
+          'font-family': 'Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+          'width': 54,
+          'height': 54,
+          'border-width': 3,
+          'border-color': themeVar('--bg-page'),
+          'border-opacity': 1,
+          'overlay-opacity': 0,
+          'transition-property': 'background-color, border-color, border-width, width, height',
+          'transition-duration': '180ms',
+          'transition-timing-function': 'ease-out',
+      }},
+      // Type-specific node fills
+      { selector: 'node[type = "person"]',    style: { 'background-color': themeVar('--node-person') } },
+      { selector: 'node[type = "influence"]', style: { 'background-color': themeVar('--node-influence') } },
+      { selector: 'node[type = "mentor"]',    style: { 'background-color': themeVar('--node-mentor') } },
+      { selector: 'node[type = "project"]',   style: { 'background-color': themeVar('--node-project') } },
+
+      // Node hover — grows, brightens, accent-color border, sits on top
+      { selector: 'node:hover', style: {
+          'background-color': themeVar('--node-hover'),
+          'cursor': 'pointer',
+          'width': 66,
+          'height': 66,
+          'border-width': 5,
+          'border-color': themeVar('--accent'),
+          'z-index': 100,
+      }},
+
+      // ----- Base edge: bezier curve, weighted width, subtle by default -----
+      { selector: 'edge', style: {
+          'width': 'mapData(weight, 0, 10, 2.5, 8)',
+          'line-color': themeVar('--edge-default'),
+          'curve-style': 'bezier',
+          'opacity': 0.45,
+          'transition-property': 'line-color, opacity, width',
+          'transition-duration': '180ms',
+      }},
+
+      // Connection-type edge colors (one per esoteric system).
+      // All 11 kinds produced by synastry.compute_edges must be listed here;
+      // any unmapped kind falls back to the default neutral edge color.
+      { selector: 'edge[kind = "hd_channel"]',           style: { 'line-color': themeVar('--accent-hd') } },
+      { selector: 'edge[kind = "hd_profile"]',           style: { 'line-color': themeVar('--accent-hd') } },
+      { selector: 'edge[kind = "hd_cross_angle"]',       style: { 'line-color': themeVar('--accent-hd') } },
+      { selector: 'edge[kind = "hd_centers"]',           style: { 'line-color': themeVar('--accent-hd') } },
+      { selector: 'edge[kind = "mayan_day_sign"]',       style: { 'line-color': themeVar('--accent-mayan') } },
+      { selector: 'edge[kind = "mayan_tone"]',           style: { 'line-color': themeVar('--accent-mayan') } },
+      { selector: 'edge[kind = "chinese_year_animal"]',  style: { 'line-color': themeVar('--accent-chinese') } },
+      { selector: 'edge[kind = "chinese_year_element"]', style: { 'line-color': themeVar('--accent-chinese') } },
+      { selector: 'edge[kind = "chinese_inner_animal"]', style: { 'line-color': themeVar('--accent-chinese') } },
+      { selector: 'edge[kind = "sun_sign"]',             style: { 'line-color': themeVar('--accent-western') } },
+      { selector: 'edge[kind = "dominant_element"]',     style: { 'line-color': themeVar('--accent-western') } },
+
+      // Edge hover — brightens, thickens, raises above other edges
+      { selector: 'edge:hover', style: {
+          'opacity': 1,
+          'width': 'mapData(weight, 0, 10, 4.5, 12)',
+          'z-index': 50,
+      }},
+
+      // Edges filtered out by a disabled legend system — hidden entirely.
+      { selector: 'edge.filtered-out', style: {
+          'display': 'none',
+      }},
+    ];
+  }
+
+  // Read inline data — fetch() of local files is blocked under file:// (CORS).
+  let data;
+  try {
+    data = JSON.parse(document.getElementById('network-data').textContent);
+  } catch (err) {
+    console.error('Could not parse network data:', err);
+    document.getElementById('network-graph').innerHTML =
+      '<p style="padding:1rem;color:var(--text-faint);text-align:center">Network data failed to load.</p>';
+    return;
+  }
+
+  const container = document.getElementById('network-graph');
+  if (!container) return;
+  if (typeof cytoscape !== 'function') {
+    console.error('Cytoscape failed to load from CDN.');
+    container.innerHTML = '<p style="padding:1rem;color:var(--text-faint);text-align:center">Cytoscape.js failed to load (offline?). Graph unavailable; entity list still works.</p>';
+    return;
+  }
+
+  const cy = cytoscape({
+    container: container,
+    elements: [
+      ...data.nodes.map(n => ({ data: { id: n.id, label: n.label, type: n.type } })),
+      ...data.edges.map(e => ({ data: {
+        source: e.source, target: e.target,
+        weight: e.weight, count: e.count,
+        tooltip: e.tooltip,
+        kind: e.connections[0].kind,
+        connections: e.connections,  // full list — needed for per-system filtering
+      }})),
+    ],
+    style: buildStyle(),
+    // Default layout: circle around the center of the frame, sized so that
+    // the diameter is ~80% of the container's shorter dimension. After
+    // layout, we zoom out 2x for a calmer starting view (the user can scroll
+    // back in or drag nodes to rearrange).
+    layout: (function() {
+      const w = container.clientWidth, h = container.clientHeight;
+      const minDim = Math.min(w, h);
+      const radius = minDim * 0.4;   // diameter = 80% of the shorter dimension
+      return {
+        name: 'circle',
+        fit: false,                  // we set radius explicitly; don't refit
+        radius: radius,
+        startAngle: -Math.PI / 2,    // first node at 12 o'clock
+        sweep: 2 * Math.PI,
+        clockwise: true,
+        animate: true,
+        animationDuration: 600,
+        animationEasing: 'ease-out',
+        padding: 40,
+      };
+    })(),
+    wheelSensitivity: 0.3,
+    minZoom: 0.2,
+    maxZoom: 2.5,
+  });
+
+  // Apply the 2x zoom-out after the layout completes. `cy.layout(...).run()`
+  // fires 'layoutstop' when done — that's the hook to use.
+  cy.one('layoutstop', () => {
+    cy.center();
+    cy.zoom(cy.zoom() * 0.5);
+    cy.center();
+  });
+  window.cyInstance = cy;
+
+  cy.on('tap', 'node', evt => {
+    const id = evt.target.data('id');
+    window.location.href = 'people/' + id + '.html';
+  });
+  cy.on('mouseover', 'edge', evt => {
+    const e = evt.target;
+    const text = e.data('tooltip');
+    const tip = document.getElementById('edge-tooltip') || (function(){
+      const t = document.createElement('div'); t.id = 'edge-tooltip';
+      t.className = 'edge-tooltip';
+      document.body.appendChild(t);
+      return t;
+    })();
+    tip.textContent = text;
+    tip.style.display = 'block';
+  });
+  cy.on('mouseout', 'edge', () => {
+    const tip = document.getElementById('edge-tooltip');
+    if (tip) tip.style.display = 'none';
+  });
+  document.addEventListener('mousemove', e => {
+    const tip = document.getElementById('edge-tooltip');
+    if (tip && tip.style.display !== 'none') {
+      tip.style.left = (e.pageX + 14) + 'px';
+      tip.style.top = (e.pageY + 14) + 'px';
+    }
+  });
+
+  const obs = new MutationObserver(() => {
+    cy.style().fromJson(buildStyle()).update();
+  });
+  obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // ----- Per-system edge filters -----
+  // Each row in the legend's "Connection types" list maps to one of these
+  // systems. Clicking a row toggles whether its edges show in the graph.
+  // An edge is kept visible as long as ANY of its connection kinds belongs
+  // to an enabled system; only when ALL kinds are disabled is the edge hidden.
+  // All 11 edge kinds produced by synastry.compute_edges, grouped by the
+  // legend system they belong to. If you add a new kind to synastry.py you
+  // MUST add it here too — otherwise it falls through as an uncategorized
+  // (and untoggleable) edge.
+  const SYSTEM_FOR_KIND = {
+    'sun_sign':              'western',
+    'dominant_element':      'western',
+    'hd_channel':            'hd',
+    'hd_profile':            'hd',
+    'hd_cross_angle':        'hd',
+    'hd_centers':            'hd',
+    'mayan_day_sign':        'mayan',
+    'mayan_tone':            'mayan',
+    'chinese_year_animal':   'chinese',
+    'chinese_year_element':  'chinese',
+    'chinese_inner_animal':  'chinese',
+  };
+  const disabledSystems = new Set();
+  try {
+    const saved = JSON.parse(localStorage.getItem('omniprofile.disabledSystems') || '[]');
+    saved.forEach(s => disabledSystems.add(s));
+  } catch (e) { /* malformed — ignore */ }
+
+  function applyEdgeFilters() {
+    // For each edge: pick the FIRST connection (in synastry-priority order)
+    // whose system is currently enabled. That becomes the edge's displayed
+    // kind, which drives both its color (via Cytoscape style selectors) and
+    // its tooltip ranking. If no connection belongs to an enabled system,
+    // hide the edge entirely.
+    //
+    // This means: toggle Western off → Western-primary edges that ALSO have
+    // an HD/Mayan/Chinese connection re-color to that next-enabled system,
+    // instead of vanishing. Toggle every system off except Mayan → every
+    // edge that has any Mayan component shows up, colored Mayan. Nothing
+    // disappears unless it has truly no enabled connection.
+    cy.edges().forEach(edge => {
+      const conns = edge.data('connections') || [{ kind: edge.data('kind') }];
+      const firstEnabled = conns.find(c => !disabledSystems.has(SYSTEM_FOR_KIND[c.kind]));
+      if (firstEnabled) {
+        edge.data('kind', firstEnabled.kind);  // dynamic recolor
+        edge.removeClass('filtered-out');
+      } else {
+        edge.addClass('filtered-out');
+      }
+    });
+  }
+
+  document.querySelectorAll('.legend-item[data-system]').forEach(item => {
+    const sys = item.dataset.system;
+    if (disabledSystems.has(sys)) {
+      item.classList.add('disabled');
+      item.setAttribute('aria-pressed', 'false');
+    }
+    function toggle() {
+      if (disabledSystems.has(sys)) {
+        disabledSystems.delete(sys);
+        item.classList.remove('disabled');
+        item.setAttribute('aria-pressed', 'true');
+      } else {
+        disabledSystems.add(sys);
+        item.classList.add('disabled');
+        item.setAttribute('aria-pressed', 'false');
+      }
+      localStorage.setItem('omniprofile.disabledSystems',
+        JSON.stringify(Array.from(disabledSystems)));
+      applyEdgeFilters();
+    }
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  // Apply restored filter state once the graph is built.
+  applyEdgeFilters();
+
+  // ----- Legend toggle ----- //
+  const legendBtn = document.getElementById('legend-toggle');
+  const networkContainer = document.getElementById('network-container');
+  function applyLegendState(hidden) {
+    networkContainer.classList.toggle('legend-hidden', hidden);
+    legendBtn.textContent = hidden ? 'Show legend' : 'Hide legend';
+    legendBtn.setAttribute('aria-pressed', String(!hidden));
+    // Graph frame width just changed — let Cytoscape recompute and refit.
+    requestAnimationFrame(() => {
+      cy.resize();
+      cy.fit(undefined, 80);
+      cy.zoom(cy.zoom() * 0.5);
+      cy.center();
+    });
+  }
+  if (legendBtn) {
+    // Buttons inside <summary> would toggle the details; suppress that.
+    legendBtn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = !networkContainer.classList.contains('legend-hidden');
+      localStorage.setItem('omniprofile.legendHidden', next ? '1' : '0');
+      applyLegendState(next);
+    });
+    const savedHidden = localStorage.getItem('omniprofile.legendHidden') === '1';
+    if (savedHidden) applyLegendState(true);
+  }
+})();
+
+// ---------------- Add-entity form ----------------
+// Independent of the network graph IIFE — only touches the form DOM and the
+// /api/* endpoints exposed by tools/profile-viewer/serve.py. Degrades cleanly
+// when the page is opened from file:// (no server) by showing a banner.
+(function() {
+  const form = document.getElementById('add-entity-form');
+  if (!form) return;
+  const banner = document.getElementById('add-entity-server-banner');
+  const status = document.getElementById('add-entity-status');
+  const submitBtn = document.getElementById('add-entity-submit');
+  const geocodeBtn = document.getElementById('add-entity-geocode');
+  const geocodeStatus = document.getElementById('add-entity-geocode-status');
+  const placeInput = document.getElementById('add-entity-place');
+  const latInput = form.querySelector('input[name="lat"]');
+  const lonInput = form.querySelector('input[name="lon"]');
+
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (isFileProtocol) banner.hidden = false;
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function setStatus(text, cls) {
+    status.className = 'add-entity-status' + (cls ? ' ' + cls : '');
+    status.innerHTML = text;
+  }
+
+  // ---- Geocoder ----
+  geocodeBtn.addEventListener('click', async () => {
+    const query = placeInput.value.trim();
+    if (!query) {
+      geocodeStatus.textContent = 'Enter a place name first.';
+      return;
+    }
+    if (isFileProtocol) {
+      geocodeStatus.textContent = 'Start the local server (python3 tools/profile-viewer/serve.py) to use the geocoder.';
+      return;
+    }
+    geocodeBtn.disabled = true;
+    geocodeStatus.textContent = 'Looking up…';
+    try {
+      const resp = await fetch('/api/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+      const body = await resp.json();
+      if (!body.ok) throw new Error(body.error || `HTTP ${resp.status}`);
+      if (!body.found) {
+        geocodeStatus.textContent = `No match for "${query}". Try a more specific name.`;
+        return;
+      }
+      latInput.value = body.result.lat.toFixed(4);
+      lonInput.value = body.result.lon.toFixed(4);
+      if (body.result.display_name) placeInput.value = body.result.display_name;
+      // Auto-fill the timezone if the server derived one from the coordinates
+      // (timezonefinder lookup; offline). Falls back to manual entry if outside
+      // its coverage area or the library isn't installed.
+      const tzInput = document.getElementById('add-entity-tz');
+      if (body.result.tz && tzInput && !tzInput.value) {
+        tzInput.value = body.result.tz;
+        geocodeStatus.innerHTML = `Found: <em>${escapeHtml(body.result.display_name)}</em>. Timezone auto-filled: <strong>${escapeHtml(body.result.tz)}</strong>.`;
+      } else {
+        geocodeStatus.innerHTML = `Found: <em>${escapeHtml(body.result.display_name)}</em>. Couldn't derive a timezone automatically — enter it manually below.`;
+      }
+    } catch (e) {
+      geocodeStatus.textContent = `Geocoder error: ${e.message}`;
+    } finally {
+      geocodeBtn.disabled = false;
+    }
+  });
+
+  // ---- Submit ----
+  // On success, hide the form (it's served its purpose) and inline the new
+  // person's profile page in an iframe right where the form used to be —
+  // matches the user's request that the chart shows up "right there
+  // underneath as the first thing." A "Reload network" button is offered for
+  // when the user wants the new entity to appear in the network graph below
+  // (which requires a page reload since the graph data was inlined at build).
+  const preview = document.getElementById('add-entity-preview');
+  const previewName = document.getElementById('add-entity-preview-name');
+  const previewFrame = document.getElementById('add-entity-preview-frame');
+  const previewOpen = document.getElementById('add-entity-preview-open');
+  const previewReload = document.getElementById('add-entity-preview-reload');
+  const previewAnother = document.getElementById('add-entity-preview-another');
+  const previewDownloadMd = document.getElementById('add-entity-preview-download-md');
+  const previewDownloadYaml = document.getElementById('add-entity-preview-download-yaml');
+  const generateReadingsBtn = document.getElementById('add-entity-generate-readings');
+  const readingsStatus = document.getElementById('add-entity-readings-status');
+  let currentEntityName = null;
+  let currentPersonUrl = null;
+
+  // Track currently-active object URLs so we can revoke them when the user
+  // resets the form (avoid leaking memory if they add many people in a row).
+  const activeBlobUrls = [];
+  function freeBlobUrls() {
+    while (activeBlobUrls.length) URL.revokeObjectURL(activeBlobUrls.pop());
+  }
+  function blobDownloadLink(linkEl, content, filename, mime) {
+    if (!content) {
+      linkEl.hidden = true;
+      return;
+    }
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    activeBlobUrls.push(url);
+    linkEl.href = url;
+    linkEl.setAttribute('download', filename);
+    linkEl.hidden = false;
+  }
+
+  function showPreview(body) {
+    currentEntityName = body.name;
+    currentPersonUrl = body.person_url;
+    previewName.textContent = body.name;
+    previewOpen.href = body.person_url;
+    previewFrame.src = body.person_url;
+    freeBlobUrls();
+    blobDownloadLink(previewDownloadMd, body.canon_md, `${body.name}.md`, 'text/markdown');
+    blobDownloadLink(previewDownloadYaml, body.profile_yaml, `${body.name}.profile.yaml`, 'application/x-yaml');
+    if (readingsStatus) readingsStatus.textContent = '';
+    if (generateReadingsBtn) {
+      // If readings were already auto-authored inline at submit, mark the
+      // button as done; otherwise leave it active so the user can click it.
+      if (body.readings_status === 'authored') {
+        generateReadingsBtn.disabled = true;
+        generateReadingsBtn.textContent = 'Readings authored ✓';
+        if (readingsStatus) {
+          setReadingsStatus(`All 5 readings authored inline. Session spend: <strong>$${(body.session_spend_usd || 0).toFixed(4)}</strong> of $${(body.session_spend_cap_usd || 1).toFixed(2)} cap.`, 'status-ok');
+        }
+      } else if (body.readings_status && body.readings_status.startsWith('failed')) {
+        generateReadingsBtn.disabled = false;
+        generateReadingsBtn.textContent = 'Retry readings (~$0.10 · ~90s)';
+        if (readingsStatus) {
+          setReadingsStatus(`Auto-readings failed: <strong>${escapeHtml(body.readings_status)}</strong>. Click the button to retry.`, 'status-err');
+        }
+      } else {
+        generateReadingsBtn.disabled = false;
+        generateReadingsBtn.textContent = 'Generate readings (~$0.10 · ~90s)';
+      }
+    }
+    form.hidden = true;
+    preview.hidden = false;
+    preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function hidePreview() {
+    preview.hidden = true;
+    form.hidden = false;
+    previewFrame.src = 'about:blank';
+    freeBlobUrls();
+    currentEntityName = null;
+    currentPersonUrl = null;
+    form.reset();
+    setStatus('', '');
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  if (previewAnother) previewAnother.addEventListener('click', hidePreview);
+  if (previewReload) previewReload.addEventListener('click', () => window.location.reload());
+
+  // ---- Generate readings (Claude API; takes ~60-120s) ----
+  function setReadingsStatus(text, cls) {
+    if (!readingsStatus) return;
+    readingsStatus.className = 'add-entity-readings-status' + (cls ? ' ' + cls : '');
+    readingsStatus.innerHTML = text;
+  }
+  if (generateReadingsBtn) {
+    generateReadingsBtn.addEventListener('click', async () => {
+      if (!currentEntityName) return;
+      generateReadingsBtn.disabled = true;
+      const originalLabel = generateReadingsBtn.textContent;
+      generateReadingsBtn.textContent = 'Authoring readings…';
+      setReadingsStatus(
+        `Calling the Anthropic API for <strong>${escapeHtml(currentEntityName)}</strong>. ` +
+        `Generating 4 system readings (Western · HD · Mayan · Chinese) plus 1 cross-system thematic synthesis. ` +
+        `This usually takes 60–120 seconds. Don't close the browser.`,
+        'status-working'
+      );
+      try {
+        const resp = await fetch('/api/author-readings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: currentEntityName }),
+        });
+        const body = await resp.json();
+        if (!body.ok) {
+          setReadingsStatus(
+            `Readings could not be authored. <strong>${escapeHtml(body.error || '(no message)')}</strong>`,
+            'status-err'
+          );
+          generateReadingsBtn.disabled = false;
+          generateReadingsBtn.textContent = originalLabel;
+          return;
+        }
+        if (body.skipped) {
+          setReadingsStatus(escapeHtml(body.message), 'status-ok');
+          generateReadingsBtn.disabled = true;
+          generateReadingsBtn.textContent = 'Readings already exist';
+          return;
+        }
+        const wrote = [];
+        if (body.wrote_system_readings) wrote.push('4 system readings');
+        if (body.wrote_thematic_reading) wrote.push('thematic synthesis');
+        setReadingsStatus(
+          `Authored ${wrote.join(' + ')}. Session spend so far: <strong>$${body.session_spend_usd.toFixed(4)}</strong> ` +
+          `of $${body.session_spend_cap_usd.toFixed(2)} cap. Refreshing the preview…`,
+          'status-ok'
+        );
+        // Refresh the iframe so the new readings appear inline
+        previewFrame.src = currentPersonUrl + '?t=' + Date.now();
+        generateReadingsBtn.disabled = true;
+        generateReadingsBtn.textContent = 'Readings written ✓';
+      } catch (e) {
+        setReadingsStatus(`Network error: ${escapeHtml(e.message)}.`, 'status-err');
+        generateReadingsBtn.disabled = false;
+        generateReadingsBtn.textContent = originalLabel;
+      }
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (isFileProtocol) {
+      setStatus(
+        'This requires the local server. Run <code>python3 tools/profile-viewer/serve.py</code> from the repo root, then open the URL it prints.',
+        'status-err'
+      );
+      return;
+    }
+
+    const fd = new FormData(form);
+    const autoReadings = document.getElementById('add-entity-auto-readings').checked;
+    const payload = {
+      name: (fd.get('name') || '').toString().trim(),
+      date: (fd.get('date') || '').toString().trim(),
+      time: (fd.get('time') || '').toString().trim() || null,
+      place: (fd.get('place') || '').toString().trim() || null,
+      lat: fd.get('lat') === '' ? null : parseFloat(fd.get('lat')),
+      lon: fd.get('lon') === '' ? null : parseFloat(fd.get('lon')),
+      tz: (fd.get('tz') || '').toString().trim() || null,
+      pronouns: (fd.get('pronouns') || '').toString().trim() || null,
+      relationship: (fd.get('relationship') || '').toString().trim() || null,
+      auto_readings: autoReadings,
+    };
+
+    if (!payload.name) { setStatus('Name is required.', 'status-err'); return; }
+    if (!payload.date) { setStatus('Birth date is required.', 'status-err'); return; }
+
+    submitBtn.disabled = true;
+    const waitHint = autoReadings
+      ? "computing chart, authoring 4 system readings + thematic synthesis, rebuilding the site. This usually takes 60-120 seconds. Don't close the browser."
+      : "computing chart and rebuilding the site (5-10 seconds).";
+    setStatus(`Submitting <strong>${escapeHtml(payload.name)}</strong>… ${waitHint}`, 'status-working');
+
+    try {
+      const resp = await fetch('/api/add-entity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const body = await resp.json();
+      if (!body.ok) {
+        setStatus(`Server rejected the submission: ${escapeHtml(body.error || '(no error message)')}`, 'status-err');
+        submitBtn.disabled = false;
+        return;
+      }
+      setStatus('', '');
+      submitBtn.disabled = false;
+      showPreview(body);
+    } catch (e) {
+      setStatus(`Network error: ${escapeHtml(e.message)}. Is the local server running?`, 'status-err');
+      submitBtn.disabled = false;
+    }
+  });
+})();
+</script>
+{% endblock %}

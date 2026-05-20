@@ -1,0 +1,88 @@
+{# Combined dashboard shown in the index's overlay mode when 2 entities are selected.
+   Caller passes: pair_a, pair_b, combined_western_svg, combined_mandala_svg,
+   pair_slug, synastry (synastry_summary result). #}
+{% set a_ess = pair_a.essentials or {} %}
+{% set b_ess = pair_b.essentials or {} %}
+
+<article class="mini-dashboard combined-dashboard" data-combined-for="{{ pair_slug }}">
+  <header class="mini-dash-header combined-dash-header">
+    <h2 class="mini-dash-name">
+      <span class="combined-name a">{{ pair_a.name }}</span>
+      <span class="combined-connector">↔</span>
+      <span class="combined-name b">{{ pair_b.name }}</span>
+    </h2>
+    <p class="mini-dash-birth">Combined chart overlay · planets, gates, and centers color-coded by entity</p>
+  </header>
+
+  <section class="combined-kpi-side-by-side">
+    {% for label, ess in [('A', a_ess), ('B', b_ess)] %}
+      {% set w = ess.get('western') or {} %}
+      {% set hd = ess.get('human_design') or {} %}
+      {% set m = ess.get('mayan') or {} %}
+      {% set c = ess.get('chinese') or {} %}
+      <div class="combined-kpi-column combined-kpi-{{ label|lower }}">
+        <h3>{{ pair_a.name if label == 'A' else pair_b.name }}</h3>
+        {% if w.sun %}<div class="combined-kpi-line"><span>Sun</span><span>{{ w.sun.sign }}</span></div>{% endif %}
+        {% if w.moon %}<div class="combined-kpi-line"><span>Moon</span><span>{{ w.moon.sign }}</span></div>{% endif %}
+        {% if w.get('rising') %}<div class="combined-kpi-line"><span>Rising</span><span>{{ w.rising.sign }}</span></div>{% endif %}
+        {% if hd.type %}<div class="combined-kpi-line"><span>HD</span><span>{{ hd.type }} · {{ hd.profile }}</span></div>{% endif %}
+        {% if m.day_sign %}<div class="combined-kpi-line"><span>Mayan</span><span>{{ m.tone }} {{ m.day_sign.kiche }}</span></div>{% endif %}
+        {% if c.year_pillar %}<div class="combined-kpi-line"><span>Chinese</span><span>{{ c.year_pillar }}</span></div>{% endif %}
+      </div>
+    {% endfor %}
+  </section>
+
+  {% if synastry %}
+  <section class="combined-resonance">
+    {% set h = synastry.total_harmony %}
+    {% set f = synastry.total_friction %}
+    {% set total = h + f if (h + f) > 0 else 1 %}
+    {% set h_pct = (h / total * 100)|round(0) %}
+    {% set f_pct = (f / total * 100)|round(0) %}
+    <div class="combined-resonance-header">
+      <span class="combined-resonance-title">Net resonance</span>
+      <a class="combined-resonance-link" href="pair/{{ pair_slug }}.html">full synastry breakdown →</a>
+    </div>
+    <div class="resonance-bar-wrap">
+      <div class="resonance-bar">
+        <div class="resonance-bar-harmony" style="width: {{ h_pct }}%"></div>
+        <div class="resonance-bar-friction" style="width: {{ f_pct }}%"></div>
+      </div>
+      <div class="resonance-bar-labels">
+        <span class="resonance-harmony-label">harmony +{{ h }}</span>
+        <span class="resonance-net-label">net {{ '+' if synastry.net > 0 else '' }}{{ synastry.net }}</span>
+        <span class="resonance-friction-label">friction −{{ f }}</span>
+      </div>
+    </div>
+    <div class="combined-resonance-systems">
+      {% for sys_key, sys_label in [('western','Western'),('hd','HD'),('chinese','Chinese'),('mayan','Mayan'),('psychometric','Psych')] %}
+        {% set sys = synastry.systems[sys_key] %}
+        <span class="combined-system-pill {{ sys_key }}" title="harmony +{{ sys.harmony }}  ·  friction −{{ sys.friction }}">
+          {{ sys_label }} <strong>{{ '+' if sys.net > 0 else '' }}{{ sys.net }}</strong>
+        </span>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="mini-charts-stack">
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
+        <h2>Combined natal wheel</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+        {% if combined_western_svg %}{{ combined_western_svg|safe }}{% else %}<p class="kpi-skipped">precision 1 required</p>{% endif %}
+      </div>
+    </details>
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
+        <h2>Combined mandala</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+        {% if combined_mandala_svg %}{{ combined_mandala_svg|safe }}{% else %}<p class="kpi-skipped">precision 1 required</p>{% endif %}
+      </div>
+    </details>
+  </section>
+</article>

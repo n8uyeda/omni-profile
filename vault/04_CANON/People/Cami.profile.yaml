@@ -1,0 +1,195 @@
+generated_at: '2026-05-18T15:01:58Z'
+engine_version: '0.5'
+entity: Cami
+canon_path: 04_CANON/People/Cami.md
+birth:
+  date: 1996-03-14
+  tz: America/Mexico_City
+  place: Mexico City, Mexico
+  lat: 19.4326
+  lon: -99.1332
+  precision: 2
+western:
+  zodiac: tropical
+  house_system: null
+  precision_note: Computed at 12:00 UT of birth date (no birth time on file). Sun
+    reliable to ±1°; Moon ±6° (date-only). Houses, Ascendant, and Midheaven omitted
+    — require precision 1.
+  ascendant: null
+  midheaven: null
+  houses: null
+  planets:
+  - body: sun
+    longitude: 354.1918
+    sign: Pisces
+    degree_in_sign: 24.1918
+    retrograde: false
+  - body: moon
+    longitude: 287.8011
+    sign: Capricorn
+    degree_in_sign: 17.8011
+    retrograde: false
+  - body: mercury
+    longitude: 341.7918
+    sign: Pisces
+    degree_in_sign: 11.7918
+    retrograde: false
+  - body: venus
+    longitude: 39.2645
+    sign: Taurus
+    degree_in_sign: 9.2645
+    retrograde: false
+  - body: mars
+    longitude: 352.0769
+    sign: Pisces
+    degree_in_sign: 22.0769
+    retrograde: false
+  - body: jupiter
+    longitude: 283.8249
+    sign: Capricorn
+    degree_in_sign: 13.8249
+    retrograde: false
+  - body: saturn
+    longitude: 357.0641
+    sign: Pisces
+    degree_in_sign: 27.0641
+    retrograde: false
+  - body: uranus
+    longitude: 303.3591
+    sign: Aquarius
+    degree_in_sign: 3.3591
+    retrograde: false
+  - body: neptune
+    longitude: 297.1842
+    sign: Capricorn
+    degree_in_sign: 27.1842
+    retrograde: false
+  - body: pluto
+    longitude: 243.0943
+    sign: Sagittarius
+    degree_in_sign: 3.0943
+    retrograde: true
+  - body: north_node
+    longitude: 197.3331
+    sign: Libra
+    degree_in_sign: 17.3331
+    retrograde: true
+  aspects:
+  - from: sun
+    to: mars
+    type: conjunction
+    separation: 2.1149
+    orb: 2.1149
+  - from: sun
+    to: saturn
+    type: conjunction
+    separation: 2.8723
+    orb: 2.8723
+  - from: sun
+    to: neptune
+    type: sextile
+    separation: 57.0075
+    orb: 2.9925
+  - from: moon
+    to: mars
+    type: sextile
+    separation: 64.2758
+    orb: 4.2758
+  - from: moon
+    to: jupiter
+    type: conjunction
+    separation: 3.9763
+    orb: 3.9763
+  - from: moon
+    to: north_node
+    type: square
+    separation: 90.4681
+    orb: 0.4681
+  - from: mercury
+    to: venus
+    type: sextile
+    separation: 57.4727
+    orb: 2.5273
+  - from: mercury
+    to: jupiter
+    type: sextile
+    separation: 57.967
+    orb: 2.033
+  - from: venus
+    to: jupiter
+    type: trine
+    separation: 115.4396
+    orb: 4.5604
+  - from: venus
+    to: uranus
+    type: square
+    separation: 95.9054
+    orb: 5.9054
+  - from: mars
+    to: saturn
+    type: conjunction
+    separation: 4.9872
+    orb: 4.9872
+  - from: jupiter
+    to: north_node
+    type: square
+    separation: 86.4918
+    orb: 3.5082
+  - from: saturn
+    to: neptune
+    type: sextile
+    separation: 59.8798
+    orb: 0.1202
+  - from: saturn
+    to: pluto
+    type: trine
+    separation: 113.9698
+    orb: 6.0302
+  - from: uranus
+    to: neptune
+    type: conjunction
+    separation: 6.1749
+    orb: 6.1749
+  - from: uranus
+    to: pluto
+    type: sextile
+    separation: 60.2649
+    orb: 0.2649
+  element_balance:
+    fire: 0
+    earth: 2
+    air: 0
+    water: 3
+  modality_balance:
+    cardinal: 1
+    fixed: 1
+    mutable: 3
+mayan:
+  correlation: GMT-584283
+  long_count: 12.19.2.17.14
+  day_sign: &id001
+    kiche: I'x
+    yucatec: Ix
+  tone: 1
+  trecena_start: *id001
+human_design:
+  skipped: requires precision 1 (date + time + place)
+chinese:
+  year:
+    animal: Rat
+    element: Fire
+    polarity: Yang
+    name: Fire Rat
+    name_with_polarity: Yang Fire Rat
+    stem_index: 2
+    branch_index: 0
+    sexagenary_index: 12
+    chinese_year_gregorian: 1996
+    chinese_new_year: '1996-02-19'
+  month:
+    animal: Rabbit
+    solar_term_pinyin: Jingzhe
+    solar_term_english: Awakening of Insects
+    solar_term_start_longitude: 345
+  hour: null
+  triple_animals: Rat / Rabbit

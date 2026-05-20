@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.Python
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Local env (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Build output — Vercel regenerates this on each deploy. Local builds also
+# write here; we don't want both racing in git history.
+site/
+
+# Serve logs / dev artifacts
+*.log

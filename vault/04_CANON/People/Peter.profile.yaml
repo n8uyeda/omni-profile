@@ -1,0 +1,437 @@
+generated_at: '2026-05-18T15:01:59Z'
+engine_version: '0.5'
+entity: Peter
+canon_path: 04_CANON/People/Peter.md
+birth:
+  date: 1988-11-09
+  time: '14:16'
+  tz: America/New_York
+  place: Newton, Middlesex County, Massachusetts, United States
+  lat: 42.337
+  lon: -71.2092
+  precision: 1
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 354.5397
+    sign: Pisces
+    degree_in_sign: 24.5397
+  midheaven:
+    longitude: 267.2161
+    sign: Sagittarius
+    degree_in_sign: 27.2161
+  houses:
+  - number: 1
+    cusp_longitude: 354.5397
+    sign: Pisces
+    degree_in_sign: 24.5397
+  - number: 2
+    cusp_longitude: 38.2688
+    sign: Taurus
+    degree_in_sign: 8.2688
+  - number: 3
+    cusp_longitude: 65.7912
+    sign: Gemini
+    degree_in_sign: 5.7912
+  - number: 4
+    cusp_longitude: 87.2161
+    sign: Gemini
+    degree_in_sign: 27.2161
+  - number: 5
+    cusp_longitude: 108.1726
+    sign: Cancer
+    degree_in_sign: 18.1726
+  - number: 6
+    cusp_longitude: 133.9647
+    sign: Leo
+    degree_in_sign: 13.9647
+  - number: 7
+    cusp_longitude: 174.5397
+    sign: Virgo
+    degree_in_sign: 24.5397
+  - number: 8
+    cusp_longitude: 218.2688
+    sign: Scorpio
+    degree_in_sign: 8.2688
+  - number: 9
+    cusp_longitude: 245.7912
+    sign: Sagittarius
+    degree_in_sign: 5.7912
+  - number: 10
+    cusp_longitude: 267.2161
+    sign: Sagittarius
+    degree_in_sign: 27.2161
+  - number: 11
+    cusp_longitude: 288.1726
+    sign: Capricorn
+    degree_in_sign: 18.1726
+  - number: 12
+    cusp_longitude: 313.9647
+    sign: Aquarius
+    degree_in_sign: 13.9647
+  planets:
+  - body: sun
+    longitude: 227.6145
+    sign: Scorpio
+    degree_in_sign: 17.6145
+    retrograde: false
+    house: 8
+  - body: moon
+    longitude: 230.0061
+    sign: Scorpio
+    degree_in_sign: 20.0061
+    retrograde: false
+    house: 8
+  - body: mercury
+    longitude: 215.034
+    sign: Scorpio
+    degree_in_sign: 5.034
+    retrograde: false
+    house: 7
+  - body: venus
+    longitude: 193.1263
+    sign: Libra
+    degree_in_sign: 13.1263
+    retrograde: false
+    house: 7
+  - body: mars
+    longitude: 0.8889
+    sign: Aries
+    degree_in_sign: 0.8889
+    retrograde: false
+    house: 1
+  - body: jupiter
+    longitude: 62.8267
+    sign: Gemini
+    degree_in_sign: 2.8267
+    retrograde: true
+    house: 2
+  - body: saturn
+    longitude: 269.7445
+    sign: Sagittarius
+    degree_in_sign: 29.7445
+    retrograde: false
+    house: 10
+  - body: uranus
+    longitude: 268.7688
+    sign: Sagittarius
+    degree_in_sign: 28.7688
+    retrograde: false
+    house: 10
+  - body: neptune
+    longitude: 278.1424
+    sign: Capricorn
+    degree_in_sign: 8.1424
+    retrograde: false
+    house: 10
+  - body: pluto
+    longitude: 222.7159
+    sign: Scorpio
+    degree_in_sign: 12.7159
+    retrograde: false
+    house: 8
+  - body: north_node
+    longitude: 341.851
+    sign: Pisces
+    degree_in_sign: 11.851
+    retrograde: true
+    house: 12
+  aspects:
+  - from: sun
+    to: moon
+    type: conjunction
+    separation: 2.3916
+    orb: 2.3916
+  - from: sun
+    to: pluto
+    type: conjunction
+    separation: 4.8985
+    orb: 4.8985
+  - from: sun
+    to: north_node
+    type: trine
+    separation: 114.2365
+    orb: 5.7635
+  - from: moon
+    to: pluto
+    type: conjunction
+    separation: 7.2902
+    orb: 7.2902
+  - from: mercury
+    to: jupiter
+    type: quincunx
+    separation: 152.2074
+    orb: 2.2074
+  - from: mercury
+    to: neptune
+    type: sextile
+    separation: 63.1083
+    orb: 3.1083
+  - from: mercury
+    to: pluto
+    type: conjunction
+    separation: 7.6819
+    orb: 7.6819
+  - from: mercury
+    to: north_node
+    type: trine
+    separation: 126.8169
+    orb: 6.8169
+  - from: venus
+    to: neptune
+    type: square
+    separation: 85.016
+    orb: 4.984
+  - from: venus
+    to: pluto
+    type: semi_sextile
+    separation: 29.5896
+    orb: 0.4104
+  - from: venus
+    to: north_node
+    type: quincunx
+    separation: 148.7247
+    orb: 1.2753
+  - from: mars
+    to: jupiter
+    type: sextile
+    separation: 61.9377
+    orb: 1.9377
+  - from: mars
+    to: saturn
+    type: square
+    separation: 91.1444
+    orb: 1.1444
+  - from: mars
+    to: uranus
+    type: square
+    separation: 92.1202
+    orb: 2.1202
+  - from: saturn
+    to: uranus
+    type: conjunction
+    separation: 0.9758
+    orb: 0.9758
+  - from: neptune
+    to: pluto
+    type: sextile
+    separation: 55.4264
+    orb: 4.5736
+  - from: neptune
+    to: north_node
+    type: sextile
+    separation: 63.7086
+    orb: 3.7086
+  - from: pluto
+    to: north_node
+    type: trine
+    separation: 119.135
+    orb: 0.865
+  element_balance:
+    fire: 1
+    earth: 0
+    air: 1
+    water: 3
+  modality_balance:
+    cardinal: 2
+    fixed: 3
+    mutable: 0
+mayan:
+  correlation: GMT-584283
+  long_count: 12.18.15.9.12
+  day_sign:
+    kiche: E
+    yucatec: Eb
+  tone: 10
+  trecena_start:
+    kiche: Aq'ab'al
+    yucatec: Akbal
+human_design:
+  type: Projector
+  strategy: Wait for the Invitation
+  authority: Self-Projected
+  not_self_theme: Bitterness
+  profile: 5/1
+  definition: Split Definition
+  incarnation_cross:
+    angle: Left Angle
+    code: 1/2 | 4/49
+    gates:
+      personality_sun: 1
+      personality_earth: 2
+      design_sun: 4
+      design_earth: 49
+    name: Left Angle Cross of the Defiant
+  defined_centers:
+  - ajna
+  - g
+  - head
+  - throat
+  undefined_centers:
+  - heart
+  - root
+  - sacral
+  - solar_plexus
+  - spleen
+  channels:
+  - channel: 4-63
+    gates:
+    - 4
+    - 63
+    centers:
+    - ajna
+    - head
+  - channel: 10-20
+    gates:
+    - 10
+    - 20
+    centers:
+    - g
+    - throat
+  hanging_gates:
+  - 1
+  - 2
+  - 7
+  - 11
+  - 21
+  - 25
+  - 28
+  - 29
+  - 43
+  - 44
+  - 48
+  - 49
+  - 52
+  - 58
+  - 64
+  personality_jd_ut: 2447475.30278
+  design_jd_ut: 2447385.61554
+  personality_activations:
+  - body: sun
+    longitude: 227.6145
+    gate: 1
+    line: 5
+  - body: earth
+    longitude: 47.6145
+    gate: 2
+    line: 5
+  - body: north_node
+    longitude: 341.851
+    gate: 63
+    line: 1
+  - body: south_node
+    longitude: 161.851
+    gate: 64
+    line: 1
+  - body: moon
+    longitude: 230.0061
+    gate: 43
+    line: 2
+  - body: mercury
+    longitude: 215.034
+    gate: 28
+    line: 4
+  - body: venus
+    longitude: 193.1263
+    gate: 48
+    line: 4
+  - body: mars
+    longitude: 0.8889
+    gate: 25
+    line: 3
+  - body: jupiter
+    longitude: 62.8267
+    gate: 20
+    line: 3
+  - body: saturn
+    longitude: 269.7445
+    gate: 10
+    line: 2
+  - body: uranus
+    longitude: 268.7688
+    gate: 10
+    line: 1
+  - body: neptune
+    longitude: 278.1424
+    gate: 58
+    line: 5
+  - body: pluto
+    longitude: 222.7159
+    gate: 44
+    line: 6
+  design_activations:
+  - body: sun
+    longitude: 139.6145
+    gate: 4
+    line: 1
+  - body: earth
+    longitude: 319.6145
+    gate: 49
+    line: 1
+  - body: north_node
+    longitude: 344.1481
+    gate: 63
+    line: 3
+  - body: south_node
+    longitude: 164.1481
+    gate: 64
+    line: 3
+  - body: moon
+    longitude: 135.1705
+    gate: 7
+    line: 3
+  - body: mercury
+    longitude: 148.8491
+    gate: 29
+    line: 5
+  - body: venus
+    longitude: 94.3203
+    gate: 52
+    line: 1
+  - body: mars
+    longitude: 10.0309
+    gate: 21
+    line: 1
+  - body: jupiter
+    longitude: 63.1842
+    gate: 20
+    line: 4
+  - body: saturn
+    longitude: 266.1958
+    gate: 11
+    line: 4
+  - body: uranus
+    longitude: 267.2867
+    gate: 11
+    line: 5
+  - body: neptune
+    longitude: 277.785
+    gate: 58
+    line: 5
+  - body: pluto
+    longitude: 219.9094
+    gate: 44
+    line: 3
+chinese:
+  year:
+    animal: Dragon
+    element: Earth
+    polarity: Yang
+    name: Earth Dragon
+    name_with_polarity: Yang Earth Dragon
+    stem_index: 4
+    branch_index: 4
+    sexagenary_index: 44
+    chinese_year_gregorian: 1988
+    chinese_new_year: '1988-02-17'
+  month:
+    animal: Pig
+    solar_term_pinyin: Lidong
+    solar_term_english: Beginning of Winter
+    solar_term_start_longitude: 225
+  hour:
+    animal: Goat
+    time_range: 13:00–15:00
+  triple_animals: Dragon / Pig / Goat

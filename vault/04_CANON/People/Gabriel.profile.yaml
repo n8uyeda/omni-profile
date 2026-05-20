@@ -1,0 +1,431 @@
+generated_at: '2026-05-18T15:01:58Z'
+engine_version: '0.5'
+entity: Gabriel
+canon_path: 04_CANON/People/Gabriel.md
+birth:
+  date: 1990-03-16
+  time: 04:30
+  tz: America/Argentina/Buenos_Aires
+  place: San Martín de los Andes, Neuquén, Argentina
+  lat: -40.158
+  lon: -71.353
+  precision: 1
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 316.2845
+    sign: Aquarius
+    degree_in_sign: 16.2845
+  midheaven:
+    longitude: 217.1247
+    sign: Scorpio
+    degree_in_sign: 7.1247
+  houses:
+  - number: 1
+    cusp_longitude: 316.2845
+    sign: Aquarius
+    degree_in_sign: 16.2845
+  - number: 2
+    cusp_longitude: 337.9906
+    sign: Pisces
+    degree_in_sign: 7.9906
+  - number: 3
+    cusp_longitude: 4.6421
+    sign: Aries
+    degree_in_sign: 4.6421
+  - number: 4
+    cusp_longitude: 37.1247
+    sign: Taurus
+    degree_in_sign: 7.1247
+  - number: 5
+    cusp_longitude: 72.9807
+    sign: Gemini
+    degree_in_sign: 12.9807
+  - number: 6
+    cusp_longitude: 106.9059
+    sign: Cancer
+    degree_in_sign: 16.9059
+  - number: 7
+    cusp_longitude: 136.2845
+    sign: Leo
+    degree_in_sign: 16.2845
+  - number: 8
+    cusp_longitude: 157.9906
+    sign: Virgo
+    degree_in_sign: 7.9906
+  - number: 9
+    cusp_longitude: 184.6421
+    sign: Libra
+    degree_in_sign: 4.6421
+  - number: 10
+    cusp_longitude: 217.1247
+    sign: Scorpio
+    degree_in_sign: 7.1247
+  - number: 11
+    cusp_longitude: 252.9807
+    sign: Sagittarius
+    degree_in_sign: 12.9807
+  - number: 12
+    cusp_longitude: 286.9059
+    sign: Capricorn
+    degree_in_sign: 16.9059
+  planets:
+  - body: sun
+    longitude: 355.4489
+    sign: Pisces
+    degree_in_sign: 25.4489
+    retrograde: false
+    house: 2
+  - body: moon
+    longitude: 229.4047
+    sign: Scorpio
+    degree_in_sign: 19.4047
+    retrograde: false
+    house: 10
+  - body: mercury
+    longitude: 352.7767
+    sign: Pisces
+    degree_in_sign: 22.7767
+    retrograde: false
+    house: 2
+  - body: venus
+    longitude: 309.8371
+    sign: Aquarius
+    degree_in_sign: 9.8371
+    retrograde: false
+    house: 12
+  - body: mars
+    longitude: 303.4437
+    sign: Aquarius
+    degree_in_sign: 3.4437
+    retrograde: false
+    house: 12
+  - body: jupiter
+    longitude: 91.4289
+    sign: Cancer
+    degree_in_sign: 1.4289
+    retrograde: false
+    house: 5
+  - body: saturn
+    longitude: 293.3968
+    sign: Capricorn
+    degree_in_sign: 23.3968
+    retrograde: false
+    house: 12
+  - body: uranus
+    longitude: 279.2396
+    sign: Capricorn
+    degree_in_sign: 9.2396
+    retrograde: false
+    house: 11
+  - body: neptune
+    longitude: 284.3072
+    sign: Capricorn
+    degree_in_sign: 14.3072
+    retrograde: false
+    house: 11
+  - body: pluto
+    longitude: 227.6062
+    sign: Scorpio
+    degree_in_sign: 17.6062
+    retrograde: true
+    house: 10
+  - body: north_node
+    longitude: 315.6788
+    sign: Aquarius
+    degree_in_sign: 15.6788
+    retrograde: true
+    house: 12
+  aspects:
+  - from: sun
+    to: moon
+    type: trine
+    separation: 126.0442
+    orb: 6.0442
+  - from: sun
+    to: mercury
+    type: conjunction
+    separation: 2.6722
+    orb: 2.6722
+  - from: sun
+    to: jupiter
+    type: square
+    separation: 95.98
+    orb: 5.98
+  - from: sun
+    to: saturn
+    type: sextile
+    separation: 62.0521
+    orb: 2.0521
+  - from: moon
+    to: mercury
+    type: trine
+    separation: 123.372
+    orb: 3.372
+  - from: moon
+    to: saturn
+    type: sextile
+    separation: 63.9921
+    orb: 3.9921
+  - from: moon
+    to: pluto
+    type: conjunction
+    separation: 1.7985
+    orb: 1.7985
+  - from: moon
+    to: north_node
+    type: square
+    separation: 86.2741
+    orb: 3.7259
+  - from: mercury
+    to: saturn
+    type: sextile
+    separation: 59.3799
+    orb: 0.6201
+  - from: mercury
+    to: pluto
+    type: trine
+    separation: 125.1705
+    orb: 5.1705
+  - from: venus
+    to: mars
+    type: conjunction
+    separation: 6.3934
+    orb: 6.3934
+  - from: venus
+    to: uranus
+    type: semi_sextile
+    separation: 30.5975
+    orb: 0.5975
+  - from: venus
+    to: north_node
+    type: conjunction
+    separation: 5.8417
+    orb: 5.8417
+  - from: mars
+    to: jupiter
+    type: quincunx
+    separation: 147.9852
+    orb: 2.0148
+  - from: jupiter
+    to: uranus
+    type: opposition
+    separation: 172.1893
+    orb: 7.8107
+  - from: uranus
+    to: neptune
+    type: conjunction
+    separation: 5.0676
+    orb: 5.0676
+  - from: neptune
+    to: pluto
+    type: sextile
+    separation: 56.701
+    orb: 3.299
+  - from: neptune
+    to: north_node
+    type: semi_sextile
+    separation: 31.3716
+    orb: 1.3716
+  - from: pluto
+    to: north_node
+    type: square
+    separation: 88.0726
+    orb: 1.9274
+  element_balance:
+    fire: 0
+    earth: 0
+    air: 2
+    water: 3
+  modality_balance:
+    cardinal: 0
+    fixed: 3
+    mutable: 2
+mayan:
+  correlation: GMT-584283
+  long_count: 12.18.16.16.4
+  day_sign:
+    kiche: K'at
+    yucatec: Kan
+  tone: 8
+  trecena_start:
+    kiche: No'j
+    yucatec: Caban
+human_design:
+  type: Reflector
+  strategy: Wait a Lunar Cycle
+  authority: Lunar
+  not_self_theme: Disappointment
+  profile: 4/6
+  definition: No Definition
+  incarnation_cross:
+    angle: Right Angle
+    code: 36/6 | 11/12
+    gates:
+      personality_sun: 36
+      personality_earth: 6
+      design_sun: 11
+      design_earth: 12
+    name: Right Angle Cross of Eden
+  defined_centers: []
+  undefined_centers:
+  - ajna
+  - g
+  - head
+  - heart
+  - root
+  - sacral
+  - solar_plexus
+  - spleen
+  - throat
+  channels: []
+  hanging_gates:
+  - 1
+  - 6
+  - 7
+  - 11
+  - 12
+  - 13
+  - 15
+  - 19
+  - 34
+  - 36
+  - 38
+  - 41
+  - 43
+  - 47
+  - 52
+  - 54
+  - 58
+  - 61
+  personality_jd_ut: 2447966.8125
+  design_jd_ut: 2447879.88501
+  personality_activations:
+  - body: sun
+    longitude: 355.4489
+    gate: 36
+    line: 4
+  - body: earth
+    longitude: 175.4489
+    gate: 6
+    line: 4
+  - body: north_node
+    longitude: 315.6788
+    gate: 13
+    line: 3
+  - body: south_node
+    longitude: 135.6788
+    gate: 7
+    line: 3
+  - body: moon
+    longitude: 229.4047
+    gate: 43
+    line: 1
+  - body: mercury
+    longitude: 352.7767
+    gate: 36
+    line: 1
+  - body: venus
+    longitude: 309.8371
+    gate: 19
+    line: 3
+  - body: mars
+    longitude: 303.4437
+    gate: 41
+    line: 2
+  - body: jupiter
+    longitude: 91.4289
+    gate: 15
+    line: 4
+  - body: saturn
+    longitude: 293.3968
+    gate: 61
+    line: 3
+  - body: uranus
+    longitude: 279.2396
+    gate: 58
+    line: 6
+  - body: neptune
+    longitude: 284.3072
+    gate: 38
+    line: 6
+  - body: pluto
+    longitude: 227.6062
+    gate: 1
+    line: 5
+  design_activations:
+  - body: sun
+    longitude: 267.4489
+    gate: 11
+    line: 6
+  - body: earth
+    longitude: 87.4489
+    gate: 12
+    line: 6
+  - body: north_node
+    longitude: 317.8199
+    gate: 13
+    line: 5
+  - body: south_node
+    longitude: 137.8199
+    gate: 7
+    line: 5
+  - body: moon
+    longitude: 170.6665
+    gate: 47
+    line: 4
+  - body: mercury
+    longitude: 286.8256
+    gate: 54
+    line: 2
+  - body: venus
+    longitude: 304.5288
+    gate: 41
+    line: 3
+  - body: mars
+    longitude: 240.8201
+    gate: 34
+    line: 1
+  - body: jupiter
+    longitude: 96.9192
+    gate: 52
+    line: 4
+  - body: saturn
+    longitude: 284.1226
+    gate: 38
+    line: 5
+  - body: uranus
+    longitude: 274.9974
+    gate: 58
+    line: 2
+  - body: neptune
+    longitude: 281.5453
+    gate: 38
+    line: 3
+  - body: pluto
+    longitude: 226.6976
+    gate: 1
+    line: 4
+chinese:
+  year:
+    animal: Horse
+    element: Metal
+    polarity: Yang
+    name: Metal Horse
+    name_with_polarity: Yang Metal Horse
+    stem_index: 6
+    branch_index: 6
+    sexagenary_index: 6
+    chinese_year_gregorian: 1990
+    chinese_new_year: '1990-01-27'
+  month:
+    animal: Rabbit
+    solar_term_pinyin: Jingzhe
+    solar_term_english: Awakening of Insects
+    solar_term_start_longitude: 345
+  hour:
+    animal: Tiger
+    time_range: 03:00–05:00
+  triple_animals: Horse / Rabbit / Tiger

@@ -1,0 +1,2 @@
+pyswisseph>=2.10.3
+PyYAML>=6.0

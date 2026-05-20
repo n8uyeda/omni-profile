@@ -1,0 +1,426 @@
+generated_at: '2026-05-18T15:01:59Z'
+engine_version: '0.5'
+entity: Kevin
+canon_path: 04_CANON/People/Kevin.md
+birth:
+  date: 1985-02-07
+  time: 09:35
+  tz: America/New_York
+  place: City of Auburn, Cayuga County, New York, United States
+  lat: 42.9317
+  lon: -76.5661
+  precision: 1
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 17.7511
+    sign: Aries
+    degree_in_sign: 17.7511
+  midheaven:
+    longitude: 279.042
+    sign: Capricorn
+    degree_in_sign: 9.042
+  houses:
+  - number: 1
+    cusp_longitude: 17.7511
+    sign: Aries
+    degree_in_sign: 17.7511
+  - number: 2
+    cusp_longitude: 54.5997
+    sign: Taurus
+    degree_in_sign: 24.5997
+  - number: 3
+    cusp_longitude: 78.5712
+    sign: Gemini
+    degree_in_sign: 18.5712
+  - number: 4
+    cusp_longitude: 99.042
+    sign: Cancer
+    degree_in_sign: 9.042
+  - number: 5
+    cusp_longitude: 121.0465
+    sign: Leo
+    degree_in_sign: 1.0465
+  - number: 6
+    cusp_longitude: 150.6835
+    sign: Virgo
+    degree_in_sign: 0.6835
+  - number: 7
+    cusp_longitude: 197.7511
+    sign: Libra
+    degree_in_sign: 17.7511
+  - number: 8
+    cusp_longitude: 234.5997
+    sign: Scorpio
+    degree_in_sign: 24.5997
+  - number: 9
+    cusp_longitude: 258.5712
+    sign: Sagittarius
+    degree_in_sign: 18.5712
+  - number: 10
+    cusp_longitude: 279.042
+    sign: Capricorn
+    degree_in_sign: 9.042
+  - number: 11
+    cusp_longitude: 301.0465
+    sign: Aquarius
+    degree_in_sign: 1.0465
+  - number: 12
+    cusp_longitude: 330.6835
+    sign: Pisces
+    degree_in_sign: 0.6835
+  planets:
+  - body: sun
+    longitude: 318.7735
+    sign: Aquarius
+    degree_in_sign: 18.7735
+    retrograde: false
+    house: 11
+  - body: moon
+    longitude: 165.5521
+    sign: Virgo
+    degree_in_sign: 15.5521
+    retrograde: false
+    house: 6
+  - body: mercury
+    longitude: 310.1957
+    sign: Aquarius
+    degree_in_sign: 10.1957
+    retrograde: false
+    house: 11
+  - body: venus
+    longitude: 4.6892
+    sign: Aries
+    degree_in_sign: 4.6892
+    retrograde: false
+    house: 12
+  - body: mars
+    longitude: 3.6737
+    sign: Aries
+    degree_in_sign: 3.6737
+    retrograde: false
+    house: 12
+  - body: jupiter
+    longitude: 300.2195
+    sign: Aquarius
+    degree_in_sign: 0.2195
+    retrograde: false
+    house: 10
+  - body: saturn
+    longitude: 237.4665
+    sign: Scorpio
+    degree_in_sign: 27.4665
+    retrograde: false
+    house: 8
+  - body: uranus
+    longitude: 257.1703
+    sign: Sagittarius
+    degree_in_sign: 17.1703
+    retrograde: false
+    house: 8
+  - body: neptune
+    longitude: 272.7633
+    sign: Capricorn
+    degree_in_sign: 2.7633
+    retrograde: false
+    house: 9
+  - body: pluto
+    longitude: 214.7479
+    sign: Scorpio
+    degree_in_sign: 4.7479
+    retrograde: true
+    house: 7
+  - body: north_node
+    longitude: 53.1342
+    sign: Taurus
+    degree_in_sign: 23.1342
+    retrograde: true
+    house: 1
+  aspects:
+  - from: sun
+    to: uranus
+    type: sextile
+    separation: 61.6032
+    orb: 1.6032
+  - from: sun
+    to: north_node
+    type: square
+    separation: 94.3607
+    orb: 4.3607
+  - from: moon
+    to: uranus
+    type: square
+    separation: 91.6182
+    orb: 1.6182
+  - from: mercury
+    to: pluto
+    type: square
+    separation: 95.4478
+    orb: 5.4478
+  - from: venus
+    to: mars
+    type: conjunction
+    separation: 1.0155
+    orb: 1.0155
+  - from: venus
+    to: jupiter
+    type: sextile
+    separation: 64.4698
+    orb: 4.4698
+  - from: venus
+    to: neptune
+    type: square
+    separation: 91.9259
+    orb: 1.9259
+  - from: venus
+    to: pluto
+    type: quincunx
+    separation: 149.9413
+    orb: 0.0587
+  - from: mars
+    to: jupiter
+    type: sextile
+    separation: 63.4543
+    orb: 3.4543
+  - from: mars
+    to: saturn
+    type: trine
+    separation: 126.2073
+    orb: 6.2073
+  - from: mars
+    to: neptune
+    type: square
+    separation: 90.9104
+    orb: 0.9104
+  - from: mars
+    to: pluto
+    type: quincunx
+    separation: 148.9258
+    orb: 1.0742
+  - from: jupiter
+    to: saturn
+    type: sextile
+    separation: 62.753
+    orb: 2.753
+  - from: jupiter
+    to: pluto
+    type: square
+    separation: 85.4716
+    orb: 4.5284
+  - from: saturn
+    to: north_node
+    type: opposition
+    separation: 175.6678
+    orb: 4.3322
+  - from: neptune
+    to: pluto
+    type: sextile
+    separation: 58.0154
+    orb: 1.9846
+  element_balance:
+    fire: 2
+    earth: 1
+    air: 2
+    water: 0
+  modality_balance:
+    cardinal: 2
+    fixed: 2
+    mutable: 1
+mayan:
+  correlation: GMT-584283
+  long_count: 12.18.11.13.1
+  day_sign:
+    kiche: Imox
+    yucatec: Imix
+  tone: 4
+  trecena_start:
+    kiche: Tijax
+    yucatec: Etznab
+human_design:
+  type: Projector
+  strategy: Wait for the Invitation
+  authority: Splenic
+  not_self_theme: Bitterness
+  profile: 6/3
+  definition: Split Definition
+  incarnation_cross:
+    angle: Left Angle
+    code: 13/7 | 43/23
+    gates:
+      personality_sun: 13
+      personality_earth: 7
+      design_sun: 43
+      design_earth: 23
+    name: Left Angle Cross of Masks
+  defined_centers:
+  - ajna
+  - root
+  - spleen
+  - throat
+  undefined_centers:
+  - g
+  - head
+  - heart
+  - sacral
+  - solar_plexus
+  channels:
+  - channel: 23-43
+    gates:
+    - 23
+    - 43
+    centers:
+    - throat
+    - ajna
+  - channel: 28-38
+    gates:
+    - 28
+    - 38
+    centers:
+    - spleen
+    - root
+  hanging_gates:
+  - 5
+  - 7
+  - 8
+  - 9
+  - 10
+  - 13
+  - 14
+  - 17
+  - 19
+  - 25
+  - 26
+  - 39
+  - 60
+  - 64
+  personality_jd_ut: 2446104.10764
+  design_jd_ut: 2446017.48544
+  personality_activations:
+  - body: sun
+    longitude: 318.7735
+    gate: 13
+    line: 6
+  - body: earth
+    longitude: 138.7735
+    gate: 7
+    line: 6
+  - body: north_node
+    longitude: 53.1342
+    gate: 23
+    line: 5
+  - body: south_node
+    longitude: 233.1342
+    gate: 43
+    line: 5
+  - body: moon
+    longitude: 165.5521
+    gate: 64
+    line: 5
+  - body: mercury
+    longitude: 310.1957
+    gate: 19
+    line: 3
+  - body: venus
+    longitude: 4.6892
+    gate: 17
+    line: 1
+  - body: mars
+    longitude: 3.6737
+    gate: 25
+    line: 6
+  - body: jupiter
+    longitude: 300.2195
+    gate: 60
+    line: 5
+  - body: saturn
+    longitude: 237.4665
+    gate: 14
+    line: 4
+  - body: uranus
+    longitude: 257.1703
+    gate: 26
+    line: 1
+  - body: neptune
+    longitude: 272.7633
+    gate: 10
+    line: 5
+  - body: pluto
+    longitude: 214.7479
+    gate: 28
+    line: 3
+  design_activations:
+  - body: sun
+    longitude: 230.7735
+    gate: 43
+    line: 3
+  - body: earth
+    longitude: 50.7735
+    gate: 23
+    line: 3
+  - body: north_node
+    longitude: 57.4241
+    gate: 8
+    line: 4
+  - body: south_node
+    longitude: 237.4241
+    gate: 14
+    line: 4
+  - body: moon
+    longitude: 99.7375
+    gate: 39
+    line: 1
+  - body: mercury
+    longitude: 249.3071
+    gate: 9
+    line: 4
+  - body: venus
+    longitude: 268.7824
+    gate: 10
+    line: 1
+  - body: mars
+    longitude: 297.9306
+    gate: 60
+    line: 2
+  - body: jupiter
+    longitude: 280.9562
+    gate: 38
+    line: 2
+  - body: saturn
+    longitude: 229.2731
+    gate: 43
+    line: 1
+  - body: uranus
+    longitude: 252.4235
+    gate: 5
+    line: 2
+  - body: neptune
+    longitude: 269.7231
+    gate: 10
+    line: 2
+  - body: pluto
+    longitude: 212.8152
+    gate: 28
+    line: 1
+chinese:
+  year:
+    animal: Rat
+    element: Wood
+    polarity: Yang
+    name: Wood Rat
+    name_with_polarity: Yang Wood Rat
+    stem_index: 0
+    branch_index: 0
+    sexagenary_index: 0
+    chinese_year_gregorian: 1984
+    chinese_new_year: '1984-02-02'
+  month:
+    animal: Tiger
+    solar_term_pinyin: Lichun
+    solar_term_english: Beginning of Spring
+    solar_term_start_longitude: 315
+  hour:
+    animal: Snake
+    time_range: 09:00–11:00
+  triple_animals: Rat / Tiger / Snake

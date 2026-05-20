@@ -1,0 +1,165 @@
+{# The Mandala chart flanked by Design / Personality activation columns.
+   Same column layout as the old bodygraph-panel; mandala replaces the bodygraph
+   since the mandala nests the bodygraph at its center.
+   Caller passes: mandala_svg, chart_hd, planet_glyphs. #}
+<div class="mandala-frame">
+  <div class="activation-column design">
+    <h3 class="activation-heading">Design</h3>
+    {% if chart_hd and chart_hd.design_activations %}
+      {% for a in chart_hd.design_activations %}
+        <div class="activation-row design-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
+          <span class="activation-glyph">{{ planet_glyphs.get(a.body, '?') }}</span>
+          <span class="activation-coord">{{ a.gate }}.{{ a.line }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="activation-empty">—</p>
+    {% endif %}
+  </div>
+
+  <div class="mandala-svg-wrap">
+    {{ mandala_svg|safe }}
+  </div>
+
+  <div class="activation-column personality">
+    <h3 class="activation-heading">Personality</h3>
+    {% if chart_hd and chart_hd.personality_activations %}
+      {% for a in chart_hd.personality_activations %}
+        <div class="activation-row personality-row" data-tip-type="planet" data-tip-id="{{ a.body }}">
+          <span class="activation-coord">{{ a.gate }}.{{ a.line }}</span>
+          <span class="activation-glyph">{{ planet_glyphs.get(a.body, '?') }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="activation-empty">—</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="mandala-legend" aria-label="Mandala chart legend">
+  <h4 class="legend-title">Reading the chart</h4>
+
+  <!-- Shared stripe pattern definition for the legend "both activations" swatch.
+       Matches the #stripe-pattern defined in svg_hd.py exactly. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <pattern id="legend-stripe-pattern" patternUnits="userSpaceOnUse"
+               width="6" height="6" patternTransform="rotate(45)">
+        <rect x="0" y="0" width="3" height="6" fill="var(--hd-personality)"/>
+        <rect x="3" y="0" width="3" height="6" fill="var(--hd-design)"/>
+      </pattern>
+    </defs>
+  </svg>
+
+  <div class="legend-section">
+    <h5 class="legend-section-title">Centers — the nine geometric shapes</h5>
+    <div class="legend-grid">
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 28 20" aria-hidden="true">
+          <rect x="2" y="3" width="24" height="14" rx="1.5" fill="var(--hd-g)" stroke="var(--hd-stroke)" stroke-width="1"/>
+        </svg>
+        <div class="legend-text">
+          <strong>Filled (defined)</strong> — consistent, reliable energy you radiate. Color varies by center (e.g., yellow G, red Sacral, brown Throat).
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 28 20" aria-hidden="true">
+          <rect x="2" y="3" width="24" height="14" rx="1.5" fill="var(--hd-undef-bg)" stroke="var(--hd-stroke)" stroke-width="1"/>
+        </svg>
+        <div class="legend-text">
+          <strong>Empty (undefined)</strong> — open, variable, conditioned by environment and the people around you.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend-section">
+    <h5 class="legend-section-title">Gates — the numbered points inside centers</h5>
+    <div class="legend-grid">
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="7.5" fill="var(--hd-personality)" stroke="var(--hd-personality)" stroke-width="1.2"/>
+          <text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="7" font-weight="600" fill="#ffffff">62</text>
+        </svg>
+        <div class="legend-text">
+          <strong>Solid red circle</strong> — <em>Personality</em> activation: the conscious self · how you experience yourself.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="7.5" fill="var(--hd-design)" stroke="var(--hd-design)" stroke-width="1.2"/>
+          <text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="7" font-weight="600" fill="#ffffff">42</text>
+        </svg>
+        <div class="legend-text">
+          <strong>Solid green circle</strong> — <em>Design</em> activation: the unconscious body · what others see and what your body knows.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="7.5" fill="url(#legend-stripe-pattern)" stroke="var(--hd-personality)" stroke-width="1.2"/>
+          <text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="7" font-weight="600" fill="#ffffff">1</text>
+        </svg>
+        <div class="legend-text">
+          <strong>Striped circle (red + green)</strong> — <em>both Personality and Design</em> activate this gate. The strongest activations in your chart.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 20 20" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="19" height="19" rx="2" fill="var(--hd-g)" stroke="var(--hd-stroke)" stroke-width="0.6"/>
+          <text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="7" font-weight="600" fill="rgba(0,0,0,0.82)">37</text>
+        </svg>
+        <div class="legend-text">
+          <strong>Number on a colored center, no circle</strong> — gate is inactive in your chart, sitting inside a defined center. Latent potential; you have access to it through the center's energy.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 20 20" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="19" height="19" rx="2" fill="var(--hd-undef-bg)" stroke="var(--hd-stroke)" stroke-width="0.6"/>
+          <text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="7" font-weight="600" fill="var(--text-dim)">59</text>
+        </svg>
+        <div class="legend-text">
+          <strong>Dim number on an empty center, no circle</strong> — gate inactive AND in an undefined center. You meet this energy through others, not through yourself.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend-section">
+    <h5 class="legend-section-title">Channels — the lines between gates</h5>
+    <div class="legend-grid">
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 28 12" aria-hidden="true">
+          <line x1="2" y1="6" x2="26" y2="6" stroke="var(--hd-stroke-weak)" stroke-width="1.4" opacity="0.45" stroke-linecap="round"/>
+        </svg>
+        <div class="legend-text">
+          <strong>Faint thin line</strong> — structural channel: neither (or only one) of its gates is activated.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 28 12" aria-hidden="true">
+          <line x1="2" y1="6" x2="14" y2="6" stroke="var(--hd-personality)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="14" y1="6" x2="26" y2="6" stroke="var(--hd-design)" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div class="legend-text">
+          <strong>Solid colored channel</strong> — both gates activated; the two halves are colored by activation source (red half = Personality side · green half = Design side). The channel <em>defines</em> the two centers it joins.
+        </div>
+      </div>
+      <div class="legend-row">
+        <svg class="legend-swatch" viewBox="0 0 28 12" aria-hidden="true">
+          <line x1="2" y1="6" x2="9" y2="6" stroke="var(--hd-personality)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="9" y1="6" x2="26" y2="6" stroke="var(--hd-stroke-weak)" stroke-width="1.4" opacity="0.45" stroke-linecap="round"/>
+        </svg>
+        <div class="legend-text">
+          <strong>Short colored stub</strong> — <em>hanging gate</em>: your gate is activated but its partner is not. You carry half the channel; you complete it through someone whose chart has the other gate.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend-section">
+    <h5 class="legend-section-title">Outer rings — hexagrams, zodiac, 64 gates</h5>
+    <p class="legend-note">
+      The same activated/inactive gate distinction is mirrored in the <strong>outer 64-sector ring</strong> around the chart: an activated gate's sector gets a bright white gate number with a glow, and its hexagram glyph (outermost ring) is rendered solid and bright. Inactive gates have a dimmer number and a faint hexagram. The zodiac wedges (inner band) and gate-sector tints are colored by element (fire / earth / air / water) and do <em>not</em> change with activation — they encode the zodiac, not your chart.
+    </p>
+  </div>
+</div>

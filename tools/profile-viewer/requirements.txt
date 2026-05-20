@@ -1,0 +1,5 @@
+Jinja2>=3.0
+PyYAML>=6.0
+# Used by tools/profile-viewer/serve.py to derive IANA timezones from
+# geocoded coordinates. Offline lookup, no API key.
+timezonefinder>=6.0
