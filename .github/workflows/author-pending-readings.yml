@@ -80,8 +80,5 @@ jobs:
           git add vault/04_CANON/People/*.profile.reading.md \
                   vault/04_CANON/People/*.profile.system_readings.md \
                   pending-readings/ 2>/dev/null || true
-          git commit -m "Auto-author readings for newly-submitted entities
-
-Triggered by pending-readings markers. The Vercel-rebuild this commit
-triggers will publish the readings to the live site."
+          git commit -m "Auto-author readings for newly-submitted entities" -m "Triggered by pending-readings markers. The Vercel-rebuild this commit triggers will publish the readings to the live site."
           git push
