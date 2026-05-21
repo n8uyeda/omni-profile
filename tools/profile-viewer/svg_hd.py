@@ -523,14 +523,17 @@ def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
         render_half(ax, ay, mx, my, gate_state(a))
         render_half(mx, my, bx, by, gate_state(b))
 
-    # 2b. HANGING GATES — short emanation half-line from the gate
+    # 2b. HANGING GATES — half-channel stub from the gate toward the partner.
+    # Goes 50% of the channel length so it visibly clears the center boundary
+    # (a 25% stub often ends inside the home center and gets hidden by the
+    # center fill). Matches the user's mental model: "half a channel."
+    HANGING_STUB_FRACTION = 0.5
     hanging = set(chart_hd.get("hanging_gates", []) or [])
     for a, b in ALL_CHANNELS:
         if a in hanging and b not in activated:
             ax, ay = GATE_POSITIONS[a]
             bx, by = GATE_POSITIONS[b]
-            # Short stub: 20% of the channel toward partner
-            sx, sy = ax + (bx - ax) * 0.25, ay + (by - ay) * 0.25
+            sx, sy = ax + (bx - ax) * HANGING_STUB_FRACTION, ay + (by - ay) * HANGING_STUB_FRACTION
             state = gate_state(a)
             if state == "personality":
                 out.append(f'<line x1="{ax}" y1="{ay}" x2="{sx}" y2="{sy}" class="channel-personality"/>')
@@ -542,7 +545,7 @@ def render_bodygraph(chart_hd: dict | None, size: int = 460) -> str:
         if b in hanging and a not in activated:
             ax, ay = GATE_POSITIONS[a]
             bx, by = GATE_POSITIONS[b]
-            sx, sy = bx + (ax - bx) * 0.25, by + (ay - by) * 0.25
+            sx, sy = bx + (ax - bx) * HANGING_STUB_FRACTION, by + (ay - by) * HANGING_STUB_FRACTION
             state = gate_state(b)
             if state == "personality":
                 out.append(f'<line x1="{bx}" y1="{by}" x2="{sx}" y2="{sy}" class="channel-personality"/>')
