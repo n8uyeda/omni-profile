@@ -83,7 +83,11 @@
   --hd-root:         #b88a5c;
   --hd-stroke:       #c0c8d8;
   --hd-stroke-weak:  #4d5670;
-  --hd-undef-bg:     #0a0e1a;
+  /* Near-transparent so channel halves that pass through undefined centers
+   * (drawn before the center fill) remain visible. Opaque fills hid the
+   * lines underneath; rgba(255,255,255,0.04) is the same low-alpha tint
+   * cosmic-glass uses and works against any page-bg. */
+  --hd-undef-bg:     rgba(255, 255, 255, 0.04);
   --hd-channel-glow: 0 0 8px rgba(255, 255, 255, 0.35);
   /* Personality / Design activation colors */
   --hd-personality:  #ff3858;
@@ -258,7 +262,9 @@
   --hd-root:         #a08458;
   --hd-stroke:       #d4a847;
   --hd-stroke-weak:  #5a5d6a;
-  --hd-undef-bg:     #161b27;
+  /* See deep-space rationale — keep undefined-center fill near-transparent
+   * so channels passing through it remain visible. */
+  --hd-undef-bg:     rgba(255, 255, 255, 0.04);
   --hd-channel-glow: 0 0 6px rgba(212, 168, 71, 0.4);
   --hd-personality:  #c46a3a;
   --hd-design:       #2ecc71;
