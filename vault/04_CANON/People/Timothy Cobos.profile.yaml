@@ -1,0 +1,427 @@
+generated_at: '2026-05-21T03:48:39Z'
+engine_version: '0.5'
+entity: Timothy Cobos
+canon_path: 04_CANON/People/Timothy Cobos.md
+birth:
+  date: 1990-06-22
+  time: '12:28'
+  tz: America/New_York
+  place: Glen Dale, Marshall County, West Virginia, United States
+  lat: 39.9492
+  lon: -80.7543
+  precision: 1
+  source: Provided by N8 on 2026-05-20 (also entered via local add-entity form on 2026-05-18 as the now-retired `cobos.md` stub; consolidated here).
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 169.485
+    sign: Virgo
+    degree_in_sign: 19.485
+  midheaven:
+    longitude: 77.8931
+    sign: Gemini
+    degree_in_sign: 17.8931
+  houses:
+    - number: 1
+      cusp_longitude: 169.485
+      sign: Virgo
+      degree_in_sign: 19.485
+    - number: 2
+      cusp_longitude: 194.7496
+      sign: Libra
+      degree_in_sign: 14.7496
+    - number: 3
+      cusp_longitude: 224.6022
+      sign: Scorpio
+      degree_in_sign: 14.6022
+    - number: 4
+      cusp_longitude: 257.8931
+      sign: Sagittarius
+      degree_in_sign: 17.8931
+    - number: 5
+      cusp_longitude: 291.5918
+      sign: Capricorn
+      degree_in_sign: 21.5918
+    - number: 6
+      cusp_longitude: 322.5263
+      sign: Aquarius
+      degree_in_sign: 22.5263
+    - number: 7
+      cusp_longitude: 349.485
+      sign: Pisces
+      degree_in_sign: 19.485
+    - number: 8
+      cusp_longitude: 14.7496
+      sign: Aries
+      degree_in_sign: 14.7496
+    - number: 9
+      cusp_longitude: 44.6022
+      sign: Taurus
+      degree_in_sign: 14.6022
+    - number: 10
+      cusp_longitude: 77.8931
+      sign: Gemini
+      degree_in_sign: 17.8931
+    - number: 11
+      cusp_longitude: 111.5918
+      sign: Cancer
+      degree_in_sign: 21.5918
+    - number: 12
+      cusp_longitude: 142.5263
+      sign: Leo
+      degree_in_sign: 22.5263
+  planets:
+    - body: sun
+      longitude: 90.9913
+      sign: Cancer
+      degree_in_sign: 0.9913
+      retrograde: false
+      house: 10
+    - body: moon
+      longitude: 89.5705
+      sign: Gemini
+      degree_in_sign: 29.5705
+      retrograde: false
+      house: 10
+    - body: mercury
+      longitude: 79.1498
+      sign: Gemini
+      degree_in_sign: 19.1498
+      retrograde: false
+      house: 10
+    - body: venus
+      longitude: 57.2511
+      sign: Taurus
+      degree_in_sign: 27.2511
+      retrograde: false
+      house: 9
+    - body: mars
+      longitude: 16.1762
+      sign: Aries
+      degree_in_sign: 16.1762
+      retrograde: false
+      house: 8
+    - body: jupiter
+      longitude: 107.4598
+      sign: Cancer
+      degree_in_sign: 17.4598
+      retrograde: false
+      house: 10
+    - body: saturn
+      longitude: 293.5864
+      sign: Capricorn
+      degree_in_sign: 23.5864
+      retrograde: true
+      house: 5
+    - body: uranus
+      longitude: 277.8805
+      sign: Capricorn
+      degree_in_sign: 7.8805
+      retrograde: true
+      house: 4
+    - body: neptune
+      longitude: 283.5328
+      sign: Capricorn
+      degree_in_sign: 13.5328
+      retrograde: true
+      house: 4
+    - body: pluto
+      longitude: 225.2671
+      sign: Scorpio
+      degree_in_sign: 15.2671
+      retrograde: true
+      house: 3
+    - body: north_node
+      longitude: 307.7083
+      sign: Aquarius
+      degree_in_sign: 7.7083
+      retrograde: true
+      house: 5
+  aspects:
+    - from: sun
+      to: moon
+      type: conjunction
+      separation: 1.4208
+      orb: 1.4208
+    - from: sun
+      to: uranus
+      type: opposition
+      separation: 173.1107
+      orb: 6.8893
+    - from: mercury
+      to: mars
+      type: sextile
+      separation: 62.9736
+      orb: 2.9736
+    - from: mercury
+      to: jupiter
+      type: semi_sextile
+      separation: 28.31
+      orb: 1.69
+    - from: venus
+      to: saturn
+      type: trine
+      separation: 123.6648
+      orb: 3.6648
+    - from: mars
+      to: jupiter
+      type: square
+      separation: 91.2836
+      orb: 1.2836
+    - from: mars
+      to: neptune
+      type: square
+      separation: 92.6434
+      orb: 2.6434
+    - from: mars
+      to: pluto
+      type: quincunx
+      separation: 150.9091
+      orb: 0.9091
+    - from: jupiter
+      to: saturn
+      type: opposition
+      separation: 173.8734
+      orb: 6.1266
+    - from: jupiter
+      to: neptune
+      type: opposition
+      separation: 176.073
+      orb: 3.927
+    - from: jupiter
+      to: pluto
+      type: trine
+      separation: 117.8073
+      orb: 2.1927
+    - from: uranus
+      to: neptune
+      type: conjunction
+      separation: 5.6523
+      orb: 5.6523
+    - from: uranus
+      to: north_node
+      type: semi_sextile
+      separation: 29.8278
+      orb: 0.1722
+    - from: neptune
+      to: pluto
+      type: sextile
+      separation: 58.2657
+      orb: 1.7343
+  element_balance:
+    fire: 1
+    earth: 1
+    air: 2
+    water: 1
+  modality_balance:
+    cardinal: 2
+    fixed: 1
+    mutable: 2
+mayan:
+  correlation: GMT-584283
+  long_count: 12.18.17.3.2
+  day_sign:
+    kiche: Iq'
+    yucatec: Ik
+  tone: 2
+  trecena_start:
+    kiche: Imox
+    yucatec: Imix
+human_design:
+  type: Manifestor
+  strategy: To Inform
+  authority: Emotional
+  not_self_theme: Anger
+  profile: 3/6
+  definition: Split Definition
+  incarnation_cross:
+    angle: Right Angle
+    code: 15/10 | 25/46
+    gates:
+      personality_sun: 15
+      personality_earth: 10
+      design_sun: 25
+      design_earth: 46
+    name: Right Angle Cross of the Vessel of Love
+  defined_centers:
+    - g
+    - heart
+    - root
+    - solar_plexus
+    - throat
+  undefined_centers:
+    - ajna
+    - head
+    - sacral
+    - spleen
+  channels:
+    - channel: 1-8
+      gates:
+        - 1
+        - 8
+      centers:
+        - g
+        - throat
+    - channel: 13-33
+      gates:
+        - 13
+        - 33
+      centers:
+        - g
+        - throat
+    - channel: 19-49
+      gates:
+        - 19
+        - 49
+      centers:
+        - root
+        - solar_plexus
+    - channel: 25-51
+      gates:
+        - 25
+        - 51
+      centers:
+        - g
+        - heart
+  hanging_gates:
+    - 7
+    - 10
+    - 15
+    - 17
+    - 38
+    - 45
+    - 46
+    - 53
+    - 58
+    - 61
+  personality_jd_ut: 2448065.18611
+  design_jd_ut: 2447974.40153
+  personality_activations:
+    - body: sun
+      longitude: 90.9913
+      gate: 15
+      line: 3
+    - body: earth
+      longitude: 270.9913
+      gate: 10
+      line: 3
+    - body: north_node
+      longitude: 307.7083
+      gate: 19
+      line: 1
+    - body: south_node
+      longitude: 127.7083
+      gate: 33
+      line: 1
+    - body: moon
+      longitude: 89.5705
+      gate: 15
+      line: 2
+    - body: mercury
+      longitude: 79.1498
+      gate: 45
+      line: 3
+    - body: venus
+      longitude: 57.2511
+      gate: 8
+      line: 3
+    - body: mars
+      longitude: 16.1762
+      gate: 51
+      line: 2
+    - body: jupiter
+      longitude: 107.4598
+      gate: 53
+      line: 3
+    - body: saturn
+      longitude: 293.5864
+      gate: 61
+      line: 4
+    - body: uranus
+      longitude: 277.8805
+      gate: 58
+      line: 5
+    - body: neptune
+      longitude: 283.5328
+      gate: 38
+      line: 5
+    - body: pluto
+      longitude: 225.2671
+      gate: 1
+      line: 3
+  design_activations:
+    - body: sun
+      longitude: 2.9913
+      gate: 25
+      line: 6
+    - body: earth
+      longitude: 182.9913
+      gate: 46
+      line: 6
+    - body: north_node
+      longitude: 315.5743
+      gate: 13
+      line: 3
+    - body: south_node
+      longitude: 135.5743
+      gate: 7
+      line: 3
+    - body: moon
+      longitude: 323.9456
+      gate: 49
+      line: 6
+    - body: mercury
+      longitude: 7.8269
+      gate: 17
+      line: 5
+    - body: venus
+      longitude: 316.7023
+      gate: 13
+      line: 4
+    - body: mars
+      longitude: 309.0811
+      gate: 19
+      line: 2
+    - body: jupiter
+      longitude: 91.9864
+      gate: 15
+      line: 4
+    - body: saturn
+      longitude: 293.9279
+      gate: 61
+      line: 4
+    - body: uranus
+      longitude: 279.4001
+      gate: 58
+      line: 6
+    - body: neptune
+      longitude: 284.421
+      gate: 38
+      line: 6
+    - body: pluto
+      longitude: 227.486
+      gate: 1
+      line: 5
+chinese:
+  year:
+    animal: Horse
+    element: Metal
+    polarity: Yang
+    name: Metal Horse
+    name_with_polarity: Yang Metal Horse
+    stem_index: 6
+    branch_index: 6
+    sexagenary_index: 6
+    chinese_year_gregorian: 1990
+    chinese_new_year: '1990-01-27'
+  month:
+    animal: Horse
+    solar_term_pinyin: Mangzhong
+    solar_term_english: Grain in Ear
+    solar_term_start_longitude: 75
+  hour:
+    animal: Horse
+    time_range: 11:00–13:00
+  triple_animals: Horse / Horse / Horse
