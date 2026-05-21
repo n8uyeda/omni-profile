@@ -1,0 +1,436 @@
+generated_at: '2026-05-21T03:43:46Z'
+engine_version: '0.5'
+entity: Liam
+canon_path: 04_CANON/Shared/People/Liam.md
+birth:
+  date: 2020-07-02
+  time: 04:59
+  tz: America/Los_Angeles
+  place: Santa Barbara, California, USA
+  lat: 34.4208
+  lon: -119.6982
+  precision: 1
+  source: Provided by N8 via Claude Code chat on 2026-05-20.
+western:
+  zodiac: tropical
+  house_system: Placidus
+  precision_note: null
+  ascendant:
+    longitude: 88.4473
+    sign: Gemini
+    degree_in_sign: 28.4473
+  midheaven:
+    longitude: 339.4668
+    sign: Pisces
+    degree_in_sign: 9.4668
+  houses:
+    - number: 1
+      cusp_longitude: 88.4473
+      sign: Gemini
+      degree_in_sign: 28.4473
+    - number: 2
+      cusp_longitude: 110.072
+      sign: Cancer
+      degree_in_sign: 20.072
+    - number: 3
+      cusp_longitude: 132.6077
+      sign: Leo
+      degree_in_sign: 12.6077
+    - number: 4
+      cusp_longitude: 159.4668
+      sign: Virgo
+      degree_in_sign: 9.4668
+    - number: 5
+      cusp_longitude: 193.3012
+      sign: Libra
+      degree_in_sign: 13.3012
+    - number: 6
+      cusp_longitude: 232.1864
+      sign: Scorpio
+      degree_in_sign: 22.1864
+    - number: 7
+      cusp_longitude: 268.4473
+      sign: Sagittarius
+      degree_in_sign: 28.4473
+    - number: 8
+      cusp_longitude: 290.072
+      sign: Capricorn
+      degree_in_sign: 20.072
+    - number: 9
+      cusp_longitude: 312.6077
+      sign: Aquarius
+      degree_in_sign: 12.6077
+    - number: 10
+      cusp_longitude: 339.4668
+      sign: Pisces
+      degree_in_sign: 9.4668
+    - number: 11
+      cusp_longitude: 13.3012
+      sign: Aries
+      degree_in_sign: 13.3012
+    - number: 12
+      cusp_longitude: 52.1864
+      sign: Taurus
+      degree_in_sign: 22.1864
+  planets:
+    - body: sun
+      longitude: 101.0584
+      sign: Cancer
+      degree_in_sign: 11.0584
+      retrograde: false
+      house: 1
+    - body: moon
+      longitude: 246.2625
+      sign: Sagittarius
+      degree_in_sign: 6.2625
+      retrograde: false
+      house: 6
+    - body: mercury
+      longitude: 98.9226
+      sign: Cancer
+      degree_in_sign: 8.9226
+      retrograde: true
+      house: 1
+    - body: venus
+      longitude: 66.2896
+      sign: Gemini
+      degree_in_sign: 6.2896
+      retrograde: false
+      house: 12
+    - body: mars
+      longitude: 2.6538
+      sign: Aries
+      degree_in_sign: 2.6538
+      retrograde: false
+      house: 10
+    - body: jupiter
+      longitude: 293.8361
+      sign: Capricorn
+      degree_in_sign: 23.8361
+      retrograde: true
+      house: 8
+    - body: saturn
+      longitude: 299.9652
+      sign: Capricorn
+      degree_in_sign: 29.9652
+      retrograde: true
+      house: 8
+    - body: uranus
+      longitude: 39.9151
+      sign: Taurus
+      degree_in_sign: 9.9151
+      retrograde: false
+      house: 11
+    - body: neptune
+      longitude: 350.9364
+      sign: Pisces
+      degree_in_sign: 20.9364
+      retrograde: true
+      house: 10
+    - body: pluto
+      longitude: 294.0566
+      sign: Capricorn
+      degree_in_sign: 24.0566
+      retrograde: true
+      house: 8
+    - body: north_node
+      longitude: 89.1295
+      sign: Gemini
+      degree_in_sign: 29.1295
+      retrograde: false
+      house: 1
+  aspects:
+    - from: sun
+      to: mercury
+      type: conjunction
+      separation: 2.1359
+      orb: 2.1359
+    - from: sun
+      to: uranus
+      type: sextile
+      separation: 61.1433
+      orb: 1.1433
+    - from: moon
+      to: mercury
+      type: quincunx
+      separation: 147.3399
+      orb: 2.6601
+    - from: moon
+      to: venus
+      type: opposition
+      separation: 179.9729
+      orb: 0.0271
+    - from: moon
+      to: mars
+      type: trine
+      separation: 116.3913
+      orb: 3.6087
+    - from: mercury
+      to: mars
+      type: square
+      separation: 96.2688
+      orb: 6.2688
+    - from: mercury
+      to: uranus
+      type: sextile
+      separation: 59.0075
+      orb: 0.9925
+    - from: venus
+      to: mars
+      type: sextile
+      separation: 63.6358
+      orb: 3.6358
+    - from: venus
+      to: saturn
+      type: trine
+      separation: 126.3243
+      orb: 6.3243
+    - from: mars
+      to: saturn
+      type: sextile
+      separation: 62.6886
+      orb: 2.6886
+    - from: mars
+      to: north_node
+      type: square
+      separation: 86.4757
+      orb: 3.5243
+    - from: jupiter
+      to: saturn
+      type: conjunction
+      separation: 6.1291
+      orb: 6.1291
+    - from: jupiter
+      to: neptune
+      type: sextile
+      separation: 57.1003
+      orb: 2.8997
+    - from: jupiter
+      to: pluto
+      type: conjunction
+      separation: 0.2205
+      orb: 0.2205
+    - from: saturn
+      to: pluto
+      type: conjunction
+      separation: 5.9086
+      orb: 5.9086
+    - from: saturn
+      to: north_node
+      type: quincunx
+      separation: 149.1643
+      orb: 0.8357
+    - from: neptune
+      to: pluto
+      type: sextile
+      separation: 56.8798
+      orb: 3.1202
+  element_balance:
+    fire: 2
+    earth: 0
+    air: 1
+    water: 2
+  modality_balance:
+    cardinal: 3
+    fixed: 0
+    mutable: 2
+mayan:
+  correlation: GMT-584283
+  long_count: 13.0.7.11.10
+  day_sign:
+    kiche: Tz'i'
+    yucatec: Oc
+  tone: 11
+  trecena_start:
+    kiche: Ajpu
+    yucatec: Ahau
+human_design:
+  type: Generator
+  strategy: To Respond
+  authority: Sacral
+  not_self_theme: Frustration
+  profile: 2/4
+  definition: Triple Split
+  incarnation_cross:
+    angle: Right Angle
+    code: 39/38 | 21/48
+    gates:
+      personality_sun: 39
+      personality_earth: 38
+      design_sun: 21
+      design_earth: 48
+    name: Right Angle Cross of Tension
+  defined_centers:
+    - ajna
+    - head
+    - root
+    - sacral
+    - spleen
+    - throat
+  undefined_centers:
+    - g
+    - heart
+    - solar_plexus
+  channels:
+    - channel: 9-52
+      gates:
+        - 9
+        - 52
+      centers:
+        - sacral
+        - root
+    - channel: 16-48
+      gates:
+        - 16
+        - 48
+      centers:
+        - throat
+        - spleen
+    - channel: 24-61
+      gates:
+        - 24
+        - 61
+      centers:
+        - ajna
+        - head
+  hanging_gates:
+    - 8
+    - 10
+    - 15
+    - 21
+    - 22
+    - 25
+    - 27
+    - 38
+    - 39
+    - 60
+    - 62
+  personality_jd_ut: 2459032.99931
+  design_jd_ut: 2458941.84793
+  personality_activations:
+    - body: sun
+      longitude: 101.0584
+      gate: 39
+      line: 2
+    - body: earth
+      longitude: 281.0584
+      gate: 38
+      line: 2
+    - body: north_node
+      longitude: 89.1295
+      gate: 15
+      line: 1
+    - body: south_node
+      longitude: 269.1295
+      gate: 10
+      line: 1
+    - body: moon
+      longitude: 246.2625
+      gate: 9
+      line: 1
+    - body: mercury
+      longitude: 98.9226
+      gate: 52
+      line: 6
+    - body: venus
+      longitude: 66.2896
+      gate: 16
+      line: 1
+    - body: mars
+      longitude: 2.6538
+      gate: 25
+      line: 5
+    - body: jupiter
+      longitude: 293.8361
+      gate: 61
+      line: 4
+    - body: saturn
+      longitude: 299.9652
+      gate: 60
+      line: 4
+    - body: uranus
+      longitude: 39.9151
+      gate: 24
+      line: 3
+    - body: neptune
+      longitude: 350.9364
+      gate: 22
+      line: 5
+    - body: pluto
+      longitude: 294.0566
+      gate: 61
+      line: 4
+  design_activations:
+    - body: sun
+      longitude: 13.0584
+      gate: 21
+      line: 4
+    - body: earth
+      longitude: 193.0584
+      gate: 48
+      line: 4
+    - body: north_node
+      longitude: 92.7273
+      gate: 15
+      line: 5
+    - body: south_node
+      longitude: 272.7273
+      gate: 10
+      line: 5
+    - body: moon
+      longitude: 114.3043
+      gate: 62
+      line: 4
+    - body: mercury
+      longitude: 347.0569
+      gate: 22
+      line: 1
+    - body: venus
+      longitude: 58.7573
+      gate: 8
+      line: 5
+    - body: mars
+      longitude: 301.7559
+      gate: 60
+      line: 6
+    - body: jupiter
+      longitude: 294.5622
+      gate: 61
+      line: 5
+    - body: saturn
+      longitude: 300.757
+      gate: 60
+      line: 5
+    - body: uranus
+      longitude: 35.2364
+      gate: 27
+      line: 4
+    - body: neptune
+      longitude: 349.3169
+      gate: 22
+      line: 3
+    - body: pluto
+      longitude: 294.858
+      gate: 61
+      line: 5
+chinese:
+  year:
+    animal: Rat
+    element: Metal
+    polarity: Yang
+    name: Metal Rat
+    name_with_polarity: Yang Metal Rat
+    stem_index: 6
+    branch_index: 0
+    sexagenary_index: 36
+    chinese_year_gregorian: 2020
+    chinese_new_year: '2020-01-25'
+  month:
+    animal: Horse
+    solar_term_pinyin: Mangzhong
+    solar_term_english: Grain in Ear
+    solar_term_start_longitude: 75
+  hour:
+    animal: Tiger
+    time_range: 03:00–05:00
+  triple_animals: Rat / Horse / Tiger
