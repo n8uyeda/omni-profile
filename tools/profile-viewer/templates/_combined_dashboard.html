@@ -77,6 +77,19 @@
     </details>
     <details class="chart-panel mini-chart-panel" open>
       <summary class="chart-panel-summary">
+        <h2>Combined bodygraph</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+        {% if combined_bodygraph_svg %}
+          <div class="bodygraph-svg-wrap">{{ combined_bodygraph_svg|safe }}</div>
+        {% else %}
+          <p class="kpi-skipped">No HD chart data on either side — precision 1 required.</p>
+        {% endif %}
+      </div>
+    </details>
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
         <h2>Combined mandala</h2>
         <span class="collapse-toggle" aria-hidden="true">▾</span>
       </summary>

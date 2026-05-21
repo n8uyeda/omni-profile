@@ -232,11 +232,22 @@ def main(argv: list[str] | None = None) -> int:
             b_hd_for_combined if b is b_ else a_hd_for_combined,
         ]
 
+        # Combined bodygraph — render only if at least one chart in the pair
+        # has precision-1 HD data. Used to live nested inside the combined
+        # mandala; now its own top-level chart (matches the person-page
+        # restructure in commit 0fc7703).
+        any_hd = any(h is not None for h in hd_in_order)
+        combined_bodygraph_svg = (
+            render_bodygraph_combined(hd_in_order, OVERLAY_COLORS, names_in_order)
+            if any_hd else ""
+        )
+
         combined_pool.append({
             "entity_a": a_,
             "entity_b": b_,
             "pair_slug": pslug,
             "western_svg": render_chart_wheel_combined(w_in_order, OVERLAY_COLORS, names_in_order),
+            "bodygraph_svg": combined_bodygraph_svg,
             "mandala_svg": render_mandala_combined(w_in_order, hd_in_order, OVERLAY_COLORS, names_in_order),
         })
 
