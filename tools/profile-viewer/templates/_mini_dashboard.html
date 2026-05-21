@@ -79,6 +79,19 @@
     </details>
     <details class="chart-panel mini-chart-panel" open>
       <summary class="chart-panel-summary">
+        <h2>Bodygraph</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
+      {% if hd_svg %}
+        <div class="bodygraph-svg-wrap">{{ hd_svg|safe }}</div>
+      {% else %}
+        <p class="kpi-skipped">precision 1 required</p>
+      {% endif %}
+      </div>
+    </details>
+    <details class="chart-panel mini-chart-panel" open>
+      <summary class="chart-panel-summary">
         <h2>Mandala</h2>
         <span class="collapse-toggle" aria-hidden="true">▾</span>
       </summary>
