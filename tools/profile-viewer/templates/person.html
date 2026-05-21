@@ -211,15 +211,35 @@
     {% endif %}
   </article>
 
-  {# ----- Human Design / Mandala ----- #}
+  {% set chart_hd = (entity.chart or {}).get('human_design') %}
+
+  {# ----- Human Design / Bodygraph (chart 1 of 2) ----- #}
   <article class="chart-section">
     <details class="chart-panel chart-panel-wide" open>
       <summary class="chart-panel-summary">
-        <h2>The Mandala — zodiac wheel · 64 gates · bodygraph</h2>
+        <h2>The Bodygraph — centers · channels · gates</h2>
         <span class="collapse-toggle" aria-hidden="true">▾</span>
       </summary>
       <div class="chart-panel-content">
-      {% set chart_hd = (entity.chart or {}).get('human_design') %}
+      {% if hd_svg %}
+        <div class="bodygraph-svg-wrap">{{ hd_svg|safe }}</div>
+      {% else %}
+        <p class="kpi-skipped">No chart data — requires precision 1.</p>
+      {% endif %}
+      </div>
+    </details>
+  </article>
+
+  {# ----- Human Design / Mandala (chart 2 of 2) — center is filled by
+         Design + Personality activation columns; legend lives at the bottom
+         of _mandala_panel.html. ----- #}
+  <article class="chart-section">
+    <details class="chart-panel chart-panel-wide" open>
+      <summary class="chart-panel-summary">
+        <h2>The Mandala — zodiac wheel · 64 gates · activations</h2>
+        <span class="collapse-toggle" aria-hidden="true">▾</span>
+      </summary>
+      <div class="chart-panel-content">
       {% if mandala_svg %}
         {% include "_mandala_panel.html" %}
       {% else %}

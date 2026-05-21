@@ -279,16 +279,10 @@ def render_mandala_combined(charts_western: list[dict], charts_hd: list[dict | N
                 f'stroke="{color}" stroke-width="1.4"/>'
             )
 
-    # Combined bodygraph at center
-    bg_inner = _strip_outer_svg(
-        render_bodygraph_combined(charts_hd, entity_colors, entity_names)
-    )
-    out.append(
-        f'<svg x="{BODY_X:.2f}" y="{BODY_Y:.2f}" width="{BODY_W:.2f}" height="{BODY_H:.2f}" '
-        f'viewBox="0 0 460 680" preserveAspectRatio="xMidYMid meet">'
-    )
-    out.append(bg_inner)
-    out.append('</svg>')
+    # Center intentionally empty — see render_mandala() for the rationale.
+    # (Pair-page combined dashboards are a separate design problem; the
+    # combined bodygraph view will move to its own block when we revisit
+    # those pages.)
 
     # Top-of-mandala legend
     for i, name in enumerate(entity_names):
@@ -472,14 +466,12 @@ def render_mandala(chart_western: dict, chart_hd: dict | None, size: int = 1000)
         tx2, ty2 = _polar(cx, cy, R_ZODIAC_IN - 7, ang)
         out.append(f'<line x1="{tx1:.2f}" y1="{ty1:.2f}" x2="{tx2:.2f}" y2="{ty2:.2f}" class="mandala-planet-tick"/>')
 
-    # 6. Nested bodygraph at the center
-    bg_inner = _strip_outer_svg(render_bodygraph(chart_hd))
-    out.append(
-        f'<svg x="{BODY_X:.2f}" y="{BODY_Y:.2f}" width="{BODY_W:.2f}" height="{BODY_H:.2f}" '
-        f'viewBox="0 0 460 680" preserveAspectRatio="xMidYMid meet">'
-    )
-    out.append(bg_inner)
-    out.append('</svg>')
+    # The center is intentionally empty. The Design + Personality activation
+    # columns are overlaid in that space via HTML (see _mandala_panel.html).
+    # Nesting the bodygraph here used to be the layout — that produced a
+    # whole class of cross-browser bugs (Firefox nested-SVG filter resolution,
+    # CSS variable leak across viewport, duplicate-ID collisions). We now
+    # keep the bodygraph as a wholly separate top-level chart.
 
     out.append('</svg>')
     return "\n".join(out)

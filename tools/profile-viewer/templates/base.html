@@ -197,9 +197,6 @@
     // Mobile-aware <details> defaults for chart panels.
     //   - Activation columns (Design / Personality): open on desktop,
     //     closed on mobile.
-    //   - Mandala drop-down: open on desktop (no drop-down chrome
-    //     visible — CSS hides the summary), closed on mobile so the
-    //     standalone bodygraph is the default-visible chart.
     // Runs once at page load. Resizes don't override user choices.
     // ============================================================
     (function() {
@@ -207,10 +204,6 @@
       document.querySelectorAll('.activation-column').forEach(col => {
         if (isDesktop) col.setAttribute('open', '');
         else col.removeAttribute('open');
-      });
-      document.querySelectorAll('.mandala-drop-down').forEach(d => {
-        if (isDesktop) d.setAttribute('open', '');
-        else d.removeAttribute('open');
       });
     })();
 
