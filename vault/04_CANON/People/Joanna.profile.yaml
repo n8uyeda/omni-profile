@@ -1,235 +1,230 @@
-generated_at: '2026-05-21T03:43:46Z'
+generated_at: '2026-05-21T18:59:33Z'
 engine_version: '0.5'
 entity: Joanna
 canon_path: 04_CANON/People/Joanna.md
 birth:
   date: 1987-11-21
-  time: '16:50'
+  time: '18:50'
   tz: America/Argentina/Buenos_Aires
   place: San Martín de los Andes, Neuquén, Argentina
   lat: -40.1561
   lon: -71.3531
   precision: 1
-  source: Provided by N8 via Claude Code chat on 2026-05-20.
+  source: Provided by N8 on 2026-05-20 (original 16:50 corrected to 18:50 / 6:50pm on 2026-05-21).
 western:
   zodiac: tropical
   house_system: Placidus
   precision_note: null
   ascendant:
-    longitude: 13.0937
-    sign: Aries
-    degree_in_sign: 13.0937
+    longitude: 36.8741
+    sign: Taurus
+    degree_in_sign: 6.8741
   midheaven:
-    longitude: 285.1339
-    sign: Capricorn
-    degree_in_sign: 15.1339
+    longitude: 314.0399
+    sign: Aquarius
+    degree_in_sign: 14.0399
   houses:
     - number: 1
-      cusp_longitude: 13.0937
-      sign: Aries
-      degree_in_sign: 13.0937
-    - number: 2
-      cusp_longitude: 40.2014
+      cusp_longitude: 36.8741
       sign: Taurus
-      degree_in_sign: 10.2014
-    - number: 3
-      cusp_longitude: 71.2855
+      degree_in_sign: 6.8741
+    - number: 2
+      cusp_longitude: 65.6444
       sign: Gemini
-      degree_in_sign: 11.2855
-    - number: 4
-      cusp_longitude: 105.1339
+      degree_in_sign: 5.6444
+    - number: 3
+      cusp_longitude: 98.687
       sign: Cancer
-      degree_in_sign: 15.1339
-    - number: 5
-      cusp_longitude: 138.4398
+      degree_in_sign: 8.687
+    - number: 4
+      cusp_longitude: 134.0399
       sign: Leo
-      degree_in_sign: 18.4398
-    - number: 6
-      cusp_longitude: 168.1196
+      degree_in_sign: 14.0399
+    - number: 5
+      cusp_longitude: 166.9185
       sign: Virgo
-      degree_in_sign: 18.1196
-    - number: 7
-      cusp_longitude: 193.0937
+      degree_in_sign: 16.9185
+    - number: 6
+      cusp_longitude: 194.4382
       sign: Libra
-      degree_in_sign: 13.0937
-    - number: 8
-      cusp_longitude: 220.2014
+      degree_in_sign: 14.4382
+    - number: 7
+      cusp_longitude: 216.8741
       sign: Scorpio
-      degree_in_sign: 10.2014
-    - number: 9
-      cusp_longitude: 251.2855
+      degree_in_sign: 6.8741
+    - number: 8
+      cusp_longitude: 245.6444
       sign: Sagittarius
-      degree_in_sign: 11.2855
-    - number: 10
-      cusp_longitude: 285.1339
+      degree_in_sign: 5.6444
+    - number: 9
+      cusp_longitude: 278.687
       sign: Capricorn
-      degree_in_sign: 15.1339
-    - number: 11
-      cusp_longitude: 318.4398
+      degree_in_sign: 8.687
+    - number: 10
+      cusp_longitude: 314.0399
       sign: Aquarius
-      degree_in_sign: 18.4398
-    - number: 12
-      cusp_longitude: 348.1196
+      degree_in_sign: 14.0399
+    - number: 11
+      cusp_longitude: 346.9185
       sign: Pisces
-      degree_in_sign: 18.1196
+      degree_in_sign: 16.9185
+    - number: 12
+      cusp_longitude: 14.4382
+      sign: Aries
+      degree_in_sign: 14.4382
   planets:
     - body: sun
-      longitude: 238.9617
+      longitude: 239.0459
       sign: Scorpio
-      degree_in_sign: 28.9617
+      degree_in_sign: 29.0459
       retrograde: false
-      house: 8
+      house: 7
     - body: moon
-      longitude: 246.2271
+      longitude: 247.4122
       sign: Sagittarius
-      degree_in_sign: 6.2271
+      degree_in_sign: 7.4122
       retrograde: false
       house: 8
     - body: mercury
-      longitude: 222.1559
+      longitude: 222.2767
       sign: Scorpio
-      degree_in_sign: 12.1559
-      retrograde: false
-      house: 8
-    - body: venus
-      longitude: 262.228
-      sign: Sagittarius
-      degree_in_sign: 22.228
-      retrograde: false
-      house: 9
-    - body: mars
-      longitude: 208.4899
-      sign: Libra
-      degree_in_sign: 28.4899
+      degree_in_sign: 12.2767
       retrograde: false
       house: 7
-    - body: jupiter
-      longitude: 20.7196
-      sign: Aries
-      degree_in_sign: 20.7196
-      retrograde: true
-      house: 1
-    - body: saturn
-      longitude: 260.769
+    - body: venus
+      longitude: 262.3317
       sign: Sagittarius
-      degree_in_sign: 20.769
-      retrograde: false
-      house: 9
-    - body: uranus
-      longitude: 265.2753
-      sign: Sagittarius
-      degree_in_sign: 25.2753
-      retrograde: false
-      house: 9
-    - body: neptune
-      longitude: 276.3457
-      sign: Capricorn
-      degree_in_sign: 6.3457
-      retrograde: false
-      house: 9
-    - body: pluto
-      longitude: 220.6616
-      sign: Scorpio
-      degree_in_sign: 10.6616
+      degree_in_sign: 22.3317
       retrograde: false
       house: 8
-    - body: north_node
-      longitude: 0.7148
+    - body: mars
+      longitude: 208.5443
+      sign: Libra
+      degree_in_sign: 28.5443
+      retrograde: false
+      house: 6
+    - body: jupiter
+      longitude: 20.713
       sign: Aries
-      degree_in_sign: 0.7148
+      degree_in_sign: 20.713
       retrograde: true
       house: 12
+    - body: saturn
+      longitude: 260.7784
+      sign: Sagittarius
+      degree_in_sign: 20.7784
+      retrograde: false
+      house: 8
+    - body: uranus
+      longitude: 265.2799
+      sign: Sagittarius
+      degree_in_sign: 25.2799
+      retrograde: false
+      house: 8
+    - body: neptune
+      longitude: 276.3483
+      sign: Capricorn
+      degree_in_sign: 6.3483
+      retrograde: false
+      house: 8
+    - body: pluto
+      longitude: 220.6648
+      sign: Scorpio
+      degree_in_sign: 10.6648
+      retrograde: false
+      house: 7
+    - body: north_node
+      longitude: 0.701
+      sign: Aries
+      degree_in_sign: 0.701
+      retrograde: true
+      house: 11
   aspects:
-    - from: sun
-      to: moon
-      type: conjunction
-      separation: 7.2654
-      orb: 7.2654
     - from: sun
       to: mars
       type: semi_sextile
-      separation: 30.4719
-      orb: 0.4719
+      separation: 30.5016
+      orb: 0.5016
     - from: sun
       to: north_node
       type: trine
-      separation: 121.7531
-      orb: 1.7531
+      separation: 121.655
+      orb: 1.655
     - from: moon
       to: neptune
       type: semi_sextile
-      separation: 30.1186
-      orb: 0.1186
+      separation: 28.9361
+      orb: 1.0639
     - from: moon
       to: north_node
       type: trine
-      separation: 114.4877
-      orb: 5.5123
+      separation: 113.2888
+      orb: 6.7112
     - from: mercury
       to: pluto
       type: conjunction
-      separation: 1.4943
-      orb: 1.4943
+      separation: 1.6118
+      orb: 1.6118
     - from: venus
       to: jupiter
       type: trine
-      separation: 118.4915
-      orb: 1.5085
+      separation: 118.3813
+      orb: 1.6187
     - from: venus
       to: saturn
       type: conjunction
-      separation: 1.459
-      orb: 1.459
+      separation: 1.5533
+      orb: 1.5533
     - from: venus
       to: uranus
       type: conjunction
-      separation: 3.0472
-      orb: 3.0472
+      separation: 2.9483
+      orb: 2.9483
     - from: mars
       to: jupiter
       type: opposition
-      separation: 172.2297
-      orb: 7.7703
+      separation: 172.1687
+      orb: 7.8313
     - from: mars
       to: uranus
       type: sextile
-      separation: 56.7854
-      orb: 3.2146
+      separation: 56.7357
+      orb: 3.2643
     - from: mars
       to: north_node
       type: quincunx
-      separation: 152.2249
-      orb: 2.2249
+      separation: 152.1567
+      orb: 2.1567
     - from: jupiter
       to: saturn
       type: trine
-      separation: 119.9506
-      orb: 0.0494
+      separation: 119.9346
+      orb: 0.0654
     - from: jupiter
       to: uranus
       type: trine
-      separation: 115.4443
-      orb: 4.5557
+      separation: 115.4331
+      orb: 4.5669
     - from: saturn
       to: uranus
       type: conjunction
-      separation: 4.5063
-      orb: 4.5063
+      separation: 4.5015
+      orb: 4.5015
     - from: uranus
       to: north_node
       type: square
-      separation: 95.4395
-      orb: 5.4395
+      separation: 95.421
+      orb: 5.421
     - from: neptune
       to: pluto
       type: sextile
-      separation: 55.6841
-      orb: 4.3159
+      separation: 55.6835
+      orb: 4.3165
     - from: neptune
       to: north_node
       type: square
-      separation: 84.3691
-      orb: 5.6309
+      separation: 84.3526
+      orb: 5.6474
   element_balance:
     fire: 2
     earth: 0
@@ -304,112 +299,112 @@ human_design:
     - 55
     - 58
     - 59
-  personality_jd_ut: 2447121.32639
-  design_jd_ut: 2447032.17082
+  personality_jd_ut: 2447121.40972
+  design_jd_ut: 2447032.25812
   personality_activations:
     - body: sun
-      longitude: 238.9617
+      longitude: 239.0459
       gate: 14
       line: 5
     - body: earth
-      longitude: 58.9617
+      longitude: 59.0459
       gate: 8
       line: 5
     - body: north_node
-      longitude: 0.7148
+      longitude: 0.701
       gate: 25
       line: 3
     - body: south_node
-      longitude: 180.7148
+      longitude: 180.701
       gate: 46
       line: 3
     - body: moon
-      longitude: 246.2271
+      longitude: 247.4122
       gate: 9
-      line: 1
+      line: 2
     - body: mercury
-      longitude: 222.1559
+      longitude: 222.2767
       gate: 44
       line: 5
     - body: venus
-      longitude: 262.228
+      longitude: 262.3317
       gate: 26
       line: 6
     - body: mars
-      longitude: 208.4899
+      longitude: 208.5443
       gate: 50
       line: 3
     - body: jupiter
-      longitude: 20.7196
+      longitude: 20.713
       gate: 51
       line: 6
     - body: saturn
-      longitude: 260.769
+      longitude: 260.7784
       gate: 26
       line: 5
     - body: uranus
-      longitude: 265.2753
+      longitude: 265.2799
       gate: 11
       line: 3
     - body: neptune
-      longitude: 276.3457
+      longitude: 276.3483
       gate: 58
       line: 3
     - body: pluto
-      longitude: 220.6616
+      longitude: 220.6648
       gate: 44
       line: 4
   design_activations:
     - body: sun
-      longitude: 150.9617
+      longitude: 151.0459
       gate: 59
       line: 1
     - body: earth
-      longitude: 330.9617
+      longitude: 331.0459
       gate: 55
       line: 1
     - body: north_node
-      longitude: 2.5697
+      longitude: 2.5644
       gate: 25
       line: 5
     - body: south_node
-      longitude: 182.5697
+      longitude: 182.5644
       gate: 46
       line: 5
     - body: moon
-      longitude: 152.8618
+      longitude: 153.9129
       gate: 59
-      line: 3
+      line: 5
     - body: mercury
-      longitude: 155.3896
+      longitude: 155.5569
       gate: 59
       line: 6
     - body: venus
-      longitude: 151.3469
+      longitude: 151.455
       gate: 59
       line: 2
     - body: mars
-      longitude: 151.1729
+      longitude: 151.2285
       gate: 59
       line: 2
     - body: jupiter
-      longitude: 29.6923
+      longitude: 29.6909
       gate: 3
       line: 4
     - body: saturn
-      longitude: 254.5565
+      longitude: 254.5572
       gate: 5
       line: 4
     - body: uranus
-      longitude: 262.7448
+      longitude: 262.7442
       gate: 11
       line: 1
     - body: neptune
-      longitude: 275.3787
+      longitude: 275.3776
       gate: 58
       line: 2
     - body: pluto
-      longitude: 217.5441
+      longitude: 217.5459
       gate: 28
       line: 6
 chinese:
@@ -430,6 +425,6 @@ chinese:
     solar_term_english: Beginning of Winter
     solar_term_start_longitude: 225
   hour:
-    animal: Monkey
-    time_range: 15:00–17:00
-  triple_animals: Rabbit / Pig / Monkey
+    animal: Rooster
+    time_range: 17:00–19:00
+  triple_animals: Rabbit / Pig / Rooster
