@@ -1,0 +1,8 @@
+# Vercel-specific upload exclusions.
+# Keep MINIMAL — anything excluded here is invisible to BOTH the build
+# step and the serverless function bundles. The build step needs vault/,
+# tools/profile-viewer/, etc., so don't exclude those here. For
+# per-function bundle exclusions, see `excludeFiles` in vercel.json.
+
+# Local dev artifacts
+.claude/

@@ -5,19 +5,23 @@
   "functions": {
     "api/chat.py": {
       "memory": 1024,
-      "maxDuration": 60
+      "maxDuration": 60,
+      "excludeFiles": "{site/**,vault/**,tools/profile-viewer/**,tools/profile-author/**,pending-readings/**,.git/**,.github/**,.claude/**}"
     },
     "api/add-entity.py": {
       "memory": 1024,
-      "maxDuration": 60
+      "maxDuration": 60,
+      "excludeFiles": "{site/**,vault/**,tools/profile-viewer/**,tools/profile-author/**,pending-readings/**,.git/**,.github/**,.claude/**}"
     },
     "api/geocode.py": {
       "memory": 512,
-      "maxDuration": 15
+      "maxDuration": 15,
+      "excludeFiles": "{site/**,vault/**,tools/**,pending-readings/**,.git/**,.github/**,.claude/**,lib/anthropic_client.py,lib/github_client.py,lib/prompts.py}"
     },
     "api/spend.py": {
       "memory": 256,
-      "maxDuration": 5
+      "maxDuration": 5,
+      "excludeFiles": "{site/**,vault/**,tools/**,pending-readings/**,.git/**,.github/**,.claude/**,lib/anthropic_client.py,lib/github_client.py,lib/prompts.py}"
     }
   }
 }
