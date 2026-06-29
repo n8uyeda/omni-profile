@@ -6,7 +6,8 @@
     "api/chat.py": {
       "memory": 1024,
       "maxDuration": 60,
-      "excludeFiles": "{site/**,vault/**,tools/profile-viewer/**,tools/profile-author/**,pending-readings/**,.git/**,.github/**,.claude/**}"
+      "comment": "Needs vault/04_CANON/People (chart data, read at runtime) and tools/profile-viewer (data.py + synastry.py, imported for pair-mode). Only site/ (60MB build output) must be stripped to stay under the 245MB Lambda limit.",
+      "excludeFiles": "{site/**,tools/profile-author/**,pending-readings/**,.git/**,.github/**,.claude/**}"
     },
     "api/add-entity.py": {
       "memory": 1024,
